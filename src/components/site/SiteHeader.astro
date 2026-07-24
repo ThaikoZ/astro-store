@@ -1,0 +1,208 @@
+---
+import { IMAGES, PRIMARY_NAV } from '../../lib/site';
+
+interface Props {
+	/** Transparent over hero photo; solid black on inner pages. */
+	variant?: 'overlay' | 'solid';
+}
+
+const { variant = 'overlay' } = Astro.props;
+const isOverlay = variant === 'overlay';
+---
+
+<header
+	class:list={[
+		'z-30 w-full',
+		isOverlay ? 'absolute inset-x-0 top-0' : 'sticky top-0 bg-ink',
+	]}
+>
+	<div class="relative z-50 flex items-center justify-between gap-6 px-5 py-5 md:px-10 md:py-6">
+		<a href="/" class="shrink-0 text-foam no-underline" aria-label="Klaudia Jaranowska Makeup - strona główna">
+			<img
+				src={IMAGES.headerLogo}
+				alt="Klaudia Jaranowska Make Up Artist"
+				class="h-10 w-auto md:h-12"
+				width="220"
+				height="48"
+				fetchpriority="high"
+			/>
+		</a>
+
+		<nav class="hidden lg:block" aria-label="Główne">
+			<ul class="m-0 flex list-none items-center gap-8 p-0">
+				{
+					PRIMARY_NAV.map((item) => (
+						<li class="relative group">
+							{item.children ? (
+								<>
+									<span class="font-display text-sm tracking-[0.14em] text-foam uppercase">
+										{item.label}
+									</span>
+									<ul class="invisible absolute left-1/2 top-full z-40 m-0 min-w-[14rem] -translate-x-1/2 list-none bg-ink p-3 opacity-0 shadow-lg transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+										{item.children.map((child) => (
+											<li>
+												<a
+													href={child.href}
+													class="block px-3 py-2 font-display text-sm tracking-[0.12em] text-foam no-underline uppercase transition-opacity hover:opacity-70"
+												>
+													{child.label}
+												</a>
+											</li>
+										))}
+									</ul>
+								</>
+							) : (
+								<a
+									href={item.href}
+									class="font-display text-sm tracking-[0.14em] text-foam no-underline uppercase transition-opacity hover:opacity-70"
+								>
+									{item.label}
+								</a>
+							)}
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+
+		<button
+			type="button"
+			class="site-menu-toggle relative z-50 flex h-8 w-8 cursor-pointer items-center justify-center border-0 bg-transparent p-0 lg:hidden"
+			aria-expanded="false"
+			aria-controls="site-mobile-nav"
+			aria-label="Otwórz menu"
+			data-site-menu-toggle
+		>
+			<span class="sr-only">Menu</span>
+			<span class="relative block h-3.5 w-7" aria-hidden="true">
+				<span
+					class="site-menu-bar absolute left-0 top-0 block h-px w-7 origin-center bg-foam transition-transform duration-300 ease-out"
+					data-menu-bar="top"
+				></span>
+				<span
+					class="site-menu-bar absolute left-0 top-1/2 block h-px w-7 -translate-y-1/2 bg-foam transition-opacity duration-200 ease-out"
+					data-menu-bar="mid"
+				></span>
+				<span
+					class="site-menu-bar absolute bottom-0 left-0 block h-px w-7 origin-center bg-foam transition-transform duration-300 ease-out"
+					data-menu-bar="bottom"
+				></span>
+			</span>
+		</button>
+	</div>
+
+	<div
+		id="site-mobile-nav"
+		class="site-mobile-nav pointer-events-none fixed inset-0 z-40 bg-ink/95 text-foam opacity-0 backdrop-blur-sm transition-[opacity,visibility] duration-300 ease-out invisible motion-reduce:transition-none"
+		data-site-mobile-nav
+		aria-hidden="true"
+	>
+		<div
+			class="site-mobile-nav-inner flex h-full flex-col px-8 pb-10 pt-28 translate-y-3 opacity-0 transition-[opacity,transform] duration-300 ease-out delay-75 motion-reduce:translate-y-0 motion-reduce:transition-none md:pt-32"
+			data-site-mobile-nav-inner
+		>
+			<nav aria-label="Menu mobilne">
+				<ul class="m-0 flex list-none flex-col gap-5 p-0">
+					{
+						PRIMARY_NAV.map((item) => (
+							<li>
+								{item.children ? (
+									<div class="flex flex-col gap-3">
+										<span class="font-display text-lg tracking-[0.14em] uppercase">{item.label}</span>
+										<ul class="m-0 flex list-none flex-col gap-2 border-l border-foam/25 pl-4">
+											{item.children.map((child) => (
+												<li>
+													<a
+														href={child.href}
+														class="font-display text-base tracking-[0.12em] text-foam no-underline uppercase opacity-90 transition-opacity hover:opacity-70"
+														data-site-menu-link
+													>
+														{child.label}
+													</a>
+												</li>
+											))}
+										</ul>
+									</div>
+								) : (
+									<a
+										href={item.href}
+										class="font-display text-lg tracking-[0.14em] text-foam no-underline uppercase transition-opacity hover:opacity-70"
+										data-site-menu-link
+									>
+										{item.label}
+									</a>
+								)}
+							</li>
+						))
+					}
+				</ul>
+			</nav>
+		</div>
+	</div>
+</header>
+
+<style>
+	header:has([data-site-menu-toggle][aria-expanded='true']) .site-mobile-nav {
+		pointer-events: auto;
+		visibility: visible;
+		opacity: 1;
+	}
+
+	header:has([data-site-menu-toggle][aria-expanded='true']) .site-mobile-nav-inner {
+		transform: translateY(0);
+		opacity: 1;
+	}
+
+	header:has([data-site-menu-toggle][aria-expanded='true']) [data-menu-bar='top'] {
+		transform: translateY(6.5px) rotate(45deg);
+	}
+
+	header:has([data-site-menu-toggle][aria-expanded='true']) [data-menu-bar='mid'] {
+		opacity: 0;
+	}
+
+	header:has([data-site-menu-toggle][aria-expanded='true']) [data-menu-bar='bottom'] {
+		transform: translateY(-6.5px) rotate(-45deg);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		header:has([data-site-menu-toggle][aria-expanded='true']) .site-mobile-nav-inner {
+			transform: none;
+		}
+
+		header:has([data-site-menu-toggle][aria-expanded='true']) [data-menu-bar='top'],
+		header:has([data-site-menu-toggle][aria-expanded='true']) [data-menu-bar='bottom'] {
+			transform: none;
+		}
+	}
+</style>
+
+<script>
+	function initSiteMenu() {
+		const toggle = document.querySelector('[data-site-menu-toggle]');
+		const panel = document.querySelector('[data-site-mobile-nav]');
+		if (!(toggle instanceof HTMLElement) || !(panel instanceof HTMLElement)) return;
+		if (toggle.dataset.menuBound === 'true') return;
+		toggle.dataset.menuBound = 'true';
+
+		const setOpen = (open: boolean) => {
+			toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+			toggle.setAttribute('aria-label', open ? 'Zamknij menu' : 'Otwórz menu');
+			panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+			document.documentElement.classList.toggle('overflow-hidden', open);
+		};
+
+		toggle.addEventListener('click', () => {
+			setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+		});
+		panel.querySelectorAll('[data-site-menu-link]').forEach((link) => {
+			link.addEventListener('click', () => setOpen(false));
+		});
+		document.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape') setOpen(false);
+		});
+	}
+
+	initSiteMenu();
+	document.addEventListener('astro:page-load', initSiteMenu);
+</script>

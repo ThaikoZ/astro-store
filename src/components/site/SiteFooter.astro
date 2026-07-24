@@ -1,0 +1,67 @@
+---
+import { FOOTER_LINKS, IMAGES, SOCIAL } from '../../lib/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-near-black px-6 py-14 text-foam md:px-10 md:py-16">
+	<div class="mx-auto flex max-w-5xl flex-col items-center gap-8 text-center">
+		<img
+			class="h-16 w-auto opacity-95 md:h-20"
+			src={IMAGES.footerLogo}
+			alt="Klaudia Jaranowska Makeup"
+			loading="lazy"
+			width="120"
+			height="160"
+		/>
+		<p class="m-0 font-sans text-xs tracking-[0.2em] text-foam/70 uppercase">
+			Klaudia Jaranowska | Sieradz |
+		</p>
+		<p class="m-0 max-w-md font-sans text-sm leading-relaxed text-foam/75">
+			Makijaż tworzony z pasją - specjalistka od naturalnego glow i kobiecej elegancji.
+		</p>
+		<nav aria-label="Stopka">
+			<ul
+				class="m-0 flex list-none flex-wrap items-center justify-center gap-x-6 gap-y-3 p-0 font-display text-sm tracking-[0.12em] uppercase"
+			>
+				{
+					FOOTER_LINKS.map((link) => (
+						<li>
+							<a
+								class="text-foam no-underline transition-opacity hover:opacity-70"
+								href={link.href}
+							>
+								{link.label}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+		<ul class="m-0 flex list-none items-center gap-5 p-0" aria-label="Social media">
+			<li>
+				<a
+					href={SOCIAL.instagram}
+					class="font-sans text-xs tracking-[0.18em] text-foam/70 no-underline uppercase transition-opacity hover:opacity-100"
+					rel="noopener noreferrer"
+					target="_blank"
+				>
+					Instagram
+				</a>
+			</li>
+			<li>
+				<a
+					href={SOCIAL.facebook}
+					class="font-sans text-xs tracking-[0.18em] text-foam/70 no-underline uppercase transition-opacity hover:opacity-100"
+					rel="noopener noreferrer"
+					target="_blank"
+				>
+					Facebook
+				</a>
+			</li>
+		</ul>
+		<p class="m-0 font-sans text-xs tracking-wide text-foam/40">
+			© Copyright {year} Klaudia Jaranowska Make Up
+		</p>
+	</div>
+</footer>

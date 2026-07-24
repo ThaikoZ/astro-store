@@ -1,326 +1,293 @@
 ---
-export type LandingProduct = {
-	id: string;
-	name: string;
-	price: string | null;
-	imageUrl: string | null;
-	imageAlt: string | null;
-};
+import SiteFooter from './site/SiteFooter.astro';
+import SiteHeader from './site/SiteHeader.astro';
+import { IMAGES, OFFER_LINKS, SOCIAL, TESTIMONIALS } from '../lib/site';
 
-interface Props {
-	products: LandingProduct[];
-	errorMessage?: string | null;
-}
-
-const { products, errorMessage = null } = Astro.props;
-
-const SITE = 'https://klaudiajaranowskamakeup.pl';
-
-const heroImage = `${SITE}/wp-content/uploads/2025/10/IMG_2036-scaled-e1761149605175.jpeg`;
-const aboutImage = `${SITE}/wp-content/uploads/2025/06/IMG_0147-scaled-e1768179865534-750x1024.jpeg`;
-const footerLogo = `${SITE}/wp-content/uploads/2025/06/logo-napis.png`;
-
-const marqueeItems = Array.from({ length: 8 }, () => 'KLAUDIA JARANOWSKA');
-
-const testimonials = [
-	{
-		quote:
-			'Makijaż wytrzymał cały wieczór, zdecydowanie będę polecać, nigdy nie czułam się tak pięknie!',
-		author: 'Ania W.',
-	},
-	{
-		quote: 'Świetnie przeprowadzone szkolenie! Pełen profesjonalizm i zaangażowanie',
-		author: 'Maria D.',
-	},
-	{
-		quote: 'Dziękuję za piękny makeup. Bardzo serdecznie polecam',
-		author: 'Magdalena I.',
-	},
-];
-
-const year = new Date().getFullYear();
+const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 ---
 
 <div class="min-h-full bg-paper text-ink">
-	<header class="absolute inset-x-0 top-0 z-20 flex items-start justify-between px-6 py-6 md:px-10 md:py-8">
-		<a href="/" class="group text-foam no-underline">
-			<span
-				class="block font-display text-[clamp(0.95rem,2.2vw,1.15rem)] font-normal tracking-[0.18em] uppercase"
-			>
-				Klaudia Jaranowska
-			</span>
-			<span
-				class="mt-1 block text-center font-sans text-[0.55rem] font-medium tracking-[0.35em] uppercase opacity-90"
-			>
-				Make up artist
-			</span>
-		</a>
-		<span class="sr-only">Menu</span>
-		<div class="flex flex-col gap-1.5 pt-1" aria-hidden="true">
-			<span class="block h-px w-6 bg-foam"></span>
-			<span class="block h-px w-6 bg-foam"></span>
-			<span class="block h-px w-6 bg-foam"></span>
-		</div>
-	</header>
+	<SiteHeader variant="overlay" />
 
-	<section
-		class="relative isolate flex min-h-svh flex-col overflow-hidden text-foam"
-		aria-label="Klaudia Jaranowska"
-	>
-		<img
-			class="absolute inset-0 -z-20 size-full object-cover object-center"
-			src={heroImage}
-			alt=""
-			fetchpriority="high"
-		/>
-		<div
-			class="absolute inset-0 -z-10 bg-linear-to-b from-black/25 via-black/35 to-black/80"
-			aria-hidden="true"
+	<main id="tresc">
+		<section
+			class="relative isolate flex h-svh flex-col overflow-hidden text-foam"
+			aria-label="Wstęp"
 		>
-		</div>
-
-		<div
-			class="flex flex-1 flex-col items-center justify-center gap-6 px-6 pb-28 text-center md:px-10"
-		>
-			<h1
-				class="m-0 max-w-[22ch] font-display text-[clamp(1.35rem,3.4vw,2rem)] font-normal leading-snug text-foam/90 animate-rise motion-reduce:animate-none"
-			>
-				Nazywam się Klaudia Jaranowska i jestem dyplomowaną makijażystką oraz
-				szkoleniowcem.
-			</h1>
-			<a
-				class="font-display text-[clamp(0.95rem,2vw,1.05rem)] font-normal tracking-wide text-foam no-underline uppercase transition-opacity duration-200 hover:opacity-70 animate-rise motion-reduce:animate-none [animation-delay:140ms]"
-				href="#o-mnie"
-			>
-				Poznaj moją ofertę
-			</a>
-			<a
-				href="#o-mnie"
-				class="mt-4 text-foam/80 transition-opacity hover:opacity-100 animate-rise motion-reduce:animate-none [animation-delay:240ms]"
-				aria-label="Przejdź dalej"
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="1.25"
-					class="size-6"
-					aria-hidden="true"
-				>
-					<path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"></path>
-				</svg>
-			</a>
-		</div>
-
-		<div class="absolute inset-x-0 bottom-0 z-10 overflow-hidden bg-ink py-3">
+			<img
+				class="absolute inset-0 -z-20 size-full object-cover object-[center_27%]"
+				src={IMAGES.hero}
+				alt=""
+				fetchpriority="high"
+			/>
 			<div
-				class="flex w-max whitespace-nowrap font-display text-sm tracking-[0.2em] text-foam uppercase animate-marquee motion-reduce:animate-none"
+				class="absolute inset-0 -z-10 bg-linear-to-b from-black/30 via-black/40 to-black/85"
 				aria-hidden="true"
 			>
+			</div>
+
+			<div
+				class="flex flex-1 flex-col items-center justify-end gap-7 px-6 pb-12 pt-28 text-center md:px-10 md:pb-16"
+			>
+				<h1
+					class="m-0 max-w-[18ch] font-display text-[clamp(1.45rem,3.6vw,2.15rem)] font-normal leading-[1.35] text-foam animate-rise motion-reduce:animate-none"
+				>
+					Nazywam się Klaudia Jaranowska
+					<br />
+					i jestem dyplomowaną
+					<br />
+					makijażystką oraz
+					<br />
+					szkoleniowcem.
+				</h1>
+				<a
+					class="font-display text-[clamp(0.95rem,2vw,1.1rem)] font-normal tracking-[0.14em] text-foam no-underline uppercase transition-opacity duration-200 hover:opacity-70 animate-rise motion-reduce:animate-none [animation-delay:140ms]"
+					href="#oferta"
+				>
+					Poznaj moją ofertę
+				</a>
+				<a
+					href="#oferta"
+					class="mt-2 text-foam/80 transition-opacity hover:opacity-100 animate-rise motion-reduce:animate-none [animation-delay:240ms]"
+					aria-label="Przejdź do oferty"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.25"
+						class="size-6"
+						aria-hidden="true"
+					>
+						<path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"></path>
+					</svg>
+				</a>
+			</div>
+			<p class="sr-only">Klaudia Jaranowska</p>
+		</section>
+
+		<div class="overflow-hidden bg-ink py-3.5" aria-hidden="true">
+			<div class="flex w-max items-center animate-marquee motion-reduce:animate-none">
 				{
-					[...marqueeItems, ...marqueeItems].map((label) => (
-						<span class="px-8">{label}</span>
+					[...marqueeLogos, ...marqueeLogos].map((src) => (
+						<img
+							src={src}
+							alt=""
+							class="mx-6 h-5 w-auto opacity-95 md:mx-8 md:h-6"
+							width="180"
+							height="24"
+							loading="lazy"
+						/>
 					))
 				}
 			</div>
-			<p class="sr-only">Klaudia Jaranowska</p>
 		</div>
-	</section>
 
-	<section
-		id="o-mnie"
-		class="bg-paper px-6 py-16 md:px-10 md:py-24"
-		aria-labelledby="about-heading"
-	>
-		<div class="mx-auto grid max-w-5xl items-center gap-12 md:grid-cols-2 md:gap-16">
-			<img
-				class="mx-auto aspect-4/5 w-full max-w-md object-cover object-top"
-				src={aboutImage}
-				alt="Klaudia Jaranowska przy pracy"
-				loading="lazy"
-				width="750"
-				height="1024"
-			/>
-			<div class="text-center md:text-left">
-				<p class="m-0 font-sans text-xs tracking-[0.25em] text-muted uppercase">O mnie</p>
+		<section
+			id="oferta"
+			class="bg-paper px-6 py-16 md:px-10 md:py-24"
+			aria-labelledby="oferta-heading"
+		>
+			<div class="mx-auto max-w-3xl text-center">
 				<h2
-					id="about-heading"
-					class="mt-3 m-0 font-display text-[clamp(1.5rem,3vw,2.1rem)] font-normal leading-tight text-ink"
+					id="oferta-heading"
+					class="m-0 font-display text-[clamp(1.6rem,3.2vw,2.25rem)] font-normal tracking-[0.16em] text-ink uppercase"
 				>
-					Sprawię, że poczujesz się
-					<span class="mt-1 block tracking-[0.08em] uppercase">pięknie i pewnie!</span>
+					Oferta
 				</h2>
-				<p class="mt-6 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-base">
-					Moja pasja do makijażu to połączenie doświadczenia, wiedzy i indywidualnego
-					podejścia do każdego klienta.
-				</p>
-				<p class="mt-4 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-base">
-					Moim celem nie jest tylko wykonanie pięknego makijażu - chcę, aby każda kobieta,
-					która siada na moim fotelu, poczuła się wyjątkowo i komfortowo. Niezależnie od
-					tego, czy przygotowujesz się do ślubu, ważnego wydarzenia, sesji zdjęciowej, czy
-					po prostu chcesz poczuć się pięknie - jestem tu, aby sprawić, byś poczuła się
-					pięknie i pewnie!
-				</p>
-				<a
-					href="#produkty"
-					class="mt-8 inline-block border border-border-soft px-8 py-3 font-display text-sm tracking-[0.12em] text-ink no-underline uppercase transition-opacity hover:opacity-70"
-				>
-					Dowiedz się więcej
-				</a>
+				<ul class="mx-auto mt-10 m-0 flex max-w-md list-none flex-col gap-5 p-0 md:mt-12 md:gap-6">
+					{
+						OFFER_LINKS.map((item) => (
+							<li>
+								<a
+									href={item.href}
+									class="font-display text-[clamp(1.05rem,2.4vw,1.35rem)] tracking-[0.08em] text-ink no-underline uppercase transition-opacity hover:opacity-60"
+								>
+									{item.label}
+								</a>
+							</li>
+						))
+					}
+				</ul>
 			</div>
-		</div>
-	</section>
+		</section>
 
-	<section
-		id="opinie"
-		class="bg-paper px-6 pb-16 md:px-10 md:pb-24"
-		aria-labelledby="testimonials-heading"
-	>
-		<header class="mx-auto mb-12 max-w-2xl text-center md:mb-16">
-			<h2
-				id="testimonials-heading"
-				class="m-0 font-display text-[clamp(1.5rem,3vw,2rem)] font-normal tracking-[0.12em] text-ink uppercase"
-			>
-				Wasze słowa
-			</h2>
-			<p class="mt-4 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-base">
-				Nie ma dla mnie większego komplementu niż uśmiech na twarzy klientki po zakończonym
-				makijażu.
-			</p>
-		</header>
+		<section
+			id="o-mnie"
+			class="bg-paper px-6 pb-16 md:px-10 md:pb-24"
+			aria-labelledby="about-heading"
+		>
+			<div class="mx-auto grid max-w-5xl items-center gap-12 md:grid-cols-2 md:gap-16">
+				<img
+					class="mx-auto aspect-4/5 w-full max-w-md object-cover object-top"
+					src={IMAGES.about}
+					alt="Klaudia Jaranowska przy pracy"
+					loading="lazy"
+					width="750"
+					height="1024"
+				/>
+				<div class="text-center md:text-left">
+					<h3
+						id="about-heading"
+						class="m-0 font-display text-[clamp(1.45rem,3vw,2rem)] font-normal leading-tight text-ink"
+					>
+						Sprawię, że poczujesz się
+						<span class="mt-2 block tracking-[0.1em] uppercase">pięknie i pewnie!</span>
+					</h3>
+					<p class="mt-6 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-base">
+						Moja pasja do makijażu to połączenie doświadczenia, wiedzy i indywidualnego
+						podejścia do każdego klienta.
+					</p>
+					<p class="mt-4 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-base">
+						Moim celem nie jest tylko wykonanie pięknego makijażu - chcę, aby każda kobieta,
+						która siada na moim fotelu, poczuła się wyjątkowo i komfortowo. Niezależnie od
+						tego, czy przygotowujesz się do ślubu, ważnego wydarzenia, sesji zdjęciowej, czy
+						po prostu chcesz poczuć się pięknie - jestem tu, aby sprawić, byś poczuła się
+						pięknie i pewnie!
+					</p>
+					<a
+						href="/kontakt/"
+						class="mt-8 inline-block border border-border-soft px-8 py-3 font-display text-sm tracking-[0.12em] text-ink no-underline uppercase transition-opacity hover:opacity-70"
+					>
+						Dowiedz się więcej
+					</a>
+				</div>
+			</div>
+		</section>
 
-		<ul class="mx-auto m-0 grid max-w-5xl list-none grid-cols-1 gap-10 p-0 md:grid-cols-3 md:gap-8">
-			{
-				testimonials.map((item) => (
-					<li class="text-center">
-						<blockquote class="m-0">
-							<p class="m-0 font-display text-base leading-relaxed text-ink/90 italic md:text-lg">
-								“{item.quote}”
-							</p>
-							<footer class="mt-4 font-sans text-xs tracking-[0.18em] text-muted uppercase">
-								{item.author}
-							</footer>
-						</blockquote>
-					</li>
-				))
-			}
-		</ul>
-	</section>
-
-	<section
-		id="produkty"
-		class="bg-paper px-6 pb-16 md:px-10 md:pb-24"
-		aria-labelledby="products-heading"
-	>
-		<header class="mx-auto mb-12 max-w-2xl text-center md:mb-16">
-			<h2
-				id="products-heading"
-				class="m-0 font-display text-[clamp(1.5rem,3vw,2rem)] font-normal tracking-[0.12em] text-ink uppercase"
-			>
-				Produkty
-			</h2>
-			<p class="mt-4 m-0 font-display text-base leading-relaxed text-ink/80">
-				Wybierz coś dla siebie.
-			</p>
-		</header>
-
-		{
-			errorMessage ? (
-				<p class="m-0 text-center font-sans text-sm text-muted" role="status">
-					{errorMessage}
+		<section
+			id="opinie"
+			class="bg-paper px-6 pb-16 md:px-10 md:pb-24"
+			aria-labelledby="testimonials-heading"
+		>
+			<header class="mx-auto mb-10 max-w-2xl text-center md:mb-14">
+				<h2
+					id="testimonials-heading"
+					class="m-0 font-display text-[clamp(1.5rem,3vw,2rem)] font-normal tracking-[0.12em] text-ink uppercase"
+				>
+					Wasze słowa
+				</h2>
+				<p class="mt-4 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-base">
+					Nie ma dla mnie większego komplementu niż uśmiech na twarzy klientki po zakończonym
+					makijażu. Wasze opinie są dla mnie ogromnym źródłem motywacji i inspiracji do
+					dalszego rozwoju.
 				</p>
-			) : products.length === 0 ? (
-				<p class="m-0 text-center font-sans text-sm text-muted" role="status">
-					Brak produktów.
-				</p>
-			) : (
-				<ul class="mx-auto m-0 grid max-w-5xl list-none grid-cols-1 gap-12 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-10 lg:gap-y-16">
-					{products.map((product, index) => (
-						<li
-							class="grid content-start gap-4 text-center animate-rise-fast motion-reduce:animate-none"
-							style={`animation-delay: ${Math.min(index, 8) * 60}ms`}
-						>
-							{product.imageUrl ? (
+			</header>
+
+			<div class="mx-auto max-w-3xl" data-testimonials>
+				<div class="relative min-h-[12rem] text-center" aria-live="polite">
+					{
+						TESTIMONIALS.map((item, index) => (
+							<figure
+								class:list={[
+									'testimonial-slide m-0 px-4',
+									index === 0 ? 'block' : 'hidden',
+								]}
+								data-testimonial-slide
+								data-index={index}
+							>
 								<img
-									class="mx-auto block aspect-4/5 w-full max-w-sm object-cover"
-									src={product.imageUrl}
-									alt={product.imageAlt || product.name}
+									src={IMAGES.quoteMarks}
+									alt=""
+									class="mx-auto mb-5 h-8 w-auto opacity-80"
+									width="64"
+									height="32"
 									loading="lazy"
-									width="480"
-									height="600"
-								/>
-							) : (
-								<div
-									class="mx-auto aspect-4/5 w-full max-w-sm bg-linear-to-br from-[#e8e6e2] to-[#cfcbc4]"
 									aria-hidden="true"
 								/>
-							)}
-							<h3 class="m-0 font-display text-lg font-normal tracking-[0.08em] text-ink uppercase">
-								{product.name}
-							</h3>
-							{product.price && (
-								<p class="m-0 font-sans text-sm tracking-wide text-muted">{product.price}</p>
-							)}
-						</li>
-					))}
-				</ul>
-			)
-		}
-	</section>
+								<blockquote class="m-0">
+									<p class="m-0 font-display text-base leading-relaxed text-ink/90 italic md:text-lg">
+										“{item.quote}”
+									</p>
+								</blockquote>
+								<figcaption class="mt-5 font-sans text-xs tracking-[0.18em] text-muted uppercase">
+									-{item.author}
+								</figcaption>
+							</figure>
+						))
+					}
+				</div>
+				<div class="mt-8 flex items-center justify-center gap-6">
+					<button
+						type="button"
+						class="border-0 bg-transparent font-sans text-xs tracking-[0.18em] text-ink uppercase opacity-70 transition-opacity hover:opacity-100"
+						data-testimonial-prev
+						aria-label="Poprzednia opinia"
+					>
+						Poprzedni
+					</button>
+					<button
+						type="button"
+						class="border-0 bg-transparent font-sans text-xs tracking-[0.18em] text-ink uppercase opacity-70 transition-opacity hover:opacity-100"
+						data-testimonial-next
+						aria-label="Następna opinia"
+					>
+						Następny
+					</button>
+				</div>
+			</div>
+		</section>
 
-	<footer class="bg-near-black px-6 py-14 text-foam md:px-10 md:py-16">
-		<div class="mx-auto flex max-w-5xl flex-col items-center gap-8 text-center">
+		<section
+			id="instagram"
+			class="relative isolate overflow-hidden px-6 py-20 text-foam md:px-10 md:py-28"
+			aria-labelledby="instagram-heading"
+		>
 			<img
-				class="h-10 w-auto opacity-90 md:h-12"
-				src={footerLogo}
-				alt="Klaudia Jaranowska Makeup"
+				class="absolute inset-0 -z-20 size-full object-cover object-center"
+				src={IMAGES.instagram}
+				alt=""
 				loading="lazy"
-				width="240"
-				height="48"
 			/>
-			<p class="m-0 max-w-md font-sans text-sm leading-relaxed text-foam/75">
-				Makijaż tworzony z pasją - specjalistka od naturalnego glow i kobiecej elegancji.
-			</p>
-			<p class="m-0 font-sans text-xs tracking-[0.2em] text-foam/55 uppercase">
-				Klaudia Jaranowska | Sieradz
-			</p>
-			<nav aria-label="Stopka">
-				<ul
-					class="m-0 flex list-none flex-wrap items-center justify-center gap-x-6 gap-y-3 p-0 font-display text-sm tracking-[0.12em] uppercase"
+			<div class="absolute inset-0 -z-10 bg-black/55" aria-hidden="true"></div>
+			<div class="mx-auto max-w-2xl text-center">
+				<h2
+					id="instagram-heading"
+					class="m-0 font-display text-[clamp(1.5rem,3vw,2.1rem)] font-normal tracking-[0.06em] text-foam"
 				>
-					<li>
-						<a
-							class="text-foam no-underline transition-opacity hover:opacity-70"
-							href={`${SITE}/blog/`}
-							rel="noopener noreferrer"
-						>
-							Blog
-						</a>
-					</li>
-					<li>
-						<a
-							class="text-foam no-underline transition-opacity hover:opacity-70"
-							href={`${SITE}/regulamin/`}
-							rel="noopener noreferrer"
-						>
-							Regulamin
-						</a>
-					</li>
-					<li>
-						<a
-							class="text-foam no-underline transition-opacity hover:opacity-70"
-							href={`${SITE}/polityka-prywatnosci/`}
-							rel="noopener noreferrer"
-						>
-							Polityka prywatności
-						</a>
-					</li>
-				</ul>
-			</nav>
-			<p class="m-0 font-sans text-xs tracking-wide text-foam/40">
-				© {year} Klaudia Jaranowska Make Up
-			</p>
-		</div>
-	</footer>
+					Zobacz jak pracuję!
+				</h2>
+				<p class="mt-4 m-0 font-sans text-sm leading-relaxed text-foam/85 md:text-base">
+					Zajrzyj na Instagram - tam czeka więcej makijażowych metamorfoz, kulisy pracy i
+					inspiracje!
+				</p>
+				<a
+					href={SOCIAL.instagram}
+					class="mt-8 inline-block font-display text-sm tracking-[0.14em] text-foam no-underline uppercase transition-opacity hover:opacity-70"
+					rel="noopener noreferrer"
+					target="_blank"
+				>
+					Obserwuj mnie na Insta!
+				</a>
+			</div>
+		</section>
+	</main>
+
+	<SiteFooter />
 </div>
+
+<script>
+	function initTestimonials() {
+		const root = document.querySelector('[data-testimonials]');
+		if (!(root instanceof HTMLElement)) return;
+
+		const slides = [...root.querySelectorAll('[data-testimonial-slide]')];
+		if (slides.length === 0) return;
+
+		let index = 0;
+		const show = (next: number) => {
+			index = (next + slides.length) % slides.length;
+			slides.forEach((slide, i) => {
+				slide.classList.toggle('hidden', i !== index);
+				slide.classList.toggle('block', i === index);
+			});
+		};
+
+		root.querySelector('[data-testimonial-prev]')?.addEventListener('click', () => show(index - 1));
+		root.querySelector('[data-testimonial-next]')?.addEventListener('click', () => show(index + 1));
+	}
+
+	initTestimonials();
+	document.addEventListener('astro:page-load', initTestimonials);
+</script>
