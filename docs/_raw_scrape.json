@@ -1,0 +1,270 @@
+{
+  "strona-glowna": {
+    "url": "https://klaudiajaranowskamakeup.pl/",
+    "title": "Strona Główna - Klaudia Jaranowska Makeup",
+    "headings": [
+      "Nazywam się Klaudia Jaranowska i jestem dyplomowaną makijażystką oraz szkoleniowcem.",
+      "POZNAJ MOJĄ OFERTĘ",
+      "OFERTA",
+      "Sprawię, że poczujesz się",
+      "WASZE SŁOWA",
+      "Zobacz jak pracuję!"
+    ],
+    "image_count": 56,
+    "text_chunks": 25
+  },
+  "makijaze": {
+    "url": "https://klaudiajaranowskamakeup.pl/makijaze/",
+    "title": "Makijaże - Klaudia Jaranowska Makeup",
+    "headings": [
+      "MAKIJAŻE",
+      "Voucher",
+      "Zobacz jak pracuję!"
+    ],
+    "image_count": 47,
+    "text_chunks": 19
+  },
+  "pakiet-slubny": {
+    "url": "https://klaudiajaranowskamakeup.pl/pakiet-slubny/",
+    "title": "Pakiet ślubny - Klaudia Jaranowska Makeup",
+    "headings": [
+      "PAKIET ŚLUBNY",
+      "W skład pakietu ślubnego wchodzi:",
+      "Dodatkowe informacje:",
+      "Zobacz jak pracuję!"
+    ],
+    "image_count": 47,
+    "text_chunks": 18
+  },
+  "lekcja-makijazu": {
+    "url": "https://klaudiajaranowskamakeup.pl/lekcja-makijazu/",
+    "title": "Lekcja Makijażu - Klaudia Jaranowska Makeup",
+    "headings": [
+      "LEKCJA MAKIJAŻU",
+      "MAKIJAŻ DZIENNY",
+      "600zł",
+      "MAKIJAŻ WIECZOROWY",
+      "700zł"
+    ],
+    "image_count": 25,
+    "text_chunks": 34
+  },
+  "szkolenia-online": {
+    "url": "https://klaudiajaranowskamakeup.pl/szkolenia-online/",
+    "title": "Szkolenia Online - Klaudia Jaranowska Makeup",
+    "headings": [
+      "CLASSY BRIDE MAKE-UP",
+      "Foxy Eye Masterclass"
+    ],
+    "image_count": 26,
+    "text_chunks": 7
+  },
+  "szkolenia-stacjonarne": {
+    "url": "https://klaudiajaranowskamakeup.pl/szkolenia-stacjonarne/",
+    "title": "Szkolenia Stacjonarne - Klaudia Jaranowska Makeup",
+    "headings": [
+      "SZKOLENIA",
+      "1 DZIEŃ",
+      "1500zł",
+      "2 DNI",
+      "2800zł",
+      "3 DNI",
+      "3900zł",
+      "Skontaktuj się ze mną, aby poznać dostępne terminy i umówić się na szkolenie."
+    ],
+    "image_count": 33,
+    "text_chunks": 42
+  },
+  "kontakt": {
+    "url": "https://klaudiajaranowskamakeup.pl/kontakt/",
+    "title": "Kontakt - Klaudia Jaranowska Makeup",
+    "headings": [
+      "KONTAKT",
+      "Jak dojechać?",
+      "Dane kontaktowe",
+      "Nasze salony"
+    ],
+    "image_count": 12,
+    "text_chunks": 17
+  },
+  "regulamin": {
+    "url": "https://klaudiajaranowskamakeup.pl/regulamin/",
+    "title": "Regulamin - Klaudia Jaranowska Makeup",
+    "headings": [
+      "Regulamin",
+      "POSTANOWIENIA OGÓLNE",
+      "KONTAKT ZE SKLEPEM",
+      "WYMAGANIA TECHNICZNE",
+      "ZASADY KORZYSTANIA ZE SKLEPU",
+      "ZAKŁADANIE KONTA W SKLEPIE",
+      "FORMY PŁATNOŚCI",
+      "CENY",
+      "DOSTAWA PRODUKTU CYFROWEGO",
+      "LICENCJA",
+      "PRAWO ODSTĄPIENIA OD UMOWY",
+      "OCHRONA DANYCH OSOBOWYCH",
+      "WŁASNOŚĆ INTELEKTUALNA",
+      "REKLAMACJE",
+      "ZMIANA REGULAMINU",
+      "POSTANOWIENIA KOŃCOWE"
+    ],
+    "image_count": 12,
+    "text_chunks": 84
+  },
+  "polityka-prywatnosci": {
+    "url": "https://klaudiajaranowskamakeup.pl/polityka-prywatnosci/",
+    "title": "Polityka Prywatności - Klaudia Jaranowska Makeup",
+    "headings": [
+      "Polityka Prywatności",
+      "POSTANOWIENIA OGÓLNE",
+      "DEFINICJE",
+      "PRZETWARZANE DANE ORAZ CEL PRZETWARZANIA",
+      "UDOSTĘPNIANIE DANYCH",
+      "OKRES PRZECHOWYWANIA DANYCH",
+      "PRAWA UŻYTKOWNIKA",
+      "BEZPIECZEŃSTWO DANYCH",
+      "PLIKI COOKIES",
+      "NEWSLETTER",
+      "ZMIANY POLITYKI"
+    ],
+    "image_count": 12,
+    "text_chunks": 74
+  },
+  "moje-konto": {
+    "url": "https://klaudiajaranowskamakeup.pl/moje-konto/",
+    "title": "Moje konto - Klaudia Jaranowska Makeup",
+    "headings": [
+      "Moje konto",
+      "Logowanie"
+    ],
+    "image_count": 12,
+    "text_chunks": 9
+  },
+  "koszyk": {
+    "url": "https://klaudiajaranowskamakeup.pl/koszyk/",
+    "title": "Koszyk - Klaudia Jaranowska Makeup",
+    "headings": [
+      "Twój koszyk jest obecnie pusty!",
+      "Nowe szkolenia"
+    ],
+    "image_count": 26,
+    "text_chunks": 7
+  },
+  "koszyk-2": {
+    "url": "https://klaudiajaranowskamakeup.pl/koszyk-2/",
+    "title": "Koszyk - Klaudia Jaranowska Makeup",
+    "headings": [],
+    "image_count": 12,
+    "text_chunks": 2
+  },
+  "checkout": {
+    "url": "https://klaudiajaranowskamakeup.pl/checkout/",
+    "title": "Checkout - Klaudia Jaranowska Makeup",
+    "headings": [
+      "Checkout",
+      "Order Details",
+      "Continue as Guest",
+      "Payment Method"
+    ],
+    "image_count": 12,
+    "text_chunks": 282
+  },
+  "zamowienie": {
+    "url": "https://klaudiajaranowskamakeup.pl/koszyk/",
+    "title": "Koszyk - Klaudia Jaranowska Makeup",
+    "headings": [
+      "Twój koszyk jest obecnie pusty!",
+      "Nowe szkolenia"
+    ],
+    "image_count": 26,
+    "text_chunks": 7
+  },
+  "produkt-classy-bride-make-up": {
+    "url": "https://klaudiajaranowskamakeup.pl/szkolenia-online/classy-bride-make-up/",
+    "title": "CLASSY BRIDE MAKE-UP - Klaudia Jaranowska Makeup",
+    "headings": [
+      "CLASSY BRIDE MAKE-UP",
+      "FAQ"
+    ],
+    "image_count": 21,
+    "text_chunks": 27
+  },
+  "produkt-foxy-eye-masterclass": {
+    "url": "https://klaudiajaranowskamakeup.pl/szkolenia-online/foxy-eye-masterclass/",
+    "title": "Foxy Eye Masterclass - Klaudia Jaranowska Makeup",
+    "headings": [
+      "Foxy Eye Masterclass",
+      "FAQ",
+      "FAQ"
+    ],
+    "image_count": 19,
+    "text_chunks": 42
+  },
+  "kategoria-produktu-kursy": {
+    "url": "https://klaudiajaranowskamakeup.pl/kategoria-produktu/kursy/",
+    "title": "Archiwa kursy - Klaudia Jaranowska Makeup",
+    "headings": [
+      "kursy",
+      "CLASSY BRIDE MAKE-UP",
+      "Foxy Eye Masterclass"
+    ],
+    "image_count": 26,
+    "text_chunks": 8
+  },
+  "kursy-szkoleniaa": {
+    "url": "https://klaudiajaranowskamakeup.pl/szkoleniaa/",
+    "title": "Archiwum Kursy - Klaudia Jaranowska Makeup",
+    "headings": [
+      "Foxy Eye Masterclass",
+      "Zabezpieczone: Classy Bride Make-Up"
+    ],
+    "image_count": 14,
+    "text_chunks": 20
+  },
+  "kurs-foxy-eye-masterclass": {
+    "url": "https://klaudiajaranowskamakeup.pl/szkoleniaa/foxy-eye-masterclass/",
+    "title": "Foxy Eye Masterclass - Klaudia Jaranowska Makeup",
+    "headings": [
+      "Foxy Eye Masterclass",
+      "O kursie",
+      "FAQ",
+      "Zawartość kursu",
+      "Makijaż Foxy Eye",
+      "Makijaż Foxy eye"
+    ],
+    "image_count": 13,
+    "text_chunks": 49
+  },
+  "kokpit": {
+    "url": "https://klaudiajaranowskamakeup.pl/kokpit/",
+    "title": "Kokpit - Klaudia Jaranowska Makeup",
+    "headings": [],
+    "image_count": 12,
+    "text_chunks": 6
+  },
+  "rejestracja-studenta": {
+    "url": "https://klaudiajaranowskamakeup.pl/rejestracja-studenta/",
+    "title": "Rejestracja studenta - Klaudia Jaranowska Makeup",
+    "headings": [
+      "Rejestracja studenta"
+    ],
+    "image_count": 12,
+    "text_chunks": 10
+  },
+  "rejestracja-wykladowcy": {
+    "url": "https://klaudiajaranowskamakeup.pl/rejestracja-wykladowcy/",
+    "title": "Rejestracja wykładowcy - Klaudia Jaranowska Makeup",
+    "headings": [
+      "Rejestracja wykładowcy"
+    ],
+    "image_count": 12,
+    "text_chunks": 10
+  },
+  "blog": {
+    "url": "https://klaudiajaranowskamakeup.pl/blog/",
+    "title": "Blog - Klaudia Jaranowska Makeup",
+    "headings": [],
+    "image_count": 12,
+    "text_chunks": 1
+  }
+}
