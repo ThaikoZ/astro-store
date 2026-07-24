@@ -1,0 +1,844 @@
+/**
+ * Brand-merged card checkout
+ * Layout: reference card UI. Tokens: Klaudia ink/foam/paper + Playfair/Montserrat.
+ */
+
+body.astro-checkout,
+body.astro-pay {
+	--pay-page: #f3f3f3;
+	--pay-card: #ffffff;
+	--pay-ink: #000000;
+	--pay-muted: #6e7179;
+	--pay-border: #d5d2cc;
+	--pay-cta: #000000;
+	--pay-cta-text: #ffffff;
+	--pay-font-display: "Playfair Display", Georgia, serif;
+	--pay-font-sans: "Montserrat", system-ui, sans-serif;
+	--pay-radius-card: 12px;
+	--pay-radius-control: 8px;
+	--pay-tracking: 0.18em;
+	--pay-focus: #000000;
+
+	margin: 0;
+	min-height: 100vh;
+	width: 100%;
+	max-width: none;
+	background: var(--pay-page);
+	color: var(--pay-ink);
+	font-family: var(--pay-font-sans);
+	font-size: 15px;
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+	overflow-x: hidden;
+}
+
+html:has(body.astro-checkout) {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	background: var(--pay-page);
+}
+
+body.astro-checkout.admin-bar {
+	padding-top: 0 !important;
+}
+
+/* Kill theme chrome */
+body.astro-checkout .site-header,
+body.astro-checkout .site-footer,
+body.astro-checkout header#masthead,
+body.astro-checkout footer#colophon,
+body.astro-checkout #secondary,
+body.astro-checkout .widget-area,
+body.astro-checkout .elementor-location-header,
+body.astro-checkout .elementor-location-footer,
+body.astro-checkout .elementor-location-popup,
+body.astro-checkout .entry-header,
+body.astro-checkout .page-header,
+body.astro-checkout h1.entry-title,
+body.astro-checkout .astro-pay-root > h1 {
+	display: none !important;
+}
+
+body.astro-checkout #page,
+body.astro-checkout .site,
+body.astro-checkout .site-content,
+body.astro-checkout .ast-container,
+body.astro-checkout .ast-woocommerce-container,
+body.astro-checkout #content,
+body.astro-checkout #primary,
+body.astro-checkout .content-area,
+body.astro-checkout .site-main,
+body.astro-checkout article,
+body.astro-checkout .entry-content,
+body.astro-checkout .hentry,
+body.astro-checkout .woocommerce,
+body.astro-checkout .woocommerce-page {
+	width: 100% !important;
+	max-width: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	float: none !important;
+	background: transparent !important;
+}
+
+.astro-pay-root,
+.astro-pay-root > .woocommerce,
+.astro-pay-checkout {
+	display: block;
+	min-height: 100vh;
+	width: 100%;
+	max-width: none;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	background: var(--pay-page);
+}
+
+/* Notices live in .astro-pay-notices (same width as cards) */
+.astro-pay-notices {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	margin: 0 0 1rem;
+	width: 100%;
+}
+
+.astro-pay-notices:empty {
+	display: none;
+	margin: 0;
+}
+
+body.astro-checkout .astro-pay-notices .woocommerce-notices-wrapper,
+body.astro-checkout .astro-pay-notices .woocommerce-NoticeGroup,
+body.astro-checkout .astro-pay-notices .woocommerce-NoticeGroup-checkout,
+body.astro-checkout .astro-pay-notices .woocommerce-message,
+body.astro-checkout .astro-pay-notices .woocommerce-info,
+body.astro-checkout .astro-pay-notices .woocommerce-error,
+body.astro-checkout .astro-pay-notices ul.woocommerce-error {
+	box-sizing: border-box !important;
+	width: 100% !important;
+	max-width: none !important;
+	margin: 0 !important;
+	float: none !important;
+}
+
+body.astro-checkout .woocommerce-message,
+body.astro-checkout .woocommerce-info,
+body.astro-checkout .woocommerce-error,
+body.astro-checkout ul.woocommerce-error {
+	box-sizing: border-box;
+	padding: 0.85rem 1rem !important;
+	border: 1px solid var(--pay-border) !important;
+	border-radius: var(--pay-radius-control) !important;
+	background: var(--pay-card);
+	font-size: 0.9rem;
+	font-family: var(--pay-font-sans);
+}
+
+body.astro-checkout .woocommerce-message {
+	border-color: #c7e4c7 !important;
+	background: #eef7ee !important;
+	color: var(--pay-ink) !important;
+}
+
+body.astro-checkout .woocommerce-error,
+body.astro-checkout ul.woocommerce-error {
+	border-color: #f5c2c7 !important;
+	color: #842029;
+}
+
+/* Fallback if a notice is still outside the shell */
+body.astro-checkout .astro-pay-root .woocommerce-message:not(.astro-pay-notices *),
+body.astro-checkout .astro-pay-root .woocommerce-info:not(.astro-pay-notices *),
+body.astro-checkout .astro-pay-root .woocommerce-error:not(.astro-pay-notices *),
+body.astro-checkout .astro-pay-root .woocommerce-notices-wrapper:not(.astro-pay-notices *),
+body.astro-checkout .astro-pay-root .woocommerce-NoticeGroup:not(.astro-pay-notices *) {
+	box-sizing: border-box !important;
+	width: calc(100% - 2.5rem) !important;
+	max-width: calc(1240px - 2.5rem) !important;
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+
+@media (min-width: 900px) {
+	body.astro-checkout .astro-pay-root .woocommerce-message:not(.astro-pay-notices *),
+	body.astro-checkout .astro-pay-root .woocommerce-info:not(.astro-pay-notices *),
+	body.astro-checkout .astro-pay-root .woocommerce-error:not(.astro-pay-notices *),
+	body.astro-checkout .astro-pay-root .woocommerce-notices-wrapper:not(.astro-pay-notices *),
+	body.astro-checkout .astro-pay-root .woocommerce-NoticeGroup:not(.astro-pay-notices *) {
+		width: calc(100% - 3rem) !important;
+		max-width: calc(1240px - 3rem) !important;
+	}
+}
+
+body.astro-checkout .woocommerce-form-coupon-toggle {
+	display: none !important;
+}
+
+body.astro-checkout .woocommerce-form-login-toggle {
+	max-width: 1240px;
+	margin: 0.75rem auto 0;
+	padding: 0 1.25rem;
+}
+
+body.astro-checkout .woocommerce-form-login {
+	max-width: 560px;
+	margin: 0.5rem auto 1rem;
+	padding: 1rem 1.15rem;
+	border: 1px solid var(--pay-border);
+	border-radius: var(--pay-radius-card);
+	background: var(--pay-card);
+}
+
+body.astro-checkout form.checkout_coupon.astro-pay-coupon-native {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
+/* ========== Layout ========== */
+.astro-pay-shell {
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 1240px;
+	margin: 0 auto;
+	padding: 1.5rem 1.25rem 3rem;
+}
+
+@media (min-width: 900px) {
+	.astro-pay-shell {
+		padding: 2.5rem 1.5rem 3.5rem;
+	}
+}
+
+.astro-pay-layout {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1.25rem;
+	width: 100%;
+	align-items: start;
+}
+
+@media (min-width: 900px) {
+	.astro-pay-layout {
+		grid-template-columns: minmax(0, 1.8fr) minmax(280px, 1fr);
+		gap: 1.5rem;
+	}
+}
+
+.astro-pay-card {
+	box-sizing: border-box;
+	background: var(--pay-card);
+	border: 1px solid var(--pay-border);
+	border-radius: var(--pay-radius-card);
+	padding: 1.5rem 1.35rem;
+}
+
+@media (min-width: 900px) {
+	.astro-pay-card {
+		padding: 2rem 1.75rem;
+	}
+}
+
+.astro-pay-card--form {
+	min-width: 0;
+}
+
+.astro-pay-card--cart {
+	min-width: 0;
+}
+
+@media (min-width: 900px) {
+	.astro-pay-card--cart {
+		position: sticky;
+		top: 1.5rem;
+	}
+}
+
+.astro-pay-card__title {
+	margin: 0 0 1.35rem;
+	font-family: var(--pay-font-display);
+	font-size: clamp(1.35rem, 2.2vw, 1.65rem);
+	font-weight: 400;
+	letter-spacing: 0.04em;
+	line-height: 1.25;
+	color: var(--pay-ink);
+}
+
+.astro-pay-section {
+	margin: 0 0 1.75rem;
+}
+
+.astro-pay-section:last-child {
+	margin-bottom: 0;
+}
+
+.astro-pay-section__title {
+	margin: 0 0 1rem;
+	font-family: var(--pay-font-display);
+	font-size: 1.15rem;
+	font-weight: 400;
+	letter-spacing: 0.04em;
+	color: var(--pay-ink);
+}
+
+.astro-pay-back {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	margin: 0 0 1.25rem;
+	color: var(--pay-ink);
+	text-decoration: none;
+	font-family: var(--pay-font-sans);
+	font-size: 0.75rem;
+	font-weight: 500;
+	letter-spacing: var(--pay-tracking);
+	text-transform: uppercase;
+}
+
+.astro-pay-back:hover {
+	opacity: 0.7;
+	color: var(--pay-ink);
+}
+
+/* Hide Woo default headings inside our cards */
+.astro-pay-card .woocommerce-billing-fields > h3,
+.astro-pay-card .woocommerce-shipping-fields > h3,
+.astro-pay-card .woocommerce-additional-fields > h3,
+body.astro-checkout #order_review_heading {
+	display: none;
+}
+
+.astro-pay-card .woocommerce-shipping-fields #ship-to-different-address {
+	display: block;
+	margin: 0 0 1rem;
+}
+
+.astro-pay-card .col-1,
+.astro-pay-card .col-2,
+.astro-pay-card .col2-set .col-1,
+.astro-pay-card .col2-set .col-2 {
+	float: none !important;
+	width: 100% !important;
+	padding: 0 !important;
+}
+
+/* Fields */
+body.astro-checkout .woocommerce form .form-row {
+	padding: 0;
+	margin: 0 0 0.9rem;
+}
+
+body.astro-checkout .woocommerce form .form-row label {
+	display: block;
+	margin: 0 0 0.35rem;
+	font-family: var(--pay-font-sans);
+	font-size: 0.72rem;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--pay-ink);
+	line-height: 1.3;
+}
+
+body.astro-checkout .woocommerce form .form-row label .required {
+	color: #b42318;
+	text-decoration: none;
+	border: 0;
+}
+
+/* Buy as company */
+body.astro-checkout .astro-pay-buy-as-company {
+	margin: 0.35rem 0 1rem !important;
+}
+
+body.astro-checkout .astro-pay-buy-as-company label {
+	display: inline-flex !important;
+	align-items: center;
+	gap: 0.55rem;
+	text-transform: none;
+	letter-spacing: 0;
+	font-size: 0.9rem !important;
+	font-weight: 500 !important;
+	cursor: pointer;
+}
+
+body.astro-checkout .astro-pay-buy-as-company input[type="checkbox"] {
+	width: 1.05rem;
+	height: 1.05rem;
+	margin: 0;
+	accent-color: var(--pay-ink);
+	cursor: pointer;
+}
+
+body.astro-checkout form.checkout .astro-pay-company-field {
+	display: none;
+}
+
+body.astro-checkout form.checkout.astro-pay-company-on .astro-pay-company-field {
+	display: block;
+}
+
+body.astro-checkout form.checkout .astro-pay-company-field[hidden] {
+	display: none !important;
+}
+
+body.astro-checkout form.checkout.astro-pay-company-on .astro-pay-company-field label .optional {
+	display: none !important;
+}
+
+body.astro-checkout form.checkout.astro-pay-company-on .astro-pay-company-field label .required {
+	display: inline !important;
+	color: #b42318;
+}
+
+body.astro-checkout .woocommerce form .form-row input.input-text,
+body.astro-checkout .woocommerce form .form-row textarea,
+body.astro-checkout .woocommerce form .form-row select,
+body.astro-checkout .select2-container .select2-selection--single {
+	box-sizing: border-box;
+	width: 100%;
+	min-height: 46px;
+	margin: 0;
+	padding: 0.7rem 0.9rem;
+	border: 1px solid var(--pay-border);
+	border-radius: var(--pay-radius-control);
+	background: #fff;
+	color: var(--pay-ink);
+	font-family: var(--pay-font-sans);
+	font-size: 0.92rem;
+	line-height: 1.4;
+	box-shadow: none;
+	outline: none;
+	transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+body.astro-checkout .woocommerce form .form-row textarea {
+	min-height: 96px;
+	resize: vertical;
+}
+
+body.astro-checkout .woocommerce form .form-row input.input-text:focus,
+body.astro-checkout .woocommerce form .form-row textarea:focus,
+body.astro-checkout .woocommerce form .form-row select:focus,
+body.astro-checkout .select2-container--open .select2-selection--single {
+	border-color: var(--pay-ink);
+	box-shadow: 0 0 0 1px var(--pay-ink);
+}
+
+/* Invalid fields after place-order / checkout validation */
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid input.input-text,
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid textarea,
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid select,
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid .select2-container .select2-selection--single,
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid-required-field input.input-text,
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid-required-field textarea,
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid-required-field select,
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid-required-field .select2-container .select2-selection--single,
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid-email input.input-text,
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid-phone input.input-text {
+	border-color: #b42318 !important;
+	box-shadow: 0 0 0 1px #b42318 !important;
+}
+
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid input.input-text:focus,
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid textarea:focus,
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid select:focus,
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid .select2-container--open .select2-selection--single,
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid-required-field input.input-text:focus,
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid-required-field textarea:focus,
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid-required-field select:focus,
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid-email input.input-text:focus,
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid-phone input.input-text:focus {
+	border-color: #b42318 !important;
+	box-shadow: 0 0 0 1px #b42318 !important;
+}
+
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid > label .required,
+body.astro-checkout .woocommerce form .form-row.woocommerce-invalid-required-field > label .required {
+	color: #b42318;
+}
+
+body.astro-checkout .select2-container .select2-selection--single {
+	display: flex;
+	align-items: center;
+	height: 46px !important;
+}
+
+body.astro-checkout .select2-container--default .select2-selection--single .select2-selection__rendered {
+	padding: 0;
+	line-height: 1.4;
+	color: var(--pay-ink);
+}
+
+body.astro-checkout .select2-container--default .select2-selection--single .select2-selection__arrow {
+	height: 44px;
+}
+
+/* Select2 dropdown is portaled under body; CSS only loads on checkout */
+.select2-container--open .select2-dropdown {
+	border-color: var(--pay-border, #d5d2cc);
+	border-radius: var(--pay-radius-control, 8px);
+	overflow: hidden;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.select2-container--open .select2-dropdown--below {
+	margin-top: 0.35rem;
+}
+
+.select2-search--dropdown {
+	padding: 0.75rem 0.75rem 0.45rem !important;
+}
+
+.select2-search--dropdown .select2-search__field {
+	box-sizing: border-box;
+	width: 100% !important;
+	min-height: 40px;
+	margin: 0 !important;
+	padding: 0.55rem 0.75rem !important;
+	border: 1px solid var(--pay-border, #d5d2cc) !important;
+	border-radius: var(--pay-radius-control, 8px) !important;
+	outline: none;
+	font-family: var(--pay-font-sans, "Montserrat", system-ui, sans-serif);
+	font-size: 0.88rem;
+}
+
+.select2-search--dropdown .select2-search__field:focus {
+	border-color: var(--pay-ink, #000) !important;
+	box-shadow: 0 0 0 1px var(--pay-ink, #000);
+}
+
+.select2-results__options {
+	padding: 0.25rem 0.45rem 0.55rem;
+}
+
+.select2-container--default .select2-results__option {
+	padding: 0.55rem 0.65rem;
+	border-radius: 6px;
+	font-family: var(--pay-font-sans, "Montserrat", system-ui, sans-serif);
+	font-size: 0.9rem;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected],
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+	background: var(--pay-ink, #000) !important;
+	color: #fff !important;
+}
+
+body.astro-checkout .woocommerce form .form-row-first,
+body.astro-checkout .woocommerce form .form-row-last {
+	width: 100%;
+	float: none;
+}
+
+@media (min-width: 560px) {
+	body.astro-checkout .woocommerce form .form-row-first,
+	body.astro-checkout .woocommerce form .form-row-last {
+		width: calc(50% - 0.45rem);
+	}
+
+	body.astro-checkout .woocommerce form .form-row-first {
+		float: left;
+		clear: both;
+	}
+
+	body.astro-checkout .woocommerce form .form-row-last {
+		float: right;
+	}
+}
+
+.astro-pay-section::after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+/* Payment / shipping method cards */
+body.astro-checkout #payment {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: transparent;
+}
+
+body.astro-checkout #payment ul.payment_methods,
+.astro-pay-shipping-methods #shipping_method {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.65rem;
+	border: 0;
+	background: transparent;
+}
+
+body.astro-checkout #payment ul.payment_methods li,
+.astro-pay-shipping-methods #shipping_method li {
+	list-style: none;
+	margin: 0;
+	padding: 0.95rem 1rem;
+	border: 1px solid var(--pay-border);
+	border-radius: var(--pay-radius-control);
+	background: #fff;
+	cursor: pointer;
+}
+
+body.astro-checkout #payment ul.payment_methods li:has(input:checked),
+.astro-pay-shipping-methods #shipping_method li:has(input:checked) {
+	border-color: var(--pay-ink);
+	box-shadow: 0 0 0 1px var(--pay-ink);
+}
+
+body.astro-checkout #payment ul.payment_methods li label,
+.astro-pay-shipping-methods #shipping_method li label {
+	font-family: var(--pay-font-sans);
+	font-size: 0.9rem;
+	font-weight: 500;
+	color: var(--pay-ink);
+	cursor: pointer;
+}
+
+body.astro-checkout #payment div.payment_box {
+	margin: 0.75rem 0 0;
+	padding: 0.75rem 0 0;
+	border: 0;
+	border-top: 1px solid var(--pay-border);
+	background: transparent !important;
+	color: var(--pay-muted);
+	font-size: 0.85rem;
+}
+
+body.astro-checkout #payment div.payment_box::before {
+	display: none;
+}
+
+/* Cart lines */
+.astro-pay-lines {
+	list-style: none;
+	margin: 0 0 1.25rem;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.astro-pay-line {
+	display: grid;
+	grid-template-columns: 56px 1fr auto;
+	gap: 0.85rem;
+	align-items: center;
+}
+
+.astro-pay-line__media {
+	position: relative;
+	width: 56px;
+	height: 56px;
+}
+
+.astro-pay-line__media img,
+.astro-pay-line__img {
+	width: 56px;
+	height: 56px;
+	object-fit: cover;
+	border-radius: 8px;
+	border: 1px solid var(--pay-border);
+	background: var(--pay-page);
+	display: block;
+}
+
+.astro-pay-line__qty {
+	position: absolute;
+	top: -0.35rem;
+	right: -0.35rem;
+	min-width: 1.2rem;
+	height: 1.2rem;
+	padding: 0 0.3rem;
+	border-radius: 999px;
+	background: var(--pay-ink);
+	color: var(--pay-cta-text);
+	font-size: 0.68rem;
+	font-weight: 600;
+	line-height: 1.2rem;
+	text-align: center;
+}
+
+.astro-pay-line__name {
+	margin: 0;
+	font-family: var(--pay-font-sans);
+	font-size: 0.9rem;
+	font-weight: 600;
+	color: var(--pay-ink);
+}
+
+.astro-pay-line__meta .variation {
+	margin: 0.2rem 0 0;
+	font-size: 0.78rem;
+	color: var(--pay-muted);
+}
+
+.astro-pay-line__price {
+	font-size: 0.9rem;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+/* Coupon */
+.astro-pay-coupon {
+	margin: 0 0 1.25rem;
+}
+
+.astro-pay-coupon__panel {
+	display: flex;
+	align-items: stretch;
+	gap: 0;
+	border: 1px solid var(--pay-border);
+	border-radius: var(--pay-radius-control);
+	overflow: hidden;
+	background: #fff;
+}
+
+.astro-pay-coupon__input {
+	flex: 1;
+	min-height: 46px;
+	padding: 0.65rem 0.9rem;
+	border: 0;
+	background: transparent;
+	color: var(--pay-ink);
+	font-family: var(--pay-font-sans);
+	font-size: 0.88rem;
+	outline: none;
+}
+
+.astro-pay-coupon__input::placeholder {
+	color: var(--pay-muted);
+}
+
+.astro-pay-coupon__apply {
+	flex: 0 0 auto;
+	padding: 0 1rem;
+	border: 0;
+	border-left: 1px solid var(--pay-border);
+	background: transparent;
+	color: var(--pay-ink);
+	font-family: var(--pay-font-sans);
+	font-size: 0.72rem;
+	font-weight: 600;
+	letter-spacing: var(--pay-tracking);
+	text-transform: uppercase;
+	cursor: pointer;
+}
+
+.astro-pay-coupon__apply:hover {
+	opacity: 0.7;
+}
+
+/* Totals */
+.astro-pay-totals {
+	width: 100%;
+	border-collapse: collapse;
+	font-family: var(--pay-font-sans);
+	font-size: 0.9rem;
+	margin: 0 0 1.25rem;
+}
+
+.astro-pay-totals th,
+.astro-pay-totals td {
+	padding: 0.4rem 0;
+	border: 0;
+	background: transparent;
+	font-weight: 400;
+	color: var(--pay-muted);
+	vertical-align: top;
+}
+
+.astro-pay-totals th {
+	text-align: left;
+}
+
+.astro-pay-totals td {
+	text-align: right;
+	color: var(--pay-ink);
+	font-weight: 500;
+}
+
+.astro-pay-totals .order-total th,
+.astro-pay-totals .order-total td {
+	padding-top: 0.85rem;
+	border-top: 1px solid var(--pay-border);
+	font-weight: 600;
+	font-size: 1.05rem;
+	color: var(--pay-ink);
+}
+
+/* Place order (right card) */
+.astro-pay-place-order {
+	margin: 0;
+}
+
+body.astro-checkout .astro-pay-place-order .woocommerce-terms-and-conditions-wrapper {
+	margin: 0 0 1rem;
+	font-size: 0.8rem;
+	color: var(--pay-muted);
+}
+
+/* Match Astro Button solid/ink (CartDrawer checkout CTA) */
+body.astro-checkout .astro-pay-place-order #place_order,
+body.astro-checkout button#place_order {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	gap: 0.625rem;
+	box-sizing: border-box;
+	width: 100%;
+	margin: 0;
+	padding: 0.875rem 2rem !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	background: var(--pay-ink) !important;
+	color: var(--pay-foam, #fff) !important;
+	font-family: var(--pay-font-sans) !important;
+	font-size: 0.75rem !important;
+	font-weight: 400 !important;
+	line-height: 1.25 !important;
+	letter-spacing: 0.18em !important;
+	text-transform: uppercase !important;
+	text-decoration: none !important;
+	text-shadow: none !important;
+	cursor: pointer;
+	box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
+	transition: opacity 150ms ease;
+	opacity: 1;
+}
+
+body.astro-checkout .astro-pay-place-order #place_order:hover,
+body.astro-checkout button#place_order:hover {
+	opacity: 0.8;
+	background: var(--pay-ink) !important;
+	color: var(--pay-foam, #fff) !important;
+}
+
+body.astro-checkout .astro-pay-place-order #place_order:disabled,
+body.astro-checkout button#place_order:disabled,
+body.astro-checkout .astro-pay-place-order #place_order.disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+	pointer-events: none;
+	box-shadow: none !important;
+}
+
+body.astro-checkout .astro-pay-card a {
+	color: var(--pay-ink);
+	text-underline-offset: 0.12em;
+}
+
+body.astro-checkout .astro-pay-card a:hover {
+	opacity: 0.7;
+}

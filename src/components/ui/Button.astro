@@ -22,6 +22,7 @@ interface Props {
 	'data-add-to-cart'?: string | boolean;
 	'data-product-id'?: string | number;
 	'data-cart-continue'?: string | boolean;
+	'data-cart-checkout'?: string | boolean;
 }
 
 const {
@@ -37,6 +38,7 @@ const {
 	'data-add-to-cart': dataAddToCart,
 	'data-product-id': dataProductId,
 	'data-cart-continue': dataCartContinue,
+	'data-cart-checkout': dataCartCheckout,
 } = Astro.props;
 
 const isLink = typeof href === 'string';
@@ -92,6 +94,9 @@ const tones: Record<Variant, Record<Tone, string>> = {
 			data-product-id={dataProductId != null ? String(dataProductId) : undefined}
 			data-cart-continue={
 				dataCartContinue === undefined || dataCartContinue === false ? undefined : ''
+			}
+			data-cart-checkout={
+				dataCartCheckout === undefined || dataCartCheckout === false ? undefined : ''
 			}
 		>
 			<span class="btn-spinner" data-btn-spinner aria-hidden="true"></span>

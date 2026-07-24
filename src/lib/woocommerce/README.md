@@ -15,6 +15,45 @@ Install and activate these on the WordPress site (plus WooCommerce itself):
 
 Without JWT Authentication, catalog/cart queries may still work for guests, but customer login and authenticated orders will not.
 
+## Hosted WooCommerce checkout
+
+The Astro cart redirects to native WordPress `/checkout/` (payment gateways stay on WooCommerce), then returns to Astro `/moje-konto/?tab=zamowienia`.
+
+### 1. Install the MU-plugins on WordPress
+
+Upload/activate as normal plugins under `wp-content/plugins/` (zips in `wordpress/dist/`):
+
+- [`astro-headless-checkout`](../../../wordpress/plugins/astro-headless-checkout/) - session handoff + return URL
+- [`astro-checkout-ui`](../../../wordpress/plugins/astro-checkout-ui/) - Stripe-style blank checkout UI
+
+Activate both in WP Admin → Plugins. Checkout page must use classic `[woocommerce_checkout]` (not the Checkout block).
+
+In `wp-config.php`, set the Astro origin (must match `PUBLIC_APP_ORIGIN` in production):
+
+```php
+define( 'ASTRO_APP_ORIGIN', 'https://your-astro-site.example' );
+```
+
+Headless checkout plugin:
+
+- Loads the headless cart when `/checkout/?session_id=…` is opened
+- Deletes that session after payment
+- Redirects successful orders to `{ASTRO_APP_ORIGIN}/moje-konto/?tab=zamowienia&from_checkout=1`
+
+Checkout UI plugin:
+
+- Full-bleed split layout (summary left, form/pay right)
+- Overrides `form-checkout.php` + `review-order.php`
+
+### 2. Astro env
+
+```bash
+PUBLIC_WORDPRESS_URL=https://your-wordpress-site.example
+PUBLIC_APP_ORIGIN=http://localhost:4321
+```
+
+Cart CTA **Do kasy** builds `{PUBLIC_WORDPRESS_URL}/checkout/?session_id=…` from the `woocommerce-session` cookie (`src/lib/shop/hostedCheckout.ts`).
+
 ## Setup
 
 1. Set env vars (see [`.env.example`](../../../.env.example)):
@@ -22,6 +61,7 @@ Without JWT Authentication, catalog/cart queries may still work for guests, but 
 ```bash
 WORDPRESS_GRAPHQL_URL=https://your-site.example/graphql
 PUBLIC_WORDPRESS_GRAPHQL_URL=/api/graphql
+PUBLIC_WORDPRESS_URL=https://your-site.example
 PUBLIC_APP_ORIGIN=http://localhost:4321
 PUBLIC_STRIPE_PUBLISHABLE_KEY=
 ```

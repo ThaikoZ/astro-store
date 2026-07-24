@@ -1,6 +1,8 @@
 import { formatPrice } from '../lib/formatPrice';
+import { clearLocalCartSessionCookie } from '../lib/shop/hostedCheckout';
 import { getBrowserWooClient } from '../lib/woocommerce';
 import type { CustomerFragment, OrderFragmentFragment } from '../lib/woocommerce/generated/sdk';
+import { resetCartUiAfterCheckout } from './cart-ui';
 
 const VALID_TABS = new Set(['kokpit', 'profil', 'kursy', 'zamowienia', 'ustawienia']);
 
@@ -537,10 +539,24 @@ async function loadAccount(root: HTMLElement) {
 	}
 }
 
+function clearCartAfterHostedCheckoutReturn() {
+	const params = new URLSearchParams(window.location.search);
+	if (params.get('from_checkout') !== '1') return;
+
+	clearLocalCartSessionCookie();
+	resetCartUiAfterCheckout();
+
+	params.delete('from_checkout');
+	const next = `${window.location.pathname}?${params.toString()}`.replace(/\?$/, '');
+	window.history.replaceState({}, '', next);
+}
+
 export async function initAccountUi() {
 	const root = document.querySelector('[data-account-root]');
 	if (!(root instanceof HTMLElement) || root.dataset.bound === 'true') return;
 	root.dataset.bound = 'true';
+
+	clearCartAfterHostedCheckoutReturn();
 
 	try {
 		const woo = getBrowserWooClient();

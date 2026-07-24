@@ -1,4 +1,5 @@
 import { formatPrice } from '../lib/formatPrice';
+import { getHostedCheckoutRedirectUrl } from '../lib/shop/hostedCheckout';
 import { getBrowserWooClient } from '../lib/woocommerce';
 import type { CartFragment } from '../lib/woocommerce/generated/sdk';
 
@@ -94,6 +95,25 @@ function updateBadge(itemCount: number) {
 	if (titleCount instanceof HTMLElement) {
 		titleCount.textContent = itemCount > 0 ? ` (${itemCount})` : '';
 	}
+}
+
+/** Reset header badge / drawer after hosted WP checkout returns. */
+export function resetCartUiAfterCheckout() {
+	updateBadge(0);
+	renderCart(null);
+	setCartError('');
+	setDrawerOpen(false);
+}
+
+function goToHostedCheckout(button: HTMLButtonElement | null) {
+	const result = getHostedCheckoutRedirectUrl(import.meta.env.PUBLIC_WORDPRESS_URL);
+	if (!result.ok) {
+		setCartError(result.error);
+		return;
+	}
+
+	setLoading(button, true);
+	window.location.assign(result.url);
 }
 
 function lineImage(line: CartLine): { src: string; alt: string } | null {
@@ -327,6 +347,12 @@ function bindDocumentEvents() {
 		);
 		if (closeTrigger) {
 			setDrawerOpen(false);
+			return;
+		}
+
+		const checkoutButton = target.closest<HTMLButtonElement>('[data-cart-checkout]');
+		if (checkoutButton instanceof HTMLButtonElement && !checkoutButton.disabled) {
+			goToHostedCheckout(checkoutButton);
 			return;
 		}
 
