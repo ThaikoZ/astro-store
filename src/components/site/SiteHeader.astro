@@ -12,9 +12,11 @@ const isOverlay = variant === 'overlay';
 
 <header
 	class:list={[
-		'z-30 w-full',
-		isOverlay ? 'absolute inset-x-0 top-0' : 'sticky top-0 bg-ink',
+		'site-header fixed inset-x-0 top-0 z-30 w-full transition-[transform,background-color] duration-300 ease-out motion-reduce:transition-none',
+		isOverlay ? 'bg-transparent' : 'bg-ink',
 	]}
+	data-site-header
+	data-variant={variant}
 >
 	<div class="relative z-50 flex items-center justify-between gap-6 px-5 py-5 md:px-10 md:py-6">
 		<a href="/" class="shrink-0 text-foam no-underline" aria-label="Klaudia Jaranowska Makeup - strona główna">
@@ -35,7 +37,7 @@ const isOverlay = variant === 'overlay';
 						<li class="relative group">
 							{item.children ? (
 								<>
-									<span class="font-display text-sm tracking-[0.14em] text-foam uppercase">
+									<span class="nav-link nav-link--static inline-block font-display text-sm tracking-[0.14em] text-foam uppercase">
 										{item.label}
 									</span>
 									<ul class="invisible absolute left-1/2 top-full z-40 m-0 min-w-[14rem] -translate-x-1/2 list-none bg-ink p-3 opacity-0 shadow-lg transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
@@ -43,7 +45,7 @@ const isOverlay = variant === 'overlay';
 											<li>
 												<a
 													href={child.href}
-													class="block px-3 py-2 font-display text-sm tracking-[0.12em] text-foam no-underline uppercase transition-opacity hover:opacity-70"
+													class="nav-link block px-3 py-2 font-display text-sm tracking-[0.12em] text-foam no-underline uppercase"
 												>
 													{child.label}
 												</a>
@@ -54,7 +56,7 @@ const isOverlay = variant === 'overlay';
 							) : (
 								<a
 									href={item.href}
-									class="font-display text-sm tracking-[0.14em] text-foam no-underline uppercase transition-opacity hover:opacity-70"
+									class="nav-link inline-block font-display text-sm tracking-[0.14em] text-foam no-underline uppercase"
 								>
 									{item.label}
 								</a>
@@ -114,7 +116,7 @@ const isOverlay = variant === 'overlay';
 												<li>
 													<a
 														href={child.href}
-														class="font-display text-base tracking-[0.12em] text-foam no-underline uppercase opacity-90 transition-opacity hover:opacity-70"
+														class="nav-link inline-block font-display text-base tracking-[0.12em] text-foam no-underline uppercase opacity-90 transition-opacity hover:opacity-100"
 														data-site-menu-link
 													>
 														{child.label}
@@ -126,7 +128,7 @@ const isOverlay = variant === 'overlay';
 								) : (
 									<a
 										href={item.href}
-										class="font-display text-lg tracking-[0.14em] text-foam no-underline uppercase transition-opacity hover:opacity-70"
+										class="nav-link inline-block font-display text-lg tracking-[0.14em] text-foam no-underline uppercase"
 										data-site-menu-link
 									>
 										{item.label}
@@ -142,6 +144,49 @@ const isOverlay = variant === 'overlay';
 </header>
 
 <style>
+	.nav-link {
+		position: relative;
+	}
+
+	.nav-link::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: -0.2em;
+		height: 1px;
+		background-color: currentColor;
+		opacity: 0;
+		transition: opacity 280ms ease;
+	}
+
+	.nav-link.block::after {
+		left: 0.75rem;
+		right: 0.75rem;
+		bottom: 0.45rem;
+	}
+
+	.nav-link:hover::after,
+	.nav-link:focus-visible::after,
+	.group:hover > .nav-link--static::after,
+	.group:focus-within > .nav-link--static::after {
+		opacity: 1;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.nav-link::after {
+			transition: none;
+		}
+	}
+
+	.site-header.is-hidden {
+		transform: translateY(-100%);
+	}
+
+	.site-header.is-scrolled {
+		background-color: #000000;
+	}
+
 	header:has([data-site-menu-toggle][aria-expanded='true']) .site-mobile-nav {
 		pointer-events: auto;
 		visibility: visible;
@@ -166,6 +211,10 @@ const isOverlay = variant === 'overlay';
 	}
 
 	@media (prefers-reduced-motion: reduce) {
+		.site-header.is-hidden {
+			transform: none;
+		}
+
 		header:has([data-site-menu-toggle][aria-expanded='true']) .site-mobile-nav-inner {
 			transform: none;
 		}
@@ -178,31 +227,76 @@ const isOverlay = variant === 'overlay';
 </style>
 
 <script>
-	function initSiteMenu() {
+	function initSiteHeader() {
+		const header = document.querySelector('[data-site-header]');
 		const toggle = document.querySelector('[data-site-menu-toggle]');
 		const panel = document.querySelector('[data-site-mobile-nav]');
-		if (!(toggle instanceof HTMLElement) || !(panel instanceof HTMLElement)) return;
-		if (toggle.dataset.menuBound === 'true') return;
-		toggle.dataset.menuBound = 'true';
+		if (!(header instanceof HTMLElement) || !(toggle instanceof HTMLElement) || !(panel instanceof HTMLElement)) {
+			return;
+		}
+		if (header.dataset.headerBound === 'true') return;
+		header.dataset.headerBound = 'true';
 
-		const setOpen = (open: boolean) => {
+		const setMenuOpen = (open: boolean) => {
 			toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
 			toggle.setAttribute('aria-label', open ? 'Zamknij menu' : 'Otwórz menu');
 			panel.setAttribute('aria-hidden', open ? 'false' : 'true');
 			document.documentElement.classList.toggle('overflow-hidden', open);
+			if (open) header.classList.remove('is-hidden');
 		};
 
 		toggle.addEventListener('click', () => {
-			setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+			setMenuOpen(toggle.getAttribute('aria-expanded') !== 'true');
 		});
 		panel.querySelectorAll('[data-site-menu-link]').forEach((link) => {
-			link.addEventListener('click', () => setOpen(false));
+			link.addEventListener('click', () => setMenuOpen(false));
 		});
 		document.addEventListener('keydown', (event) => {
-			if (event.key === 'Escape') setOpen(false);
+			if (event.key === 'Escape') setMenuOpen(false);
 		});
+
+		let lastY = window.scrollY;
+		let ticking = false;
+		const topThreshold = 24;
+		const deltaThreshold = 6;
+		const isOverlay = header.dataset.variant === 'overlay';
+
+		const updateHeader = () => {
+			const y = window.scrollY;
+			const delta = y - lastY;
+			const menuOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+			if (isOverlay) {
+				header.classList.toggle('is-scrolled', y > topThreshold);
+			}
+
+			if (!menuOpen) {
+				if (y <= topThreshold) {
+					header.classList.remove('is-hidden');
+				} else if (delta > deltaThreshold) {
+					header.classList.add('is-hidden');
+				} else if (delta < -deltaThreshold) {
+					header.classList.remove('is-hidden');
+				}
+			}
+
+			lastY = y;
+			ticking = false;
+		};
+
+		window.addEventListener(
+			'scroll',
+			() => {
+				if (ticking) return;
+				ticking = true;
+				window.requestAnimationFrame(updateHeader);
+			},
+			{ passive: true },
+		);
+
+		updateHeader();
 	}
 
-	initSiteMenu();
-	document.addEventListener('astro:page-load', initSiteMenu);
+	initSiteHeader();
+	document.addEventListener('astro:page-load', initSiteHeader);
 </script>
