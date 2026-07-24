@@ -201,7 +201,7 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 
 		<section
 			id="opinie"
-			class="bg-foam px-6 pb-16 md:px-10 md:pb-24"
+			class="bg-foam px-6 py-16 md:px-10 md:py-24"
 			aria-labelledby="testimonials-heading"
 		>
 			<header class="mx-auto mb-10 max-w-2xl text-center md:mb-14">
@@ -218,57 +218,62 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 				</p>
 			</header>
 
-			<div class="mx-auto max-w-3xl" data-testimonials>
-				<div class="relative min-h-[12rem] text-center" aria-live="polite">
-					{
-						TESTIMONIALS.map((item, index) => (
-							<figure
-								class:list={[
-									'testimonial-slide m-0 px-4',
-									index === 0 ? 'block' : 'hidden',
-								]}
-								data-testimonial-slide
-								data-index={index}
-							>
-								<img
-									src={IMAGES.quoteMarks}
-									alt=""
-									class="mx-auto mb-5 h-8 w-auto opacity-80"
-									width="64"
-									height="32"
-									loading="lazy"
-									aria-hidden="true"
-								/>
-								<blockquote class="m-0">
-									<p class="m-0 font-display text-base leading-relaxed text-ink/90 italic md:text-lg">
-										“{item.quote}”
-									</p>
-								</blockquote>
-								<figcaption class="mt-5 font-sans text-xs tracking-[0.18em] text-muted uppercase">
-									-{item.author}
-								</figcaption>
-							</figure>
-						))
-					}
-				</div>
-				<div class="mt-8 flex items-center justify-center gap-6">
-					<button
-						type="button"
-						class="border-0 bg-transparent font-sans text-xs tracking-[0.18em] text-ink uppercase opacity-70 transition-opacity hover:opacity-100"
-						data-testimonial-prev
-						aria-label="Poprzednia opinia"
+			<div class="mx-auto flex max-w-6xl items-center gap-2 md:gap-4" data-testimonials>
+				<button
+					type="button"
+					class="flex size-10 shrink-0 cursor-pointer items-center justify-center border-0 bg-transparent text-ink transition-opacity hover:opacity-60"
+					data-testimonial-prev
+					aria-label="Poprzednie opinie"
+				>
+					<svg class="size-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+						<path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"></path>
+					</svg>
+				</button>
+
+				<div class="min-w-0 flex-1 overflow-hidden" aria-live="polite">
+					<div
+						class="flex transition-transform duration-500 ease-out motion-reduce:transition-none"
+						data-testimonials-track
 					>
-						Poprzedni
-					</button>
-					<button
-						type="button"
-						class="border-0 bg-transparent font-sans text-xs tracking-[0.18em] text-ink uppercase opacity-70 transition-opacity hover:opacity-100"
-						data-testimonial-next
-						aria-label="Następna opinia"
-					>
-						Następny
-					</button>
+						{
+							[...TESTIMONIALS, ...TESTIMONIALS].map((item) => (
+								<figure
+									class="m-0 w-full shrink-0 grow-0 basis-full px-3 text-center sm:basis-1/2 lg:basis-1/3"
+									data-testimonial-slide
+								>
+									<img
+										src={IMAGES.quoteMarks}
+										alt=""
+										class="mx-auto mb-4 h-3 w-auto opacity-80"
+										width="64"
+										height="32"
+										loading="lazy"
+										aria-hidden="true"
+									/>
+									<blockquote class="m-0">
+										<p class="m-0 font-display text-base leading-relaxed text-ink/90 italic md:text-lg">
+											“{item.quote}”
+										</p>
+									</blockquote>
+									<figcaption class="mt-5 font-sans text-xs tracking-[0.18em] text-muted uppercase">
+										-{item.author}
+									</figcaption>
+								</figure>
+							))
+						}
+					</div>
 				</div>
+
+				<button
+					type="button"
+					class="flex size-10 shrink-0 cursor-pointer items-center justify-center border-0 bg-transparent text-ink transition-opacity hover:opacity-60"
+					data-testimonial-next
+					aria-label="Następne opinie"
+				>
+					<svg class="size-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+						<path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"></path>
+					</svg>
+				</button>
 			</div>
 		</section>
 
@@ -343,21 +348,67 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 	function initTestimonials() {
 		const root = document.querySelector('[data-testimonials]');
 		if (!(root instanceof HTMLElement)) return;
+		if (root.dataset.testimonialsBound === 'true') return;
+		root.dataset.testimonialsBound = 'true';
 
+		const track = root.querySelector('[data-testimonials-track]');
 		const slides = [...root.querySelectorAll('[data-testimonial-slide]')];
-		if (slides.length === 0) return;
+		if (!(track instanceof HTMLElement) || slides.length === 0) return;
 
+		// Track is duplicated once for seamless looping.
+		const uniqueCount = slides.length / 2;
 		let index = 0;
-		const show = (next: number) => {
-			index = (next + slides.length) % slides.length;
-			slides.forEach((slide, i) => {
-				slide.classList.toggle('hidden', i !== index);
-				slide.classList.toggle('block', i === index);
-			});
+		let locked = false;
+
+		const visibleCount = () => {
+			if (window.matchMedia('(min-width: 1024px)').matches) return Math.min(3, uniqueCount);
+			if (window.matchMedia('(min-width: 640px)').matches) return Math.min(2, uniqueCount);
+			return 1;
 		};
 
-		root.querySelector('[data-testimonial-prev]')?.addEventListener('click', () => show(index - 1));
-		root.querySelector('[data-testimonial-next]')?.addEventListener('click', () => show(index + 1));
+		const stepPercent = () => 100 / visibleCount();
+
+		const render = (animate = true) => {
+			track.style.transition = animate ? '' : 'none';
+			track.style.transform = `translateX(-${index * stepPercent()}%)`;
+			if (!animate) {
+				// Force reflow so the next animated move works.
+				void track.offsetWidth;
+				track.style.transition = '';
+			}
+		};
+
+		const go = (direction: number) => {
+			if (locked) return;
+			locked = true;
+			index += direction;
+			render(true);
+
+			window.setTimeout(() => {
+				if (index >= uniqueCount) {
+					index -= uniqueCount;
+					render(false);
+				} else if (index < 0) {
+					index += uniqueCount;
+					render(false);
+				}
+				locked = false;
+			}, 520);
+		};
+
+		root.querySelector('[data-testimonial-prev]')?.addEventListener('click', () => go(-1));
+		root.querySelector('[data-testimonial-next]')?.addEventListener('click', () => go(1));
+
+		window.addEventListener(
+			'resize',
+			() => {
+				index = ((index % uniqueCount) + uniqueCount) % uniqueCount;
+				render(false);
+			},
+			{ passive: true },
+		);
+
+		render(false);
 	}
 
 	function initLanding() {
