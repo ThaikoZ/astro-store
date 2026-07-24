@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Custom Headless Checkout
  * Description: Headless WooCommerce checkout for Astro storefronts - branded checkout UI, session handoff, JWT auth via one-time codes, and return to the storefront account page.
- * Version: 1.0.1
+ * Version: 1.0.3
  * Requires at least: 6.0
  * Requires PHP: 8.0
  * Requires Plugins: woocommerce
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CUSTOM_HEADLESS_CHECKOUT_VERSION', '1.0.1' );
+define( 'CUSTOM_HEADLESS_CHECKOUT_VERSION', '1.0.3' );
 define( 'CUSTOM_HEADLESS_CHECKOUT_FILE', __FILE__ );
 define( 'CUSTOM_HEADLESS_CHECKOUT_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CUSTOM_HEADLESS_CHECKOUT_URL', plugin_dir_url( __FILE__ ) );

@@ -81,7 +81,7 @@ WP Admin → **WooCommerce → Headless Checkout** (`custom-headless-checkout` *
 
 - Require login before checkout
 - Enable/disable company + NIP fields
-- Terms of use + privacy policy URLs (override Woo page links in checkout consent + required checkbox)
+- Terms of use + privacy policy URLs; choose notice-only acceptance or a required checkbox
 - Custom CSS (checkout only)
 
 Public REST for Astro: `GET /wp-json/custom-checkout/v1/settings` → `{ authRequired, companyFieldsEnabled }`.

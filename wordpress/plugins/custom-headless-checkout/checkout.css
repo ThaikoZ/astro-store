@@ -690,30 +690,56 @@ body.astro-checkout #payment div.payment_box::before {
 	white-space: nowrap;
 }
 
-/* Coupon */
+/* Coupon - collapsed by default */
 .astro-pay-coupon {
-	margin: 0 0 1.25rem;
+	margin: 0 0 1rem;
+}
+
+.astro-pay-coupon__toggle {
+	display: inline;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--pay-ink);
+	font-family: var(--pay-font-sans);
+	font-size: 0.8rem;
+	font-weight: 500;
+	letter-spacing: 0.02em;
+	text-decoration: underline;
+	text-underline-offset: 0.18em;
+	cursor: pointer;
+}
+
+.astro-pay-coupon__toggle:hover {
+	opacity: 0.65;
 }
 
 .astro-pay-coupon__panel {
 	display: flex;
 	align-items: stretch;
 	gap: 0;
+	margin-top: 0.55rem;
 	border: 1px solid var(--pay-border);
 	border-radius: var(--pay-radius-control);
 	overflow: hidden;
 	background: #fff;
 }
 
+.astro-pay-coupon__panel[hidden] {
+	display: none;
+}
+
 .astro-pay-coupon__input {
 	flex: 1;
-	min-height: 46px;
-	padding: 0.65rem 0.9rem;
+	min-height: 34px;
+	height: 34px;
+	padding: 0 0.7rem;
 	border: 0;
 	background: transparent;
 	color: var(--pay-ink);
 	font-family: var(--pay-font-sans);
-	font-size: 0.88rem;
+	font-size: 0.8rem;
+	line-height: 1;
 	outline: none;
 }
 
@@ -723,13 +749,13 @@ body.astro-checkout #payment div.payment_box::before {
 
 .astro-pay-coupon__apply {
 	flex: 0 0 auto;
-	padding: 0 1rem;
+	padding: 0 0.75rem;
 	border: 0;
 	border-left: 1px solid var(--pay-border);
 	background: transparent;
 	color: var(--pay-ink);
 	font-family: var(--pay-font-sans);
-	font-size: 0.72rem;
+	font-size: 0.65rem;
 	font-weight: 600;
 	letter-spacing: var(--pay-tracking);
 	text-transform: uppercase;

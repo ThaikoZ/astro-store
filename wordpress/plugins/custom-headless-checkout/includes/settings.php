@@ -15,12 +15,13 @@ const CUSTOM_HEADLESS_CHECKOUT_OPTION = 'custom_headless_checkout_settings';
 /**
  * Default settings.
  *
- * @return array{auth_required:bool,company_fields_enabled:bool,custom_css:string,terms_url:string,privacy_url:string}
+ * @return array{auth_required:bool,company_fields_enabled:bool,terms_checkbox:bool,custom_css:string,terms_url:string,privacy_url:string}
  */
 function custom_headless_checkout_default_settings(): array {
 	return array(
 		'auth_required'          => false,
 		'company_fields_enabled' => true,
+		'terms_checkbox'         => false,
 		'custom_css'             => '',
 		'terms_url'              => '',
 		'privacy_url'            => '',
@@ -48,6 +49,7 @@ function custom_headless_checkout_maybe_migrate_settings(): void {
 		array(
 			'auth_required'          => ! empty( $merged['auth_required'] ),
 			'company_fields_enabled' => ! empty( $merged['company_fields_enabled'] ),
+			'terms_checkbox'         => ! empty( $merged['terms_checkbox'] ),
 			'custom_css'             => is_string( $merged['custom_css'] ) ? $merged['custom_css'] : '',
 			'terms_url'              => is_string( $merged['terms_url'] ) ? $merged['terms_url'] : '',
 			'privacy_url'            => is_string( $merged['privacy_url'] ) ? $merged['privacy_url'] : '',
@@ -59,7 +61,7 @@ function custom_headless_checkout_maybe_migrate_settings(): void {
 /**
  * Merged settings from the database.
  *
- * @return array{auth_required:bool,company_fields_enabled:bool,custom_css:string,terms_url:string,privacy_url:string}
+ * @return array{auth_required:bool,company_fields_enabled:bool,terms_checkbox:bool,custom_css:string,terms_url:string,privacy_url:string}
  */
 function custom_headless_checkout_get_settings(): array {
 	custom_headless_checkout_maybe_migrate_settings();
@@ -75,6 +77,7 @@ function custom_headless_checkout_get_settings(): array {
 	return array(
 		'auth_required'          => ! empty( $merged['auth_required'] ),
 		'company_fields_enabled' => ! empty( $merged['company_fields_enabled'] ),
+		'terms_checkbox'         => ! empty( $merged['terms_checkbox'] ),
 		'custom_css'             => is_string( $merged['custom_css'] ) ? $merged['custom_css'] : '',
 		'terms_url'              => is_string( $merged['terms_url'] ) ? $merged['terms_url'] : '',
 		'privacy_url'            => is_string( $merged['privacy_url'] ) ? $merged['privacy_url'] : '',
@@ -93,6 +96,13 @@ function custom_headless_checkout_auth_required(): bool {
  */
 function custom_headless_checkout_company_fields_enabled(): bool {
 	return custom_headless_checkout_get_settings()['company_fields_enabled'];
+}
+
+/**
+ * Whether checkout shows a required terms checkbox (vs notice-only acceptance).
+ */
+function custom_headless_checkout_terms_checkbox_enabled(): bool {
+	return custom_headless_checkout_get_settings()['terms_checkbox'];
 }
 
 /**
@@ -144,7 +154,7 @@ add_action(
 
 /**
  * @param mixed $input Raw POST settings.
- * @return array{auth_required:bool,company_fields_enabled:bool,custom_css:string,terms_url:string,privacy_url:string}
+ * @return array{auth_required:bool,company_fields_enabled:bool,terms_checkbox:bool,custom_css:string,terms_url:string,privacy_url:string}
  */
 function custom_headless_checkout_sanitize_settings( $input ): array {
 	$defaults = custom_headless_checkout_default_settings();
@@ -161,6 +171,7 @@ function custom_headless_checkout_sanitize_settings( $input ): array {
 	return array(
 		'auth_required'          => ! empty( $input['auth_required'] ),
 		'company_fields_enabled' => ! empty( $input['company_fields_enabled'] ),
+		'terms_checkbox'         => ! empty( $input['terms_checkbox'] ),
 		'custom_css'             => $custom_css,
 		'terms_url'              => $terms_url,
 		'privacy_url'            => $privacy_url,
@@ -211,6 +222,35 @@ function custom_headless_checkout_render_settings_page(): void {
 							/>
 							Pokaż „Kupuję jako firma”, Firma i NIP
 						</label>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">Zgoda na regulamin</th>
+					<td>
+						<fieldset>
+							<label style="display:block;margin-bottom:8px;">
+								<input
+									type="radio"
+									name="<?php echo esc_attr( $option ); ?>[terms_checkbox]"
+									value="0"
+									<?php checked( ! $settings['terms_checkbox'] ); ?>
+								/>
+								Tylko tekst (akceptacja przez złożenie zamówienia)
+							</label>
+							<label style="display:block;">
+								<input
+									type="radio"
+									name="<?php echo esc_attr( $option ); ?>[terms_checkbox]"
+									value="1"
+									<?php checked( $settings['terms_checkbox'] ); ?>
+								/>
+								Wymagany checkbox „Przeczytałem/am i akceptuję…”
+							</label>
+						</fieldset>
+						<p class="description">
+							Tekst: „Składając zamówienie, akceptujesz regulamin oraz politykę prywatności.”
+							Linki biorą się z pól poniżej.
+						</p>
 					</td>
 				</tr>
 				<tr>

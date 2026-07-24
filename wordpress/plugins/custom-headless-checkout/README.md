@@ -4,7 +4,7 @@ Headless WooCommerce checkout for Astro (or similar) storefronts.
 
 Branded blank checkout UI, guest session handoff, JWT login via one-time codes, and return to the storefront account page after payment.
 
-**Version:** 1.0.1  
+**Version:** 1.0.3  
 **Author:** Adrian Sudak, AlphaAi Ventures sp. z o.o.  
 **Website:** [alphaaiventures.com](https://alphaaiventures.com)
 
@@ -62,6 +62,7 @@ define( 'GRAPHQL_JWT_AUTH_SECRET_KEY', 'your-long-random-secret' );
 | --- | --- |
 | Wymagane konto | Require login before checkout (storefront gates on this via REST) |
 | Pola firmowe | Show “Kupuję jako firma”, company name, NIP |
+| Zgoda na regulamin | Notice-only text (accept by placing order) or required checkbox |
 | URL regulaminu | Terms link in checkout consent |
 | URL polityki prywatności | Privacy link in checkout consent |
 | Własny CSS | Injected only on the blank checkout page |

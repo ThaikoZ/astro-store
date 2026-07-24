@@ -468,3 +468,20 @@ add_filter(
 	20,
 	3
 );
+
+/**
+ * When notice-only terms mode is on, stop Woo from requiring a terms checkbox.
+ */
+add_filter(
+	'woocommerce_terms_and_conditions_checkbox_enabled',
+	static function ( $enabled ) {
+		if ( ! function_exists( 'custom_headless_checkout_should_load' ) || ! custom_headless_checkout_should_load() ) {
+			return $enabled;
+		}
+		if ( ! custom_headless_checkout_terms_checkbox_enabled() ) {
+			return false;
+		}
+		return $enabled;
+	},
+	20
+);

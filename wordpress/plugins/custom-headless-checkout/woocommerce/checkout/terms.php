@@ -1,6 +1,7 @@
 <?php
 /**
- * Checkout terms / privacy notice with configurable Astro URLs + required acceptance.
+ * Checkout terms / privacy notice with configurable URLs.
+ * Checkbox vs notice-only is controlled in WooCommerce → Headless Checkout.
  *
  * @package CustomHeadlessCheckout
  */
@@ -10,6 +11,9 @@ defined( 'ABSPATH' ) || exit;
 $settings    = function_exists( 'custom_headless_checkout_get_settings' ) ? custom_headless_checkout_get_settings() : array();
 $terms_url   = isset( $settings['terms_url'] ) ? (string) $settings['terms_url'] : '';
 $privacy_url = isset( $settings['privacy_url'] ) ? (string) $settings['privacy_url'] : '';
+$want_checkbox = function_exists( 'custom_headless_checkout_terms_checkbox_enabled' )
+	? custom_headless_checkout_terms_checkbox_enabled()
+	: ! empty( $settings['terms_checkbox'] );
 
 if ( $terms_url === '' && function_exists( 'wc_terms_and_conditions_page_id' ) ) {
 	$terms_id = wc_terms_and_conditions_page_id();
@@ -34,9 +38,10 @@ if ( $privacy_url === '' && function_exists( 'wc_privacy_policy_page_id' ) ) {
 $has_custom_links = $terms_url !== '' || $privacy_url !== '';
 $woo_checkbox     = function_exists( 'wc_terms_and_conditions_checkbox_enabled' ) && wc_terms_and_conditions_checkbox_enabled();
 $show_terms       = apply_filters( 'woocommerce_checkout_show_terms', true );
-$show_checkbox    = $show_terms && ( $has_custom_links || $woo_checkbox );
+$show_notice      = $show_terms && $has_custom_links;
+$show_checkbox    = $show_terms && $want_checkbox && ( $has_custom_links || $woo_checkbox );
 
-if ( ! $has_custom_links && ! $show_checkbox ) {
+if ( ! $show_notice && ! $show_checkbox ) {
 	return;
 }
 
@@ -60,7 +65,7 @@ $checked = apply_filters( 'woocommerce_terms_is_checked_default', isset( $_POST[
 <div class="woocommerce-terms-and-conditions-wrapper astro-pay-terms">
 	<?php do_action( 'woocommerce_checkout_before_terms_and_conditions' ); ?>
 
-	<?php if ( $links_html !== '' ) : ?>
+	<?php if ( $show_notice && $links_html !== '' && ! $show_checkbox ) : ?>
 		<p class="form-row astro-pay-terms__text">
 			<?php
 			echo wp_kses_post(

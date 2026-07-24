@@ -150,6 +150,9 @@
 			syncBuyAsCompany();
 		}
 
+		var couponRoot = document.querySelector('[data-astro-coupon]');
+		var couponToggle = document.querySelector('[data-astro-coupon-toggle]');
+		var couponPanel = document.querySelector('[data-astro-coupon-panel]');
 		var couponInput = document.querySelector('[data-astro-coupon-input]');
 		var couponApply = document.querySelector('[data-astro-coupon-apply]');
 		var nativeCoupon = document.querySelector('form.checkout_coupon.astro-pay-coupon-native');
@@ -157,10 +160,36 @@
 			? nativeCoupon.querySelector('input[name="coupon_code"]')
 			: null;
 
+		function setCouponOpen(open) {
+			if (!couponToggle || !couponPanel) return;
+			couponToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+			if (open) {
+				couponPanel.hidden = false;
+				if (couponRoot) couponRoot.classList.add('is-open');
+				if (couponInput) {
+					window.setTimeout(function () {
+						couponInput.focus();
+					}, 10);
+				}
+			} else {
+				couponPanel.hidden = true;
+				if (couponRoot) couponRoot.classList.remove('is-open');
+			}
+		}
+
+		if (couponToggle && couponPanel) {
+			couponToggle.addEventListener('click', function (e) {
+				e.preventDefault();
+				var open = couponToggle.getAttribute('aria-expanded') !== 'true';
+				setCouponOpen(open);
+			});
+		}
+
 		function applyCoupon() {
 			if (!nativeCoupon || !nativeInput || !couponInput) return;
 			var code = (couponInput.value || '').trim();
 			if (!code) {
+				setCouponOpen(true);
 				couponInput.focus();
 				return;
 			}

@@ -102,7 +102,21 @@ if ( ( $auth_required || $woo_requires_login ) && ! is_user_logged_in() ) {
 				<?php do_action( 'woocommerce_checkout_after_order_review' ); ?>
 
 				<div class="astro-pay-coupon" data-astro-coupon>
-					<div class="astro-pay-coupon__panel">
+					<button
+						type="button"
+						class="astro-pay-coupon__toggle"
+						data-astro-coupon-toggle
+						aria-expanded="false"
+						aria-controls="astro-pay-coupon-panel"
+					>
+						<?php esc_html_e( 'Masz kod rabatowy?', 'woocommerce' ); ?>
+					</button>
+					<div
+						id="astro-pay-coupon-panel"
+						class="astro-pay-coupon__panel"
+						data-astro-coupon-panel
+						hidden
+					>
 						<input
 							type="text"
 							class="astro-pay-coupon__input"
