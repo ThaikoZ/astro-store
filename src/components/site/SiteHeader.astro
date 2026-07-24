@@ -37,7 +37,7 @@ const isOverlay = variant === 'overlay';
 						<li class="relative group">
 							{item.children ? (
 								<>
-									<span class="nav-link nav-link--static inline-block font-display text-sm tracking-[0.14em] text-foam uppercase">
+									<span class="nav-link nav-link--static inline-block whitespace-nowrap font-display text-sm tracking-[0.14em] text-foam uppercase">
 										{item.label}
 									</span>
 									<ul class="invisible absolute left-1/2 top-full z-40 m-0 min-w-[14rem] -translate-x-1/2 list-none bg-ink p-3 opacity-0 shadow-lg transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
@@ -45,7 +45,7 @@ const isOverlay = variant === 'overlay';
 											<li>
 												<a
 													href={child.href}
-													class="nav-link block px-3 py-2 font-display text-sm tracking-[0.12em] text-foam no-underline uppercase"
+													class="nav-link block whitespace-nowrap px-3 py-2 font-display text-sm tracking-[0.12em] text-foam no-underline uppercase"
 												>
 													{child.label}
 												</a>
@@ -56,7 +56,7 @@ const isOverlay = variant === 'overlay';
 							) : (
 								<a
 									href={item.href}
-									class="nav-link inline-block font-display text-sm tracking-[0.14em] text-foam no-underline uppercase"
+									class="nav-link inline-block whitespace-nowrap font-display text-sm tracking-[0.14em] text-foam no-underline uppercase"
 								>
 									{item.label}
 								</a>
@@ -110,13 +110,13 @@ const isOverlay = variant === 'overlay';
 							<li>
 								{item.children ? (
 									<div class="flex flex-col gap-3">
-										<span class="font-display text-lg tracking-[0.14em] uppercase">{item.label}</span>
+										<span class="whitespace-nowrap font-display text-lg tracking-[0.14em] uppercase">{item.label}</span>
 										<ul class="m-0 flex list-none flex-col gap-2 border-l border-foam/25 pl-4">
 											{item.children.map((child) => (
 												<li>
 													<a
 														href={child.href}
-														class="nav-link inline-block font-display text-base tracking-[0.12em] text-foam no-underline uppercase opacity-90 transition-opacity hover:opacity-100"
+														class="nav-link inline-block whitespace-nowrap font-display text-base tracking-[0.12em] text-foam no-underline uppercase opacity-90 transition-opacity hover:opacity-100"
 														data-site-menu-link
 													>
 														{child.label}
@@ -128,7 +128,7 @@ const isOverlay = variant === 'overlay';
 								) : (
 									<a
 										href={item.href}
-										class="nav-link inline-block font-display text-lg tracking-[0.14em] text-foam no-underline uppercase"
+										class="nav-link inline-block whitespace-nowrap font-display text-lg tracking-[0.14em] text-foam no-underline uppercase"
 										data-site-menu-link
 									>
 										{item.label}

@@ -15,6 +15,7 @@ export const IMAGES = {
 export const SOCIAL = {
 	instagram: 'https://www.instagram.com/klaudiajaranowskamakeup/',
 	facebook: 'https://www.facebook.com/p/Klaudia-Jaranowska-MakeUp-100068526680261/',
+	tiktok: 'https://www.tiktok.com/@jaranowskamakeup',
 } as const;
 
 export type NavItem = {
