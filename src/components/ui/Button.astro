@@ -34,13 +34,13 @@ const {
 const isLink = typeof href === 'string';
 
 const base =
-	'inline-flex cursor-pointer items-center justify-center no-underline uppercase transition-opacity';
+	'inline-flex cursor-pointer items-center justify-center gap-2.5 no-underline uppercase transition-opacity disabled:cursor-not-allowed';
 
 const variants: Record<Variant, string> = {
 	solid:
-		'px-8 py-3.5 font-sans text-xs tracking-[0.18em] shadow-sm hover:opacity-80',
+		'px-8 py-3.5 font-sans text-xs tracking-[0.18em] shadow-sm hover:opacity-80 disabled:hover:opacity-60',
 	ghost:
-		'border border-border-soft px-8 py-3.5 font-display text-sm tracking-[0.14em] text-ink hover:opacity-70',
+		'border border-border-soft px-8 py-3.5 font-display text-sm tracking-[0.14em] text-ink hover:opacity-70 disabled:hover:opacity-60',
 	text: 'font-display text-[clamp(0.95rem,2vw,1.1rem)] font-normal tracking-[0.14em] hover:opacity-70',
 };
 
@@ -76,8 +76,12 @@ const tones: Record<Variant, Record<Tone, string>> = {
 			type={type}
 			class:list={[base, variants[variant], tones[variant][tone], className]}
 			aria-label={ariaLabel}
+			aria-busy="false"
 		>
-			<slot />
+			<span class="btn-spinner" data-btn-spinner aria-hidden="true"></span>
+			<span data-btn-label>
+				<slot />
+			</span>
 		</button>
 	)
 }

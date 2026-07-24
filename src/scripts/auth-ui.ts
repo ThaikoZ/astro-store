@@ -12,11 +12,23 @@ function setStatus(el: Element | null, message: string, kind: 'error' | 'success
 	el.classList.toggle('text-ink/70', kind === 'info' || kind === 'success');
 }
 
+function ensureBtnSpinner(button: HTMLButtonElement) {
+	if (button.querySelector('[data-btn-spinner]')) return;
+	const spinner = document.createElement('span');
+	spinner.className = 'btn-spinner';
+	spinner.setAttribute('data-btn-spinner', '');
+	spinner.setAttribute('aria-hidden', 'true');
+	button.prepend(spinner);
+	button.classList.add('inline-flex', 'items-center', 'justify-center', 'gap-2.5');
+}
+
 function setLoading(button: HTMLButtonElement | null, loading: boolean) {
 	if (!button) return;
+	ensureBtnSpinner(button);
 	button.disabled = loading;
 	button.setAttribute('aria-busy', loading ? 'true' : 'false');
 	button.classList.toggle('opacity-60', loading);
+	button.classList.toggle('cursor-not-allowed', loading);
 }
 
 function stripHtml(value: string): string {
@@ -257,38 +269,6 @@ function initResetForm() {
 	});
 }
 
-function initAccountPage() {
-	const root = document.querySelector('[data-auth-account]');
-	if (!(root instanceof HTMLElement) || root.dataset.bound === 'true') return;
-	root.dataset.bound = 'true';
-
-	const logoutBtn = root.querySelector<HTMLButtonElement>('[data-auth-logout]');
-	const status = root.querySelector('[data-auth-status]');
-
-	try {
-		const woo = getBrowserWooClient();
-		if (!woo.auth.isAuthenticated()) {
-			window.location.href = '/logowanie/';
-			return;
-		}
-	} catch {
-		window.location.href = '/logowanie/';
-		return;
-	}
-
-	logoutBtn?.addEventListener('click', async () => {
-		setLoading(logoutBtn, true);
-		try {
-			const woo = getBrowserWooClient();
-			await woo.auth.logout();
-			window.location.href = '/logowanie/';
-		} catch (error) {
-			setStatus(status, polishAuthError(error instanceof Error ? error.message : ''));
-			setLoading(logoutBtn, false);
-		}
-	});
-}
-
 function initPasswordToggles() {
 	const toggles = document.querySelectorAll<HTMLButtonElement>('[data-auth-password-toggle]');
 	for (const toggle of toggles) {
@@ -319,7 +299,6 @@ export function initAuthUi() {
 	initRegisterForm();
 	initForgotForm();
 	initResetForm();
-	initAccountPage();
 }
 
 initAuthUi();

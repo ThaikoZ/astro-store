@@ -1,0 +1,60 @@
+---
+import Button from '../ui/Button.astro';
+
+const fields = [
+	{ name: 'firstName', label: 'Imię', autocomplete: 'given-name', wide: false },
+	{ name: 'lastName', label: 'Nazwisko', autocomplete: 'family-name', wide: false },
+	{ name: 'email', label: 'E-mail', autocomplete: 'email', type: 'email', wide: true },
+	{ name: 'phone', label: 'Telefon', autocomplete: 'tel', type: 'tel', wide: false },
+	{ name: 'address1', label: 'Adres', autocomplete: 'address-line1', wide: true },
+	{ name: 'city', label: 'Miasto', autocomplete: 'address-level2', wide: false },
+	{ name: 'postcode', label: 'Kod pocztowy', autocomplete: 'postal-code', wide: false },
+] as const;
+---
+
+<section data-account-panel="profil" class="hidden" aria-hidden="true">
+	<h2
+		class="mt-0 mb-8 font-display text-[clamp(1.6rem,3vw,2.15rem)] font-normal tracking-[0.02em] text-ink md:mb-10"
+	>
+		Mój profil
+	</h2>
+
+	<div class="grid gap-5 sm:grid-cols-2" data-account-skeleton aria-hidden="true">
+		{
+			fields.map((field) => (
+				<div class:list={['block', field.wide && 'sm:col-span-2']}>
+					<span class="skeleton mb-2 h-3 w-20"></span>
+					<span class="skeleton h-10 w-full"></span>
+				</div>
+			))
+		}
+		<span class="skeleton mt-2 h-12 w-44"></span>
+	</div>
+
+	<form class="space-y-5" data-account-form="profile" data-account-loaded novalidate>
+		<div class="grid gap-5 sm:grid-cols-2">
+			{
+				fields.map((field) => (
+					<label class:list={['block', field.wide && 'sm:col-span-2']}>
+						<span class="mb-1 block font-sans text-[0.68rem] font-medium tracking-[0.16em] text-ink/50 uppercase">
+							{field.label}
+						</span>
+						<input
+							class="w-full border-0 border-b border-ink/20 bg-transparent py-2.5 font-sans text-sm text-ink outline-none transition-[border-color] placeholder:text-ink/35 focus:border-ink"
+							type={'type' in field ? field.type : 'text'}
+							name={field.name}
+							autocomplete={field.autocomplete}
+							data-account-profile-field={field.name}
+						/>
+					</label>
+				))
+			}
+		</div>
+
+		<p class="m-0 hidden font-sans text-sm leading-relaxed" data-account-status="profile" hidden></p>
+
+		<Button type="submit" variant="solid" tone="ink" class="mt-2">
+			Zapisz zmiany
+		</Button>
+	</form>
+</section>

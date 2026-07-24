@@ -1271,13 +1271,13 @@ export type UpdateCustomerMutationVariables = Exact<{
 }>;
 
 
-export type UpdateCustomerMutation = { updateCustomer: { customer: { downloadableItems: { nodes: Array<{ id: string, name: string | null, url: string | null, accessExpires: string | null, downloadsRemaining: number | null, product:
+export type UpdateCustomerMutation = { updateCustomer: { customer: { lastName: string | null, email: string | null, firstName: string | null, username: string | null, databaseId: number | null, cartToken: string | null, isPayingCustomer: boolean | null, date: string | null, downloadableItems: { nodes: Array<{ id: string, name: string | null, url: string | null, accessExpires: string | null, downloadsRemaining: number | null, product:
             | { name: string | null, slug: string | null }
             | { name: string | null, slug: string | null }
             | { name: string | null, slug: string | null }
             | { name: string | null, slug: string | null }
             | { name: string | null, slug: string | null }
-           | null }> } | null } | null } | null };
+           | null }> } | null, billing: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null, shipping: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null } | null } | null };
 
 export type UpdatePasswordMutationVariables = Exact<{
   id: string | number;
@@ -2173,6 +2173,7 @@ export const UpdateCustomerDocument = gql`
     mutation UpdateCustomer($input: UpdateCustomerInput!) {
   updateCustomer(input: $input) {
     customer {
+      ...Customer
       downloadableItems(first: 100) {
         nodes {
           ...DownloadableItem
@@ -2181,7 +2182,8 @@ export const UpdateCustomerDocument = gql`
     }
   }
 }
-    ${DownloadableItemFragmentDoc}`;
+    ${CustomerFragmentDoc}
+${DownloadableItemFragmentDoc}`;
 export const UpdatePasswordDocument = gql`
     mutation updatePassword($id: ID!, $password: String!) {
   updateUser(input: {id: $id, password: $password}) {

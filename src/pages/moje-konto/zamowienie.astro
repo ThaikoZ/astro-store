@@ -1,0 +1,51 @@
+---
+import SiteFooter from '../../components/site/SiteFooter.astro';
+import SiteHeader from '../../components/site/SiteHeader.astro';
+import Container from '../../components/ui/Container.astro';
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Zamówienie - Klaudia Jaranowska Makeup">
+	<div class="min-h-full bg-foam text-ink md:bg-paper">
+		<SiteHeader variant="solid" />
+		<main class="pt-28 pb-16 md:pt-32 md:pb-24 lg:pb-28">
+			<Container>
+				<div class="w-full max-w-3xl" data-order-detail data-loading>
+					<a
+						href="/moje-konto/?tab=zamowienia"
+						class="inline-flex font-sans text-sm text-ink/55 no-underline underline-offset-4 transition-opacity hover:text-ink hover:underline"
+					>
+						← Historia zamówień
+					</a>
+
+					<div class="mt-8 space-y-4" data-order-skeleton aria-hidden="true">
+						<span class="skeleton h-9 w-64 max-w-full"></span>
+						<span class="skeleton mt-2 h-4 w-40"></span>
+						<div class="mt-8 space-y-3 border border-border-soft bg-foam p-5 md:p-6">
+							<span class="skeleton h-4 w-full"></span>
+							<span class="skeleton h-4 w-[85%]"></span>
+							<span class="skeleton h-4 w-[66%]"></span>
+						</div>
+						<div class="space-y-3 border border-border-soft bg-foam p-5 md:p-6">
+							<span class="skeleton h-4 w-32"></span>
+							<span class="skeleton h-4 w-48"></span>
+							<span class="skeleton h-4 w-40"></span>
+						</div>
+					</div>
+
+					<div data-order-content data-order-loaded class="mt-8"></div>
+					<p
+						class="mt-8 m-0 hidden font-sans text-sm leading-relaxed text-red-800"
+						data-order-error
+						hidden
+					></p>
+				</div>
+			</Container>
+		</main>
+		<SiteFooter />
+	</div>
+</Layout>
+
+<script>
+	import '../../scripts/order-detail-ui';
+</script>

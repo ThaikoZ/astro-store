@@ -1,6 +1,6 @@
-import type { WooClientConfig } from './client';
-import { createWooClient } from './client';
-import type { CookieAdapter } from './cookies';
+import type { WooClientConfig } from "./client";
+import { createWooClient } from "./client";
+import type { CookieAdapter } from "./cookies";
 
 type AstroEnv = {
   WORDPRESS_GRAPHQL_URL?: string;
@@ -24,13 +24,17 @@ export function createWooClientFromEnv(
     WORDPRESS_GRAPHQL_URL: import.meta.env.WORDPRESS_GRAPHQL_URL,
     PUBLIC_WORDPRESS_GRAPHQL_URL: import.meta.env.PUBLIC_WORDPRESS_GRAPHQL_URL,
     PUBLIC_APP_ORIGIN: import.meta.env.PUBLIC_APP_ORIGIN,
-    PUBLIC_STRIPE_PUBLISHABLE_KEY: import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY,
+    PUBLIC_STRIPE_PUBLISHABLE_KEY: import.meta.env
+      .PUBLIC_STRIPE_PUBLISHABLE_KEY,
   },
   options: { cookies?: CookieAdapter; fetch?: typeof fetch } = {},
 ) {
-  const endpoint = env.PUBLIC_WORDPRESS_GRAPHQL_URL || env.WORDPRESS_GRAPHQL_URL;
+  const endpoint =
+    env.PUBLIC_WORDPRESS_GRAPHQL_URL || env.WORDPRESS_GRAPHQL_URL;
   if (!endpoint) {
-    throw new Error('PUBLIC_WORDPRESS_GRAPHQL_URL or WORDPRESS_GRAPHQL_URL is not set.');
+    throw new Error(
+      "PUBLIC_WORDPRESS_GRAPHQL_URL or WORDPRESS_GRAPHQL_URL is not set.",
+    );
   }
 
   const config: WooClientConfig = {

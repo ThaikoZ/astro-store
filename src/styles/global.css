@@ -58,3 +58,65 @@ button[aria-expanded='true'] .accordion-icon-minus {
     transition: none;
   }
 }
+
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-spinner {
+  display: none;
+  width: 0.95rem;
+  height: 0.95rem;
+  flex-shrink: 0;
+  border: 1.5px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 9999px;
+}
+
+button[aria-busy='true'] .btn-spinner,
+button[aria-busy='true'] [data-btn-spinner] {
+  display: inline-block;
+  animation: btn-spin 0.7s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button[aria-busy='true'] .btn-spinner,
+  button[aria-busy='true'] [data-btn-spinner] {
+    animation: none;
+    opacity: 0.7;
+  }
+}
+
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.skeleton {
+  display: block;
+  background: color-mix(in srgb, #000 8%, #f3f3f3);
+  animation: skeleton-pulse 1.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    opacity: 0.7;
+  }
+}
+
+[data-account-root][data-loading] [data-account-loaded],
+[data-account-root]:not([data-loading]) [data-account-skeleton],
+[data-account-orders][data-loading] [data-account-orders-loaded],
+[data-account-orders]:not([data-loading]) [data-account-orders-skeleton],
+[data-order-detail][data-loading] [data-order-loaded],
+[data-order-detail]:not([data-loading]) [data-order-skeleton] {
+  display: none !important;
+}

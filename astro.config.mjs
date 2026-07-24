@@ -31,10 +31,33 @@ const graphqlProxy = wpProxy
 		}
 	: undefined;
 
+/** Rewrite /moje-konto/zamowienie/:id → /moje-konto/zamowienie/?id=:id (static site). */
+function orderDetailRewrite() {
+	/** @param {import('vite').ViteDevServer | import('vite').PreviewServer} server */
+	const attach = (server) => {
+		server.middlewares.use((req, _res, next) => {
+			const url = req.url ?? '';
+			const match = url.match(/^\/moje-konto\/zamowienie\/([^/?#]+)\/?(\?.*)?$/);
+			if (match && match[1] && match[1] !== 'index.html') {
+				const qs = new URLSearchParams(match[2]?.startsWith('?') ? match[2].slice(1) : '');
+				qs.set('id', decodeURIComponent(match[1]));
+				req.url = `/moje-konto/zamowienie/?${qs.toString()}`;
+			}
+			next();
+		});
+	};
+
+	return {
+		name: 'order-detail-rewrite',
+		configureServer: attach,
+		configurePreviewServer: attach,
+	};
+}
+
 // https://astro.build/config
 export default defineConfig({
 	vite: {
-		plugins: [tailwindcss()],
+		plugins: [tailwindcss(), orderDetailRewrite()],
 		server: {
 			proxy: graphqlProxy,
 		},

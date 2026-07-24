@@ -1,0 +1,38 @@
+---
+import AccountNav from './AccountNav.astro';
+---
+
+<div class="w-full" data-account-root data-loading>
+	<header class="flex items-center gap-5 border-b border-border-soft pb-8 md:gap-6 md:pb-10">
+		<div
+			class="relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-ink font-sans text-base font-medium tracking-[0.08em] text-foam md:size-[4.5rem] md:text-lg"
+			aria-hidden="true"
+		>
+			<span
+				class="skeleton absolute inset-0 rounded-full !bg-ink/25"
+				data-account-skeleton
+			></span>
+			<span data-account-avatar data-account-loaded></span>
+		</div>
+		<div class="min-w-0 flex-1">
+			<p class="m-0 font-sans text-sm text-ink/55 md:text-[0.95rem]">Cześć,</p>
+			<div class="mt-2" data-account-skeleton aria-hidden="true">
+				<span class="skeleton h-7 w-44 max-w-full md:h-8 md:w-56"></span>
+			</div>
+			<p
+				class="mt-1 m-0 min-h-[1.2em] font-display text-[clamp(1.6rem,3.2vw,2.15rem)] font-normal tracking-[0.02em] text-ink"
+				data-account-name
+				data-account-loaded
+			></p>
+		</div>
+	</header>
+
+	<div class="mt-8 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-14 xl:grid-cols-[16rem_minmax(0,1fr)] xl:gap-16">
+		<aside class="lg:border-r lg:border-border-soft lg:pr-10">
+			<AccountNav />
+		</aside>
+		<div class="min-w-0">
+			<slot />
+		</div>
+	</div>
+</div>
