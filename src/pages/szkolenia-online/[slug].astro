@@ -1,0 +1,240 @@
+---
+import Button from '../../components/ui/Button.astro';
+import SiteFooter from '../../components/site/SiteFooter.astro';
+import SiteHeader from '../../components/site/SiteHeader.astro';
+import Container from '../../components/ui/Container.astro';
+import Layout from '../../layouts/Layout.astro';
+import { mapProductDetail } from '../../lib/shop/mapProductDetail';
+import { createMemoryCookieAdapter, createWooClientFromEnv } from '../../lib/woocommerce';
+
+export async function getStaticPaths() {
+	const woo = createWooClientFromEnv(
+		{
+			WORDPRESS_GRAPHQL_URL: import.meta.env.WORDPRESS_GRAPHQL_URL,
+			PUBLIC_WORDPRESS_GRAPHQL_URL: import.meta.env.PUBLIC_WORDPRESS_GRAPHQL_URL,
+			PUBLIC_APP_ORIGIN: import.meta.env.PUBLIC_APP_ORIGIN,
+		},
+		{
+			cookies: createMemoryCookieAdapter(),
+		},
+	);
+
+	try {
+		const { products } = await woo.catalog.getProducts();
+		const paths: { params: { slug: string } }[] = [];
+
+		for (const node of products?.nodes ?? []) {
+			if (node?.slug) {
+				paths.push({ params: { slug: node.slug } });
+			}
+		}
+
+		return paths;
+	} catch {
+		return [];
+	}
+}
+
+const { slug } = Astro.params;
+
+if (!slug) {
+	return Astro.redirect('/szkolenia-online/');
+}
+
+const woo = createWooClientFromEnv(
+	{
+		WORDPRESS_GRAPHQL_URL: import.meta.env.WORDPRESS_GRAPHQL_URL,
+		PUBLIC_WORDPRESS_GRAPHQL_URL: import.meta.env.PUBLIC_WORDPRESS_GRAPHQL_URL,
+		PUBLIC_APP_ORIGIN: import.meta.env.PUBLIC_APP_ORIGIN,
+	},
+	{
+		cookies: createMemoryCookieAdapter(),
+	},
+);
+
+let product = null as ReturnType<typeof mapProductDetail>;
+let loadError: string | null = null;
+
+try {
+	const { product: node } = await woo.catalog.getProduct(slug);
+	product = mapProductDetail(node);
+	if (!product) {
+		return Astro.redirect('/szkolenia-online/');
+	}
+} catch (error) {
+	loadError =
+		error instanceof Error
+			? error.message
+			: 'Nie udało się pobrać szkolenia. Spróbuj ponownie później.';
+}
+
+const pageTitle = product
+	? `${product.name} - Klaudia Jaranowska Makeup`
+	: 'Szkolenie Online - Klaudia Jaranowska Makeup';
+---
+
+<Layout title={pageTitle} withTopMargin>
+	<div class="min-h-full bg-paper text-ink">
+		<SiteHeader variant="solid" />
+
+		<main class="pb-16 pt-10 md:pb-24 md:pt-14 lg:pb-28">
+			<Container>
+				{
+					loadError || !product ? (
+						<p class="mx-auto max-w-xl text-center font-sans text-sm leading-relaxed text-ink/70 md:text-base">
+							Nie udało się wczytać szkolenia. Sprawdź połączenie z WordPress i spróbuj ponownie.
+						</p>
+					) : (
+						<article
+							class="grid items-start gap-10 md:grid-cols-2 md:gap-12 lg:gap-16"
+							aria-labelledby="product-heading"
+						>
+							<div class="overflow-hidden bg-ink/5 md:sticky md:top-28 lg:top-32">
+								{product.imageUrl ? (
+									<img
+										src={product.imageUrl}
+										alt={product.imageAlt}
+										class="aspect-4/5 w-full object-cover object-center md:aspect-auto md:min-h-128 lg:min-h-144"
+										width="900"
+										height="1125"
+										fetchpriority="high"
+									/>
+								) : (
+									<div class="flex aspect-4/5 w-full items-center justify-center font-sans text-xs tracking-[0.14em] text-ink/40 uppercase md:min-h-128">
+										Brak zdjęcia
+									</div>
+								)}
+							</div>
+
+							<div class="md:pt-2">
+								<h1
+									id="product-heading"
+									class="m-0 font-display text-[clamp(1.6rem,3.5vw,2.35rem)] font-normal leading-tight tracking-[0.12em] text-ink uppercase"
+								>
+									{product.name}
+								</h1>
+
+								<p class="mt-4 m-0 font-sans text-base tracking-[0.06em] text-ink md:text-lg">
+									{product.priceLabel}
+								</p>
+
+								<div class="mt-6 max-w-sm">
+									{product.canAddToCart ? (
+										<Button
+											variant="solid"
+											tone="ink"
+											class="w-full"
+											data-add-to-cart
+											data-product-id={product.databaseId}
+										>
+											Dodaj do koszyka
+										</Button>
+									) : (
+										<Button variant="solid" tone="ink" class="w-full" disabled>
+											{product.stockLabel ?? 'Niedostępne'}
+										</Button>
+									)}
+								</div>
+
+								{product.descriptionHtml ? (
+									<>
+										<hr class="mt-8 mb-0 border-0 border-t border-border-soft" />
+										<div
+											class="product-description mt-8 font-sans text-[0.95rem] leading-[1.75] text-ink md:text-[1rem]"
+											set:html={product.descriptionHtml}
+										/>
+									</>
+								) : null}
+							</div>
+						</article>
+					)
+				}
+			</Container>
+		</main>
+
+		<SiteFooter />
+	</div>
+</Layout>
+
+<style is:global>
+	.product-description :where(p, ul, ol, h2, h3, h4, blockquote, figure, table) {
+		margin: 0 0 1.1em;
+	}
+
+	.product-description > *:first-child {
+		margin-top: 0;
+	}
+
+	.product-description > *:last-child {
+		margin-bottom: 0;
+	}
+
+	.product-description :where(ul, ol) {
+		padding-left: 1.35em;
+		list-style-position: outside;
+	}
+
+	.product-description :where(ul) {
+		list-style-type: disc;
+	}
+
+	.product-description :where(ol) {
+		list-style-type: decimal;
+	}
+
+	.product-description :where(ul ul) {
+		list-style-type: circle;
+		margin-top: 0.45em;
+		margin-bottom: 0.45em;
+	}
+
+	.product-description :where(ol ol) {
+		list-style-type: lower-alpha;
+		margin-top: 0.45em;
+		margin-bottom: 0.45em;
+	}
+
+	.product-description :where(li) {
+		display: list-item;
+		margin: 0.45em 0;
+		padding-left: 0.15em;
+	}
+
+	.product-description :where(li::marker) {
+		color: var(--color-ink);
+	}
+
+	.product-description :where(a) {
+		color: inherit;
+		text-decoration: underline;
+		text-underline-offset: 0.18em;
+	}
+
+	.product-description :where(strong, b) {
+		font-weight: 600;
+	}
+
+	.product-description :where(em, i) {
+		font-style: italic;
+	}
+
+	.product-description :where(h2, h3, h4) {
+		margin: 1.5em 0 0.65em;
+		font-family: var(--font-sans);
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	.product-description :where(blockquote) {
+		border-left: 2px solid var(--color-border-soft);
+		padding-left: 1em;
+		color: color-mix(in srgb, var(--color-ink) 75%, transparent);
+	}
+
+	.product-description :where(hr) {
+		margin: 1.5em 0;
+		border: 0;
+		border-top: 1px solid var(--color-border-soft);
+	}
+</style>

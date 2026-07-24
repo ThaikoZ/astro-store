@@ -42,14 +42,14 @@ const {
 const isLink = typeof href === 'string';
 
 const base =
-	'inline-flex cursor-pointer items-center justify-center gap-2.5 no-underline uppercase transition-opacity disabled:cursor-not-allowed';
+	'inline-flex items-center justify-center gap-2.5 no-underline uppercase transition-opacity enabled:cursor-pointer disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-40';
 
 const variants: Record<Variant, string> = {
 	solid:
-		'px-8 py-3.5 font-sans text-xs tracking-[0.18em] shadow-sm hover:opacity-80 disabled:hover:opacity-60',
+		'px-8 py-3.5 font-sans text-xs tracking-[0.18em] shadow-sm enabled:hover:opacity-80 disabled:shadow-none',
 	ghost:
-		'border border-border-soft px-8 py-3.5 font-display text-sm tracking-[0.14em] text-ink hover:opacity-70 disabled:hover:opacity-60',
-	text: 'font-display text-[clamp(0.95rem,2vw,1.1rem)] font-normal tracking-[0.14em] hover:opacity-70',
+		'border border-border-soft px-8 py-3.5 font-display text-sm tracking-[0.14em] text-ink enabled:hover:opacity-70',
+	text: 'font-display text-[clamp(0.95rem,2vw,1.1rem)] font-normal tracking-[0.14em] enabled:hover:opacity-70',
 };
 
 const tones: Record<Variant, Record<Tone, string>> = {
