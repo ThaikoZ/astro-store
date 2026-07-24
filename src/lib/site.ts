@@ -73,6 +73,14 @@ export const FOOTER_LINKS = [
 	{ label: 'Polityka prywatności', href: '/polityka-prywatnosci/' },
 ] as const;
 
+export const MAKIJAZE_SERVICES = [
+	{ label: 'Makijaż ślubny/próbny', price: '280zł' },
+	{ label: 'Makijaż wieczorowy', price: '250zł' },
+	{ label: 'Makijaż do sesji zdjęciowych', price: '250zł' },
+	{ label: 'Makijaż biznesowy', price: '250zł' },
+	{ label: 'Makijaż w niedzielę i święta', price: '280zł' },
+] as const;
+
 export const TESTIMONIALS = [
 	{
 		quote:

@@ -1,5 +1,111 @@
 ---
-import StubPage from '../layouts/StubPage.astro';
+import SiteFooter from '../components/site/SiteFooter.astro';
+import SiteHeader from '../components/site/SiteHeader.astro';
+import Button from '../components/ui/Button.astro';
+import Layout from '../layouts/Layout.astro';
+import { MAKIJAZE_SERVICES } from '../lib/site';
 ---
 
-<StubPage title="Makijaże - Klaudia Jaranowska Makeup" heading="Makijaże" />
+<Layout title="Makijaże - Klaudia Jaranowska Makeup">
+	<div class="min-h-full bg-paper text-ink">
+		<SiteHeader variant="solid" />
+
+		<main>
+			<section
+				class="px-6 pt-28 pb-12 md:px-10 md:pt-32 md:pb-16"
+				aria-labelledby="makijaze-heading"
+			>
+				<div class="mx-auto grid max-w-6xl items-start gap-12 md:grid-cols-2 md:gap-16 lg:gap-20">
+					<div class="text-center md:text-left">
+						<h1
+							id="makijaze-heading"
+							class="m-0 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] font-normal tracking-[0.14em] text-ink uppercase"
+						>
+							Makijaże
+						</h1>
+						<p
+							class="mx-auto mt-6 m-0 max-w-md font-sans text-sm leading-relaxed text-ink/80 md:mx-0 md:text-[0.95rem] md:leading-7"
+						>
+							Każda z nas pragnie wyglądać olśniewająco w wyjątkowych momentach - takich jak
+							ślub, impreza urodzinowa, firmowa, czy sesja zdjęciowa. To właśnie wtedy
+							szczególnie zależy nam, by zaprezentować się w najlepszym wydaniu i podkreślić
+							swoją urodę.
+						</p>
+						<Button href="/kontakt/" variant="solid" tone="ink" class="mt-10">
+							Zapisz się
+						</Button>
+					</div>
+
+					<ul class="m-0 list-none border-t border-ink p-0" aria-label="Cennik makijaży">
+						{
+							MAKIJAZE_SERVICES.map((service) => (
+								<li class="border-b border-ink">
+									<div class="flex items-baseline justify-between gap-4 py-4 md:py-3">
+										<span class="font-display text-[clamp(0.95rem,2vw,1.1rem)] tracking-[0.06em] text-ink uppercase">
+											{service.label}
+										</span>
+										<span class="shrink-0 font-sans text-sm tracking-wide text-ink md:text-[0.95rem]">
+											{service.price}
+										</span>
+									</div>
+								</li>
+							))
+						}
+					</ul>
+				</div>
+			</section>
+
+			<section
+				class="px-6 pb-12 md:px-10 md:pb-16"
+				aria-labelledby="voucher-heading"
+			>
+				<div
+					class="mx-auto max-w-6xl rounded-[5rem] bg-foam px-6 py-12 md:rounded-[7rem] md:px-10 md:py-16"
+				>
+					<h2
+						id="voucher-heading"
+						class="m-0 text-center font-display text-[clamp(1.6rem,3vw,2.25rem)] font-normal tracking-[0.04em] text-ink"
+					>
+						Voucher
+					</h2>
+					<div class="mx-auto mt-8 max-w-2xl text-left">
+						<p class="m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7">
+							Szukasz wyjątkowego prezentu dla bliskiej osoby?
+						</p>
+						<p class="mt-4 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7">
+							Voucher na makijaż lub szkolenie to idealny sposób, by sprawić komuś chwilę
+							luksusu, relaksu i pewności siebie.
+						</p>
+						<ul
+							class="mt-6 m-0 list-none space-y-3 p-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7"
+						>
+							<li>
+								– Makijaż okolicznościowy, ślubny lub wieczorowy: dla mamy, siostry,
+								przyjaciółki…
+							</li>
+							<li>
+								– Szkolenie makijażowe, dla tych, którzy marzą, by nauczyć się malować siebie
+								lub rozpocząć swoją drogę jako makijażystka.
+							</li>
+						</ul>
+						<p class="mt-6 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7">
+							Voucher imienny wystawiany jest na dowolną usługę z oferty. Ważny przez rok od
+							momentu zakupu.
+						</p>
+						<p class="mt-4 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7">
+							To prezent, który nie tylko cieszy, ale i zostawia trwałe wspomnienie.
+						</p>
+						<p class="mt-6 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7">
+							Napisz do mnie, a pomogę Ci wybrać odpowiednią opcję!
+						</p>
+						<Button href="/kontakt/" variant="solid" tone="ink" class="mt-10">
+							Napisz do mnie
+						</Button>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<SiteFooter />
+	</div>
+</Layout>

@@ -1,35 +1,36 @@
 @import "tailwindcss";
 
 @theme {
-	--font-display: "Playfair Display", Georgia, serif;
-	--font-sans: "Montserrat", system-ui, sans-serif;
-	--color-ink: #000000;
-	--color-near-black: #08090d;
-	--color-foam: #ffffff;
-	--color-paper: #f3f3f3;
-	--color-border-soft: #d5d2cc;
-	--color-muted: #6e7179;
-	--animate-rise: rise 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
-	--animate-rise-fast: rise 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
-	--animate-marquee: marquee 84s linear infinite;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-sans: "Montserrat", system-ui, sans-serif;
+  --color-ink: #000000;
+  --color-near-black: #08090d;
+  --color-foam: #ffffff;
+  --color-paper: #f3f3f3;
+  --color-border-soft: #d5d2cc;
+  --color-brand-gray: #f3f3f3;
+  --color-muted: #6e7179;
+  --animate-rise: rise 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-rise-fast: rise 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-marquee: marquee 84s linear infinite;
 }
 
 @keyframes rise {
-	from {
-		opacity: 0;
-		transform: translateY(12px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes marquee {
-	from {
-		transform: translateX(0);
-	}
-	to {
-		transform: translateX(-50%);
-	}
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
