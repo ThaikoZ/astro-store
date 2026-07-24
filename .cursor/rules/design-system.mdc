@@ -1,0 +1,51 @@
+---
+description: Klaudia Jaranowska Makeup visual design system (from klaudiajaranowskamakeup.pl)
+alwaysApply: true
+---
+
+# Design system - Klaudia Jaranowska Makeup
+
+Source of truth: https://klaudiajaranowskamakeup.pl/
+
+Polish-language makeup artist brand. Editorial, minimal, high-contrast. Not skincare/spa, not colorful e-commerce chrome.
+
+## Tokens (Tailwind `@theme` in `src/styles/global.css`)
+
+| Token | Value | Use |
+|---|---|---|
+| `black` / ink | `#000000` | Marquee, light-section text, borders |
+| `near-black` | `#08090d` | Deep sections / footer |
+| `white` / foam | `#ffffff` | Hero text, marquee text |
+| `paper` | `#f3f3f3` | Page sections under hero |
+| `border-soft` | `#d5d2cc` | Ghost CTA borders on light |
+| Display font | `Playfair Display` | Headings, logo, CTAs, product names |
+| Sans font | `Montserrat` | Logo subtitle, UI labels, prices |
+
+## Typography
+
+- Headings and primary CTAs: `font-display`, often sentence case in hero, **uppercase** for section titles and nav-style links
+- Logo lockup: `KLAUDIA JARANOWSKA` (Playfair, tracking wide, uppercase) + `MAKE UP ARTIST` (Montserrat, tiny, wide tracking, uppercase)
+- Body: comfortable leading, black on `paper`, white on photo/dark
+- Prefer centered type blocks for marketing sections
+
+## Layout patterns
+
+1. **Header**: transparent over hero; logo left; minimal menu control right; no heavy nav chrome
+2. **Hero**: full-bleed photo (`min-h-svh`), centered intro + text CTA; soft bottom fade into black; optional scroll chevron
+3. **Marquee**: full-width black bar; repeating `KLAUDIA JARANOWSKA` in white Playfair
+4. **Content**: `bg-paper` sections; generous whitespace; one purpose per section
+5. **Products / offer**: large centered Playfair names; price in sans; no card chrome (no shadow/radius boxes unless needed for interaction)
+
+## Components
+
+- **Primary CTA (on photo)**: text link, Playfair, white, no fill - e.g. `POZNAJ MOJĄ OFERTĘ` / `KUP PRODUKT`
+- **Ghost CTA (on light)**: Playfair, black text, `1px solid border-soft`, uppercase
+- **Do not** use purple gradients, cream+terracotta kits, pill clusters, multi-shadow cards, or Inter/Roboto as brand fonts
+
+## Copy tone
+
+Polish, first person or intimate second person, makeup / szkolenia / pewność siebie. Example hero spirit: *Nazywam się Klaudia Jaranowska i jestem dyplomowaną makijażystką oraz szkoleniowcem.*
+
+## Implementation
+
+Style with Tailwind utilities + tokens from `global.css`. Keep animations subtle (marquee drift, soft fade-in). Respect `prefers-reduced-motion`.
