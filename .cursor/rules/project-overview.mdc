@@ -1,0 +1,48 @@
+---
+description: Project overview for the Astro WordPress headless store
+alwaysApply: true
+---
+
+# Astro WordPress Headless Store
+
+This is an Astro frontend for a headless WordPress + WooCommerce site.
+
+## Stack
+
+- **Frontend**: Astro (SSG/SSR as needed)
+- **Styling**: Tailwind CSS v4 via `@tailwindcss/vite` (global entry: `src/styles/global.css`)
+- **CMS / commerce backend**: WordPress + WooCommerce
+- **API**: WPGraphQL + WPGraphQL for WooCommerce (GraphQL WooCommerce)
+- **Data flow**: Astro fetches products, pages, and content from WordPress over GraphQL - never via the WordPress PHP theme
+
+## Product shape
+
+- Marketing **landing page** (`/`)
+- **Store** with product listing and product detail pages
+- Product data (name, price, images, stock, variations, categories) comes from WooCommerce via GraphQL
+
+## Conventions
+
+- Keep WordPress as the content/commerce source of truth; Astro owns UI, routing, and presentation
+- Colocate GraphQL queries/mutations near the features that use them (e.g. `src/lib/graphql/`, `src/queries/`)
+- Prefer typed query results; regenerate or update types when the GraphQL schema changes
+- Do not hardcode product catalogs in the frontend when they should come from WooCommerce
+- Store secrets and WordPress endpoint URLs in env vars (e.g. `WORDPRESS_GRAPHQL_URL`), never in source
+- Prefer Astro components for static/marketing UI; use client islands only when interactivity is required (cart, filters, checkout widgets)
+- Style with Tailwind utility classes; keep `src/styles/global.css` as the Tailwind entry (`@import "tailwindcss"`) and import it from the shared layout
+- Prefer Tailwind utilities over ad-hoc CSS; use `@theme` in CSS for design tokens when needed
+
+## Site areas (expected)
+
+| Area | Role |
+|------|------|
+| Landing | Brand, hero, CTA into the store |
+| Store / catalog | Product grid from WooCommerce GraphQL |
+| Product detail | Single product by slug/ID from GraphQL |
+| Cart / checkout | WooCommerce session/cart via GraphQL WooCommerce (client-side where needed) |
+
+## When changing code
+
+- Fetch commerce data through GraphQL WooCommerce, not the REST API, unless GraphQL cannot cover the case
+- Keep pages thin: query in frontmatter or a data helper, render in components
+- Preserve SEO: titles, meta, and product structured data should reflect WordPress/WooCommerce content
