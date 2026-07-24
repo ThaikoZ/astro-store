@@ -30,15 +30,13 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 				class="flex flex-1 flex-col items-center justify-end gap-7 px-6 pb-12 pt-28 text-center md:px-10 md:pb-16"
 			>
 				<h1
-					class="m-0 max-w-[18ch] font-display text-[clamp(1.45rem,3.6vw,2.15rem)] font-normal leading-[1.35] text-foam animate-rise motion-reduce:animate-none"
+					class="m-0 max-w-[28ch] font-display text-[clamp(1.45rem,3.6vw,2.15rem)] font-normal leading-[1.35] text-foam animate-rise motion-reduce:animate-none"
 				>
 					Nazywam się Klaudia Jaranowska
 					<br />
-					i jestem dyplomowaną
+					i jestem dyplomowaną makijażystką
 					<br />
-					makijażystką oraz
-					<br />
-					szkoleniowcem.
+					oraz szkoleniowcem.
 				</h1>
 				<a
 					class="font-display text-[clamp(0.95rem,2vw,1.1rem)] font-normal tracking-[0.14em] text-foam no-underline uppercase transition-opacity duration-200 hover:opacity-70 animate-rise motion-reduce:animate-none [animation-delay:140ms]"
@@ -86,11 +84,11 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 
 		<section
 			id="oferta"
-			class="bg-paper px-6 py-16 md:px-10 md:py-24"
+			class="bg-paper px-6 py-20 md:px-10 md:py-28"
 			aria-labelledby="oferta-heading"
 			data-offer
 		>
-			<div class="mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-2 md:gap-14 lg:gap-20">
+			<div class="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-16 lg:gap-20">
 				<div class="relative mx-auto aspect-5/6 w-full max-w-md overflow-hidden rounded-[10rem] md:mx-0">
 					{
 						OFFER_LINKS.map((item, index) => (
@@ -114,7 +112,7 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 				<div>
 					<h2
 						id="oferta-heading"
-						class="m-0 font-display text-[clamp(1.6rem,3.2vw,2.25rem)] font-normal tracking-[0.16em] text-ink uppercase"
+						class="m-0 font-display text-[clamp(1.5rem,3vw,2.1rem)] font-normal tracking-[0.14em] text-ink uppercase"
 					>
 						Oferta
 					</h2>
@@ -124,7 +122,7 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 								<li class="border-b border-ink">
 									<a
 										href={item.href}
-										class="group flex items-center justify-between gap-4 py-2.5 font-display text-[clamp(1rem,2.2vw,1.2rem)] tracking-[0.04em] text-ink no-underline transition-opacity hover:opacity-70 md:py-4"
+										class="group flex items-center justify-between gap-4 py-2.5 font-display text-[clamp(1rem,2.2vw,1.2rem)] tracking-[0.04em] text-ink no-underline transition-opacity hover:opacity-70 md:py-3"
 										data-offer-link
 										data-index={index}
 										aria-current={index === 0 ? 'true' : undefined}
@@ -152,10 +150,10 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 
 		<section
 			id="o-mnie"
-			class="bg-foam px-6 py-16 md:px-10 md:py-24"
+			class="bg-foam px-6 py-20 md:px-10 md:py-28"
 			aria-labelledby="about-heading"
 		>
-			<div class="mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-2 md:gap-14 lg:gap-20">
+			<div class="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-16 lg:gap-20">
 				<div class="order-2 text-left md:order-1">
 					<h3
 						id="about-heading"
@@ -166,11 +164,11 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 							pięknie i pewnie!
 						</span>
 					</h3>
-					<p class="mt-6 m-0 max-w-xl font-sans text-sm leading-relaxed text-ink/80 md:text-base">
+					<p class="mt-6 m-0 max-w-xl font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7">
 						Moja pasja do makijażu to połączenie doświadczenia, wiedzy i indywidualnego
 						podejścia do każdego klienta.
 					</p>
-					<p class="mt-4 m-0 max-w-xl font-sans text-sm leading-relaxed text-ink/80 md:text-base">
+					<p class="mt-5 m-0 max-w-xl font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7">
 						Moim celem nie jest tylko wykonanie pięknego makijażu - chcę, aby każda kobieta,
 						która siada na moim fotelu, poczuła się wyjątkowo i komfortowo. Niezależnie od
 						tego, czy przygotowujesz się do ślubu, ważnego wydarzenia, sesji zdjęciowej, czy
@@ -179,7 +177,7 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 					</p>
 					<a
 						href="/kontakt/"
-						class="mt-8 inline-block bg-ink px-8 py-3.5 font-sans text-xs tracking-[0.18em] text-foam no-underline uppercase shadow-sm transition-opacity hover:opacity-80"
+						class="mt-10 inline-block bg-ink px-8 py-3.5 font-sans text-xs tracking-[0.18em] text-foam no-underline uppercase shadow-sm transition-opacity hover:opacity-80"
 					>
 						Dowiedz się więcej
 					</a>
@@ -199,19 +197,39 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 			</div>
 		</section>
 
+		<div class="bg-ink px-6 py-5 md:px-10 md:py-6">
+			<a
+				href="/szkolenia-stacjonarne/"
+				class="mx-auto flex max-w-6xl items-center justify-center gap-3 font-display text-sm tracking-[0.16em] text-foam no-underline uppercase transition-opacity hover:opacity-70 md:text-base"
+			>
+				Zobacz szkolenia stacjonarne
+				<svg
+					class="size-5 shrink-0"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.25"
+					aria-hidden="true"
+				>
+					<path d="M4 12h15" stroke-linecap="round"></path>
+					<path d="M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"></path>
+				</svg>
+			</a>
+		</div>
+
 		<section
 			id="opinie"
-			class="bg-foam px-6 py-16 md:px-10 md:py-24"
+			class="bg-foam px-6 py-20 md:px-10 md:py-28"
 			aria-labelledby="testimonials-heading"
 		>
-			<header class="mx-auto mb-10 max-w-2xl text-center md:mb-14">
+			<header class="mx-auto mb-12 max-w-2xl text-center md:mb-16">
 				<h2
 					id="testimonials-heading"
-					class="m-0 font-display text-[clamp(1.5rem,3vw,2rem)] font-normal tracking-[0.12em] text-ink uppercase"
+					class="m-0 font-display text-[clamp(1.5rem,3vw,2.1rem)] font-normal tracking-[0.14em] text-ink uppercase"
 				>
 					Wasze słowa
 				</h2>
-				<p class="mt-4 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-base">
+				<p class="mt-5 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7">
 					Nie ma dla mnie większego komplementu niż uśmiech na twarzy klientki po zakończonym
 					makijażu. Wasze opinie są dla mnie ogromnym źródłem motywacji i inspiracji do
 					dalszego rozwoju.
@@ -279,30 +297,45 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 
 		<section
 			id="instagram"
-			class="relative isolate overflow-hidden px-6 py-20 text-foam md:px-10 md:py-28"
+			class="bg-ink px-6 py-20 text-foam md:px-10 md:py-28"
 			aria-labelledby="instagram-heading"
 		>
-			<img
-				class="absolute inset-0 -z-20 size-full object-cover object-center"
-				src={IMAGES.instagram}
-				alt=""
-				loading="lazy"
-			/>
-			<div class="absolute inset-0 -z-10 bg-black/55" aria-hidden="true"></div>
-			<div class="mx-auto max-w-2xl text-center">
+			<div class="mx-auto max-w-6xl text-center">
 				<h2
 					id="instagram-heading"
 					class="m-0 font-display text-[clamp(1.5rem,3vw,2.1rem)] font-normal tracking-[0.06em] text-foam"
 				>
 					Zobacz jak pracuję!
 				</h2>
-				<p class="mt-4 m-0 font-sans text-sm leading-relaxed text-foam/85 md:text-base">
+				<p class="mx-auto mt-5 m-0 max-w-xl font-sans text-sm leading-relaxed text-foam/85 md:text-[0.95rem] md:leading-7">
 					Zajrzyj na Instagram - tam czeka więcej makijażowych metamorfoz, kulisy pracy i
 					inspiracje!
 				</p>
+
+				<ul
+					class="mx-auto mt-12 m-0 grid max-w-5xl list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 md:mt-14 md:grid-cols-5 md:gap-4"
+				>
+					{
+						OFFER_LINKS.map((item) => (
+							<li>
+								<a href={item.href} class="block overflow-hidden rounded-2xl">
+									<img
+										src={item.image}
+										alt={item.label}
+										class="aspect-square size-full object-cover transition-transform duration-500 hover:scale-105 motion-reduce:transition-none motion-reduce:hover:scale-100"
+										loading="lazy"
+										width="400"
+										height="400"
+									/>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+
 				<a
 					href={SOCIAL.instagram}
-					class="mt-8 inline-block font-display text-sm tracking-[0.14em] text-foam no-underline uppercase transition-opacity hover:opacity-70"
+					class="mt-12 inline-flex min-w-[min(100%,22rem)] items-center justify-center bg-foam px-10 py-4 font-sans text-xs tracking-[0.18em] text-ink no-underline uppercase transition-opacity hover:opacity-85 md:mt-14"
 					rel="noopener noreferrer"
 					target="_blank"
 				>
