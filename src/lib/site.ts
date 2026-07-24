@@ -81,6 +81,20 @@ export const MAKIJAZE_SERVICES = [
 	{ label: 'Makijaż w niedzielę i święta', price: '280zł' },
 ] as const;
 
+export const PAKIET_SLUBNY = {
+	price: '2300zł',
+	image: `${MEDIA}/2025/06/IMG_0147-scaled-e1768179865534.jpeg`,
+	includes: ['Makijaż ślubny', '4 Makijaże dla gości weselnych'],
+	notes: [
+		'Dojazd do 30 km - w cenie pakietu. Dalsze lub zagraniczne dojazdy wyceniane są indywidualnie.',
+		'Pakiet Poprawinowy w promocyjnej cenie - jeśli zdecydujesz się na makijaż poprawinowy, otrzymasz go w specjalnej ofercie.',
+		'Zmiana liczby osób - jeśli liczba osób w pakiecie ulegnie zmniejszeniu, cena nie ulega zmianie. W przypadku zwiększenia liczby osób obowiązuje dopłata w wysokości 400zł za każdą dodatkową osobę.',
+		'Gwarancją rezerwacji terminu jest podpisanie umowy i wpłata zadatku.',
+		'Pakiet nie zawiera makijażu próbnego ślubnego.',
+	],
+	salons: ['Łódź, Mikołaja Kopernika 17', 'Sieradz, Ogrodowa 5'],
+} as const;
+
 export const TESTIMONIALS = [
 	{
 		quote:

@@ -3,9 +3,11 @@ import '../styles/global.css';
 
 interface Props {
 	title?: string;
+	/** Extra top margin under the fixed header. Off on the landing page. */
+	withTopMargin?: boolean;
 }
 
-const { title = 'Klaudia Jaranowska Makeup' } = Astro.props;
+const { title = 'Klaudia Jaranowska Makeup', withTopMargin = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -34,6 +36,8 @@ const { title = 'Klaudia Jaranowska Makeup' } = Astro.props;
 		<title>{title}</title>
 	</head>
 	<body class="m-0 min-h-full bg-paper font-sans text-ink antialiased">
-		<slot />
+		<div class:list={[ withTopMargin && 'mt-20 md:mt-24']}>
+			<slot />
+		</div>
 	</body>
 </html>

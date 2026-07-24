@@ -11,7 +11,7 @@ interface Props {
 const { title, heading } = Astro.props;
 ---
 
-<Layout title={title}>
+<Layout title={title} withTopMargin>
 	<div class="min-h-full bg-paper text-ink">
 		<SiteHeader variant="solid" />
 		<main class="mx-auto max-w-3xl px-6 py-16 text-center md:px-10 md:py-24">

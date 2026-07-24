@@ -1,5 +1,130 @@
 ---
-import StubPage from '../layouts/StubPage.astro';
+import InstagramSection from '../components/site/InstagramSection.astro';
+import SiteFooter from '../components/site/SiteFooter.astro';
+import SiteHeader from '../components/site/SiteHeader.astro';
+import Button from '../components/ui/Button.astro';
+import ImageFrame from '../components/ui/ImageFrame.astro';
+import Layout from '../layouts/Layout.astro';
+import { OFFER_LINKS, PAKIET_SLUBNY, SOCIAL } from '../lib/site';
 ---
 
-<StubPage title="Pakiet ślubny - Klaudia Jaranowska Makeup" heading="Pakiet ślubny" />
+<Layout title="Pakiet ślubny - Klaudia Jaranowska Makeup" withTopMargin>
+	<div class="min-h-full bg-paper text-ink">
+		<SiteHeader variant="solid" />
+
+		<main>
+			<section
+				class="px-6 pt-20 md:px-10 md:pt-28"
+				aria-labelledby="pakiet-slubny-heading"
+			>
+				<div class="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-16 lg:gap-20">
+					<ImageFrame class="order-2 md:order-1">
+						<img
+							src={PAKIET_SLUBNY.image}
+							alt="Makijaż ślubny - Klaudia Jaranowska"
+							class="absolute inset-0 size-full object-cover object-[center_32%]"
+							loading="eager"
+							decoding="async"
+						/>
+					</ImageFrame>
+
+					<div class="order-1 text-center md:order-2 md:text-left">
+						<h1
+							id="pakiet-slubny-heading"
+							class="m-0 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] font-normal tracking-[0.14em] text-ink uppercase"
+						>
+							Pakiet ślubny
+						</h1>
+						<p
+							class="mx-auto mt-6 m-0 max-w-md font-sans text-sm leading-relaxed text-ink/80 md:mx-0 md:max-w-none md:text-[0.95rem] md:leading-7"
+						>
+							Zadbam o to, aby Twój wielki dzień był perfekcyjny! Pakiet Ślubny to kompleksowa
+							oferta, która obejmuje nie tylko profesjonalny makijaż ślubny, ale także pełne
+							wsparcie dla Twoich gości weselnych. Realizuję zlecenia na terenie całej Polski, a
+							także za granicą.
+						</p>
+
+						<h2
+							class="mt-10 m-0 font-display text-lg font-normal tracking-[0.06em] text-ink md:text-xl"
+						>
+							W skład pakietu ślubnego wchodzi:
+						</h2>
+						<ul
+							class="mx-auto mt-4 m-0 max-w-md list-none space-y-2 p-0 text-left font-sans text-sm leading-relaxed text-ink/80 md:mx-0 md:max-w-none md:text-[0.95rem] md:leading-7"
+						>
+							{
+								PAKIET_SLUBNY.includes.map((item) => (
+									<li>– {item}</li>
+								))
+							}
+						</ul>
+						<p
+							class="mt-6 m-0 font-display text-[clamp(1.5rem,3vw,2rem)] font-normal tracking-[0.04em] text-ink"
+						>
+							{PAKIET_SLUBNY.price}
+						</p>
+						<Button href="/kontakt/" variant="solid" tone="ink" class="mt-8">
+							Zarezerwuj swój termin!
+						</Button>
+					</div>
+				</div>
+			</section>
+
+			<section
+				class="px-6 py-20 md:px-10 md:py-28"
+				aria-labelledby="pakiet-info-heading"
+			>
+				<div
+					class="mx-auto max-w-6xl rounded-[5rem] bg-foam px-6 py-12 md:rounded-[7rem] md:px-10 md:py-16"
+				>
+					<h2
+						id="pakiet-info-heading"
+						class="m-0 text-center font-display text-[clamp(1.6rem,3vw,2.25rem)] font-normal tracking-[0.04em] text-ink"
+					>
+						Dodatkowe informacje
+					</h2>
+					<div class="mx-auto mt-8 max-w-2xl text-left">
+						<ul
+							class="m-0 list-none space-y-4 p-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7"
+						>
+							{
+								PAKIET_SLUBNY.notes.map((note) => (
+									<li>– {note}</li>
+								))
+							}
+						</ul>
+						<p class="mt-6 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7">
+							Makijaż próbny wykonuję w moich salonach:
+						</p>
+						<ul
+							class="mt-3 m-0 list-none space-y-2 p-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7"
+						>
+							{
+								PAKIET_SLUBNY.salons.map((salon) => (
+									<li>{salon}</li>
+								))
+							}
+						</ul>
+						<div class="mt-10 flex justify-center">
+							<Button href="/kontakt/" variant="solid" tone="ink">
+								Zarezerwuj swój termin!
+							</Button>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<InstagramSection
+				heading="Zobacz jak pracuję!"
+				description="Zajrzyj na Instagram - tam czeka więcej makijażowych metamorfoz, kulisy pracy i inspiracje!"
+				ctaLabel="Obserwuj mnie na Insta!"
+				ctaHref={SOCIAL.instagram}
+				ctaTarget="_blank"
+				ctaRel="noopener noreferrer"
+				items={OFFER_LINKS}
+			/>
+		</main>
+
+		<SiteFooter />
+	</div>
+</Layout>

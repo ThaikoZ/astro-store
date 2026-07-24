@@ -1,18 +1,19 @@
 ---
+import InstagramSection from '../components/site/InstagramSection.astro';
 import SiteFooter from '../components/site/SiteFooter.astro';
 import SiteHeader from '../components/site/SiteHeader.astro';
 import Button from '../components/ui/Button.astro';
 import Layout from '../layouts/Layout.astro';
-import { MAKIJAZE_SERVICES } from '../lib/site';
+import { MAKIJAZE_SERVICES, OFFER_LINKS, SOCIAL } from '../lib/site';
 ---
 
-<Layout title="Makijaże - Klaudia Jaranowska Makeup">
+<Layout title="Makijaże - Klaudia Jaranowska Makeup" withTopMargin>
 	<div class="min-h-full bg-paper text-ink">
 		<SiteHeader variant="solid" />
 
 		<main>
 			<section
-				class="px-6 pt-28 pb-12 md:px-10 md:pt-32 md:pb-16"
+				class="px-6 pt-20 md:px-10 md:pt-28"
 				aria-labelledby="makijaze-heading"
 			>
 				<div class="mx-auto grid max-w-6xl items-start gap-12 md:grid-cols-2 md:gap-16 lg:gap-20">
@@ -56,7 +57,7 @@ import { MAKIJAZE_SERVICES } from '../lib/site';
 			</section>
 
 			<section
-				class="px-6 pb-12 md:px-10 md:pb-16"
+				class="px-6 py-20 md:px-10 md:py-28"
 				aria-labelledby="voucher-heading"
 			>
 				<div
@@ -98,12 +99,24 @@ import { MAKIJAZE_SERVICES } from '../lib/site';
 						<p class="mt-6 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7">
 							Napisz do mnie, a pomogę Ci wybrać odpowiednią opcję!
 						</p>
-						<Button href="/kontakt/" variant="solid" tone="ink" class="mt-10">
-							Napisz do mnie
-						</Button>
+						<div class="mt-10 flex justify-center">
+							<Button href="/kontakt/" variant="solid" tone="ink">
+								Napisz do mnie
+							</Button>
+						</div>
 					</div>
 				</div>
 			</section>
+
+			<InstagramSection
+				heading="Zobacz jak pracuję!"
+				description="Zajrzyj na Instagram - tam czeka więcej makijażowych metamorfoz, kulisy pracy i inspiracje!"
+				ctaLabel="Obserwuj mnie na Insta!"
+				ctaHref={SOCIAL.instagram}
+				ctaTarget="_blank"
+				ctaRel="noopener noreferrer"
+				items={OFFER_LINKS}
+			/>
 		</main>
 
 		<SiteFooter />
