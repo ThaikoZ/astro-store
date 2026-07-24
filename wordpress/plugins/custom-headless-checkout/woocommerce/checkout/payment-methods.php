@@ -2,7 +2,7 @@
 /**
  * Payment methods list only (place-order lives in the cart card).
  *
- * @package AstroCheckoutUI
+ * @package CustomHeadlessCheckout
  */
 
 defined( 'ABSPATH' ) || exit;

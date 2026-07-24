@@ -2,15 +2,15 @@
 /**
  * Brand card checkout: form left, cart right.
  *
- * @package AstroCheckoutUI
+ * @package CustomHeadlessCheckout
  * @version 3.1.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
 $brand_url = home_url( '/' );
-if ( function_exists( 'astro_headless_checkout_app_origin' ) ) {
-	$astro_origin = astro_headless_checkout_app_origin();
+if ( function_exists( 'custom_headless_checkout_app_origin' ) ) {
+	$astro_origin = custom_headless_checkout_app_origin();
 	if ( $astro_origin !== '' ) {
 		$brand_url = trailingslashit( $astro_origin );
 	}
@@ -21,7 +21,7 @@ $show_shipping  = $needs_shipping && WC()->cart->show_shipping();
 
 do_action( 'woocommerce_before_checkout_form', $checkout );
 
-$auth_required = function_exists( 'astro_checkout_ui_auth_required' ) && astro_checkout_ui_auth_required();
+$auth_required = function_exists( 'custom_headless_checkout_auth_required' ) && custom_headless_checkout_auth_required();
 $woo_requires_login = ! $checkout->is_registration_enabled() && $checkout->is_registration_required();
 
 if ( ( $auth_required || $woo_requires_login ) && ! is_user_logged_in() ) {
@@ -117,7 +117,7 @@ if ( ( $auth_required || $woo_requires_login ) && ! is_user_logged_in() ) {
 				</div>
 
 				<?php
-				$place = ASTRO_CHECKOUT_UI_DIR . 'woocommerce/checkout/place-order.php';
+				$place = CUSTOM_HEADLESS_CHECKOUT_DIR . 'woocommerce/checkout/place-order.php';
 				if ( file_exists( $place ) ) {
 					include $place;
 				}

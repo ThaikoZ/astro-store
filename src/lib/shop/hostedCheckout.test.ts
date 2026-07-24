@@ -1,8 +1,12 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
 	buildHostedCheckoutUrl,
+	clearAuthRememberPreference,
 	decodeJwtPayload,
+	fetchHostedCheckoutSettings,
+	getAuthRememberPreference,
 	resolveCheckoutSessionId,
+	setAuthRememberPreference,
 } from './hostedCheckout';
 
 function makeJwt(payload: Record<string, unknown>): string {
@@ -12,6 +16,11 @@ function makeJwt(payload: Record<string, unknown>): string {
 }
 
 describe('hostedCheckout', () => {
+	afterEach(() => {
+		vi.unstubAllGlobals();
+		vi.restoreAllMocks();
+	});
+
 	it('decodes a JWT payload', () => {
 		const token = makeJwt({ data: { customer_id: 't_abc123' } });
 		expect(decodeJwtPayload(token)).toEqual({ data: { customer_id: 't_abc123' } });
@@ -70,21 +79,23 @@ describe('hostedCheckout', () => {
 		expect(result.sessionId).toBe('t_abc123');
 	});
 
-	it('adds auth_token when an auth JWT is provided', () => {
-		const auth = makeJwt({ data: { user: { id: '42' } } });
+	it('adds one-time handoff code without putting a JWT in the query', () => {
+		const handoff = 'a'.repeat(64);
 		const result = buildHostedCheckoutUrl(
 			'https://shop.example/',
 			makeJwt({ data: { customer_id: 't_abc123' } }),
-			auth,
+			handoff,
 		);
 		expect(result.ok).toBe(true);
 		if (!result.ok) return;
 		const parsed = new URL(result.url);
 		expect(parsed.searchParams.get('session_id')).toBe('t_abc123');
-		expect(parsed.searchParams.get('auth_token')).toBe(auth);
+		expect(parsed.searchParams.get('handoff')).toBe(handoff);
+		expect(result.url).not.toContain('auth_token');
+		expect(parsed.search).not.toMatch(/eyJ/);
 	});
 
-	it('omits auth_token for guests', () => {
+	it('omits handoff for guests', () => {
 		const result = buildHostedCheckoutUrl(
 			'https://shop.example/',
 			makeJwt({ data: { customer_id: 't_guest' } }),
@@ -92,6 +103,7 @@ describe('hostedCheckout', () => {
 		);
 		expect(result.ok).toBe(true);
 		if (!result.ok) return;
+		expect(result.url).not.toContain('handoff');
 		expect(result.url).not.toContain('auth_token');
 	});
 
@@ -107,5 +119,70 @@ describe('hostedCheckout', () => {
 		expect(result.ok).toBe(false);
 		if (result.ok) return;
 		expect(result.error).toMatch(/sesji koszyka/);
+	});
+
+	it('fails closed when checkout settings fetch is not ok', async () => {
+		vi.stubGlobal(
+			'fetch',
+			vi.fn().mockResolvedValue({
+				ok: false,
+				status: 500,
+				json: async () => ({}),
+			}),
+		);
+
+		const result = await fetchHostedCheckoutSettings('https://shop.example');
+		expect(result.ok).toBe(false);
+		if (result.ok) return;
+		expect(result.error).toMatch(/ustawień kasy/);
+	});
+
+	it('fails closed when checkout settings fetch throws', async () => {
+		vi.stubGlobal(
+			'fetch',
+			vi.fn().mockRejectedValue(new Error('network down')),
+		);
+
+		const result = await fetchHostedCheckoutSettings('https://shop.example');
+		expect(result.ok).toBe(false);
+		if (result.ok) return;
+		expect(result.error).toMatch(/ustawień kasy/);
+	});
+
+	it('returns settings when REST succeeds', async () => {
+		vi.stubGlobal(
+			'fetch',
+			vi.fn().mockResolvedValue({
+				ok: true,
+				json: async () => ({ authRequired: true, companyFieldsEnabled: false }),
+			}),
+		);
+
+		const result = await fetchHostedCheckoutSettings('https://shop.example');
+		expect(result.ok).toBe(true);
+		if (!result.ok) return;
+		expect(result.settings).toEqual({
+			authRequired: true,
+			companyFieldsEnabled: false,
+		});
+	});
+
+	it('persists remember-me preference in sessionStorage', () => {
+		const store = new Map<string, string>();
+		vi.stubGlobal('sessionStorage', {
+			getItem: (key: string) => store.get(key) ?? null,
+			setItem: (key: string, value: string) => {
+				store.set(key, value);
+			},
+			removeItem: (key: string) => {
+				store.delete(key);
+			},
+		});
+
+		expect(getAuthRememberPreference()).toBe(false);
+		setAuthRememberPreference(true);
+		expect(getAuthRememberPreference()).toBe(true);
+		clearAuthRememberPreference();
+		expect(getAuthRememberPreference()).toBe(false);
 	});
 });

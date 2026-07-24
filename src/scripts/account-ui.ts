@@ -1,5 +1,8 @@
 import { formatPrice } from '../lib/formatPrice';
-import { clearLocalCartSessionCookie } from '../lib/shop/hostedCheckout';
+import {
+	clearAuthRememberPreference,
+	clearLocalCartSessionCookie,
+} from '../lib/shop/hostedCheckout';
 import { getBrowserWooClient } from '../lib/woocommerce';
 import type { CustomerFragment, OrderFragmentFragment } from '../lib/woocommerce/generated/sdk';
 import { resetCartUiAfterCheckout } from './cart-ui';
@@ -574,6 +577,7 @@ function initLogout(root: HTMLElement) {
 		try {
 			const woo = getBrowserWooClient();
 			await woo.auth.logout();
+			clearAuthRememberPreference();
 			window.location.href = '/logowanie/';
 		} catch (error) {
 			setLoading(btn, false);

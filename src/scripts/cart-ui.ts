@@ -114,14 +114,22 @@ async function goToHostedCheckout(button: HTMLButtonElement | null) {
 
 	try {
 		const woo = getBrowserWooClient();
-		const settings = await fetchHostedCheckoutSettings(import.meta.env.PUBLIC_WORDPRESS_URL);
+		const settingsResult = await fetchHostedCheckoutSettings(
+			import.meta.env.PUBLIC_WORDPRESS_URL,
+		);
 
-		if (settings.authRequired && !woo.auth.isAuthenticated()) {
+		if (!settingsResult.ok) {
+			setCartError(settingsResult.error);
+			setLoading(button, false);
+			return;
+		}
+
+		if (settingsResult.settings.authRequired && !woo.auth.isAuthenticated()) {
 			window.location.assign('/logowanie/?redirect=checkout');
 			return;
 		}
 
-		const result = getHostedCheckoutRedirectUrl(import.meta.env.PUBLIC_WORDPRESS_URL);
+		const result = await getHostedCheckoutRedirectUrl(import.meta.env.PUBLIC_WORDPRESS_URL);
 		if (!result.ok) {
 			setCartError(result.error);
 			setLoading(button, false);

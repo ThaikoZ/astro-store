@@ -9,6 +9,12 @@ export type HostedCheckoutSettings = {
 	companyFieldsEnabled: boolean;
 };
 
+export type HostedCheckoutSettingsResult =
+	| { ok: true; settings: HostedCheckoutSettings }
+	| { ok: false; error: string };
+
+const REMEMBER_STORAGE_KEY = 'astro-auth-remember';
+
 let settingsCache: { at: number; value: HostedCheckoutSettings } | null = null;
 const SETTINGS_TTL_MS = 30_000;
 
@@ -65,7 +71,7 @@ export function resolveCheckoutSessionId(sessionToken: string | null | undefined
 export function buildHostedCheckoutUrl(
 	wordpressUrl: string | null | undefined,
 	sessionToken: string | null | undefined,
-	authToken?: string | null,
+	handoffCode?: string | null,
 ): HostedCheckoutBuildResult {
 	const origin = (wordpressUrl ?? '').trim().replace(/\/+$/, '');
 	if (!origin) {
@@ -86,37 +92,59 @@ export function buildHostedCheckoutUrl(
 	const url = new URL(`${origin}/checkout/`);
 	url.searchParams.set('session_id', sessionId);
 
-	const auth = (authToken ?? '').trim();
-	if (auth) {
-		url.searchParams.set('auth_token', auth);
+	const handoff = (handoffCode ?? '').trim();
+	if (handoff) {
+		url.searchParams.set('handoff', handoff);
 	}
 
 	return { ok: true, url: url.toString(), sessionId };
 }
 
-/** Fetch public checkout settings from the WordPress REST API (short TTL cache). */
+/** Persist remember-me choice for WP handoff (sessionStorage). */
+export function setAuthRememberPreference(remember: boolean): void {
+	if (typeof sessionStorage === 'undefined') return;
+	if (remember) sessionStorage.setItem(REMEMBER_STORAGE_KEY, '1');
+	else sessionStorage.removeItem(REMEMBER_STORAGE_KEY);
+}
+
+export function getAuthRememberPreference(): boolean {
+	if (typeof sessionStorage === 'undefined') return false;
+	return sessionStorage.getItem(REMEMBER_STORAGE_KEY) === '1';
+}
+
+export function clearAuthRememberPreference(): void {
+	if (typeof sessionStorage === 'undefined') return;
+	sessionStorage.removeItem(REMEMBER_STORAGE_KEY);
+}
+
+/** Fetch public checkout settings - fails closed (no silent authRequired: false). */
 export async function fetchHostedCheckoutSettings(
 	wordpressUrl: string | null | undefined = import.meta.env.PUBLIC_WORDPRESS_URL,
-): Promise<HostedCheckoutSettings> {
-	const defaults: HostedCheckoutSettings = {
-		authRequired: false,
-		companyFieldsEnabled: true,
-	};
-
+): Promise<HostedCheckoutSettingsResult> {
 	const origin = (wordpressUrl ?? '').trim().replace(/\/+$/, '');
-	if (!origin) return defaults;
+	if (!origin) {
+		return {
+			ok: false,
+			error: 'Brak adresu sklepu WordPress (PUBLIC_WORDPRESS_URL).',
+		};
+	}
 
 	const now = Date.now();
 	if (settingsCache && now - settingsCache.at < SETTINGS_TTL_MS) {
-		return settingsCache.value;
+		return { ok: true, settings: settingsCache.value };
 	}
 
 	try {
-		const res = await fetch(`${origin}/wp-json/astro-checkout/v1/settings`, {
+		const res = await fetch(`${origin}/wp-json/custom-checkout/v1/settings`, {
 			credentials: 'omit',
 			headers: { Accept: 'application/json' },
 		});
-		if (!res.ok) return defaults;
+		if (!res.ok) {
+			return {
+				ok: false,
+				error: 'Nie udało się sprawdzić ustawień kasy. Spróbuj ponownie za chwilę.',
+			};
+		}
 		const data = (await res.json()) as Partial<HostedCheckoutSettings>;
 		const value: HostedCheckoutSettings = {
 			authRequired: Boolean(data.authRequired),
@@ -126,20 +154,94 @@ export async function fetchHostedCheckoutSettings(
 					: true,
 		};
 		settingsCache = { at: now, value };
-		return value;
+		return { ok: true, settings: value };
 	} catch {
-		return defaults;
+		return {
+			ok: false,
+			error: 'Nie udało się sprawdzić ustawień kasy. Spróbuj ponownie za chwilę.',
+		};
 	}
 }
 
-/** Read browser cart + auth cookies and build the WP checkout URL. */
-export function getHostedCheckoutRedirectUrl(
+/** Exchange Astro JWT for a short-lived WP handoff code (never put JWT in the checkout URL). */
+export async function requestCheckoutHandoff(
+	wordpressUrl: string | null | undefined,
+	authToken: string,
+	sessionId: string,
+	remember: boolean,
+): Promise<{ ok: true; handoff: string } | { ok: false; error: string }> {
+	const origin = (wordpressUrl ?? '').trim().replace(/\/+$/, '');
+	if (!origin) {
+		return { ok: false, error: 'Brak adresu sklepu WordPress (PUBLIC_WORDPRESS_URL).' };
+	}
+
+	try {
+		const res = await fetch(`${origin}/wp-json/custom-checkout/v1/handoff`, {
+			method: 'POST',
+			credentials: 'omit',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				authToken,
+				sessionId,
+				remember,
+			}),
+		});
+		if (!res.ok) {
+			return {
+				ok: false,
+				error: 'Nie udało się przygotować logowania do kasy. Zaloguj się ponownie.',
+			};
+		}
+		const data = (await res.json()) as { handoff?: string };
+		const handoff = typeof data.handoff === 'string' ? data.handoff.trim() : '';
+		if (!handoff) {
+			return {
+				ok: false,
+				error: 'Nie udało się przygotować logowania do kasy. Zaloguj się ponownie.',
+			};
+		}
+		return { ok: true, handoff };
+	} catch {
+		return {
+			ok: false,
+			error: 'Nie udało się przygotować logowania do kasy. Sprawdź połączenie.',
+		};
+	}
+}
+
+/**
+ * Build hosted checkout redirect: guests use session_id; logged-in users exchange JWT for handoff.
+ */
+export async function getHostedCheckoutRedirectUrl(
 	wordpressUrl: string | null | undefined = import.meta.env.PUBLIC_WORDPRESS_URL,
-): HostedCheckoutBuildResult {
+): Promise<HostedCheckoutBuildResult> {
 	const cookies = createBrowserCookieAdapter();
 	const sessionToken = cookies.get(COOKIE_NAMES.session) ?? null;
 	const authToken = cookies.get(COOKIE_NAMES.authToken) ?? null;
-	return buildHostedCheckoutUrl(wordpressUrl, sessionToken, authToken);
+
+	const sessionId = resolveCheckoutSessionId(sessionToken);
+	if (!sessionId) {
+		return {
+			ok: false,
+			error: 'Brak sesji koszyka. Dodaj produkt i spróbuj ponownie.',
+		};
+	}
+
+	if (authToken?.trim()) {
+		const handoff = await requestCheckoutHandoff(
+			wordpressUrl,
+			authToken.trim(),
+			sessionId,
+			getAuthRememberPreference(),
+		);
+		if (!handoff.ok) return handoff;
+		return buildHostedCheckoutUrl(wordpressUrl, sessionToken, handoff.handoff);
+	}
+
+	return buildHostedCheckoutUrl(wordpressUrl, sessionToken, null);
 }
 
 /** Clear the local headless cart session cookie (after WP checkout return). */

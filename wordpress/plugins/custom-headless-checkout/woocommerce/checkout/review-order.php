@@ -2,7 +2,7 @@
 /**
  * Card cart review (line items + totals).
  *
- * @package AstroCheckoutUI
+ * @package CustomHeadlessCheckout
  * @version 3.0.0
  */
 

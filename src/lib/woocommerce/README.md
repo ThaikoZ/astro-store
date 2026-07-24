@@ -19,14 +19,14 @@ Without JWT Authentication, catalog/cart queries may still work for guests, but 
 
 The Astro cart redirects to native WordPress `/checkout/` (payment gateways stay on WooCommerce), then returns to Astro `/moje-konto/?tab=zamowienia`.
 
-### 1. Install the MU-plugins on WordPress
+### 1. Install Custom Headless Checkout on WordPress
 
-Upload/activate as normal plugins under `wp-content/plugins/` (zips in `wordpress/dist/`):
+Upload/activate as a normal plugin under `wp-content/plugins/` (zip in `wordpress/dist/`):
 
-- [`astro-headless-checkout`](../../../wordpress/plugins/astro-headless-checkout/) - session handoff + return URL
-- [`astro-checkout-ui`](../../../wordpress/plugins/astro-checkout-ui/) - Stripe-style blank checkout UI
+- [`custom-headless-checkout`](../../../wordpress/plugins/custom-headless-checkout/) - branded UI + session/JWT handoff + return URL  
+  Author: Adrian Sudak, AlphaAi Ventures sp. z o.o. ([alphaaiventures.com](https://alphaaiventures.com))
 
-Activate both in WP Admin → Plugins. Checkout page must use classic `[woocommerce_checkout]` (not the Checkout block).
+Activate in WP Admin → Plugins. Checkout page must use classic `[woocommerce_checkout]` (not the Checkout block).
 
 In `wp-config.php`, set the Astro origin (must match `PUBLIC_APP_ORIGIN` in production):
 
@@ -34,18 +34,17 @@ In `wp-config.php`, set the Astro origin (must match `PUBLIC_APP_ORIGIN` in prod
 define( 'ASTRO_APP_ORIGIN', 'https://your-astro-site.example' );
 ```
 
-Headless checkout plugin (**v1.2.0+**):
-
-- Loads the headless cart when `/checkout/?session_id=…` is opened
-- Accepts `auth_token` (Astro JWT), sets a WordPress auth cookie, then redirects to a clean URL
-- Deletes that session after payment
-- Redirects successful orders to `{ASTRO_APP_ORIGIN}/moje-konto/?tab=zamowienia&from_checkout=1`
-
-Checkout UI plugin (**v3.1.0+**):
+Custom Headless Checkout (**v1.0.0+**):
 
 - Brand card layout (form left, cart right)
-- Settings: WooCommerce → Checkout UI (auth required, company fields, terms/privacy URLs, custom CSS)
-- Public REST: `GET /wp-json/astro-checkout/v1/settings`
+- Settings: WooCommerce → Headless Checkout (auth required, company fields, terms/privacy URLs, custom CSS)
+- Terms acceptance checkbox when terms/privacy URLs (or Woo terms) are enabled
+- Loads the headless cart when `/checkout/?session_id=…` is opened (guests)
+- `POST /wp-json/custom-checkout/v1/handoff` exchanges Astro JWT for a one-time code
+- Consumes `/checkout/?session_id=…&handoff=…`, sets WP auth cookie (`remember`), merges guest cart into the user, redirects to clean `/checkout/`
+- Deletes that session after payment
+- Redirects successful orders to `{ASTRO_APP_ORIGIN}/moje-konto/?tab=zamowienia&from_checkout=1`
+- Public REST: `GET /wp-json/custom-checkout/v1/settings`
 
 ### 2. Astro env
 
@@ -54,7 +53,7 @@ PUBLIC_WORDPRESS_URL=https://your-wordpress-site.example
 PUBLIC_APP_ORIGIN=http://localhost:4321
 ```
 
-Cart CTA **Do kasy** fetches checkout settings, gates on login when `authRequired`, then builds `{PUBLIC_WORDPRESS_URL}/checkout/?session_id=…&auth_token=…` from cookies (`src/lib/shop/hostedCheckout.ts`).
+Cart CTA **Do kasy** fetches checkout settings (fails closed on error), gates on login when `authRequired`, then builds `{PUBLIC_WORDPRESS_URL}/checkout/?session_id=…` (guests) or `…&handoff=…` after a REST handoff exchange (logged-in). The JWT never appears in the checkout URL (`src/lib/shop/hostedCheckout.ts`).
 
 ## Setup
 
@@ -162,7 +161,7 @@ Without that, JS cannot read the header and guest carts will not persist across 
 
 This WordPress instance uses WooGraphQL JWT:
 
-- `login(input: { username, password })`
+- `login(input: { username, password })` - preserves the guest `Cart-Token` and re-fetches the cart so WooGraphQL can merge guest items into the user session (avoids an empty cart after login)
 - `refreshJwtAuthToken(input: { jwtRefreshToken })`
 - No GraphQL `logout` mutation - `woo.auth.logout()` clears local cookies only
 

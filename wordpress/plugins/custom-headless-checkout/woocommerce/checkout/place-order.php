@@ -2,7 +2,7 @@
 /**
  * Terms + place order button for the cart card.
  *
- * @package AstroCheckoutUI
+ * @package CustomHeadlessCheckout
  */
 
 defined( 'ABSPATH' ) || exit;

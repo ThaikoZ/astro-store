@@ -3,7 +3,10 @@ import {
 	getAuthRedirectParam,
 	isCheckoutAuthRedirect,
 } from '../lib/shop/authLinks';
-import { getHostedCheckoutRedirectUrl } from '../lib/shop/hostedCheckout';
+import {
+	getHostedCheckoutRedirectUrl,
+	setAuthRememberPreference,
+} from '../lib/shop/hostedCheckout';
 import {
 	COOKIE_NAMES,
 	extractGraphQLErrorMessage,
@@ -15,9 +18,9 @@ function currentAuthRedirect() {
 	return getAuthRedirectParam(window.location.search);
 }
 
-function redirectAfterAuth() {
+async function redirectAfterAuth() {
 	if (isCheckoutAuthRedirect(currentAuthRedirect())) {
-		const result = getHostedCheckoutRedirectUrl(import.meta.env.PUBLIC_WORDPRESS_URL);
+		const result = await getHostedCheckoutRedirectUrl(import.meta.env.PUBLIC_WORDPRESS_URL);
 		if (result.ok) {
 			window.location.href = result.url;
 			return;
@@ -28,19 +31,31 @@ function redirectAfterAuth() {
 	window.location.href = '/moje-konto/';
 }
 
-/** Show checkout gate copy + keep redirect on cross-links (works with static HTML too). */
+/** Show checkout gate / handoff error copy + keep redirect on cross-links. */
 function initCheckoutAuthNotice() {
+	const params = new URLSearchParams(window.location.search);
 	const redirect = currentAuthRedirect();
-	if (!redirect) return;
+	const handoffError = params.get('auth_error') === 'handoff';
 
-	if (isCheckoutAuthRedirect(redirect)) {
+	if (handoffError) {
+		const status = document.querySelector('[data-auth-form="login"] [data-auth-status]');
+		setStatus(
+			status,
+			'Sesja logowania wygasła. Zaloguj się ponownie, aby przejść do kasy.',
+			'error',
+		);
+	}
+
+	if (!redirect && !handoffError) return;
+
+	if (isCheckoutAuthRedirect(redirect) || handoffError) {
 		for (const notice of document.querySelectorAll<HTMLElement>('[data-auth-checkout-notice]')) {
 			notice.hidden = false;
 			notice.classList.remove('hidden');
 		}
 
 		const subtitle = document.querySelector<HTMLElement>('#auth-heading + p');
-		if (subtitle) {
+		if (subtitle && isCheckoutAuthRedirect(redirect)) {
 			if (document.querySelector('[data-auth-form="login"]')) {
 				subtitle.textContent = 'Aby przejść do kasy, zaloguj się lub załóż konto.';
 			} else if (document.querySelector('[data-auth-form="register"]')) {
@@ -49,14 +64,17 @@ function initCheckoutAuthNotice() {
 		}
 	}
 
-	for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-auth-checkout-register]')) {
-		link.href = authHref('/rejestracja/', redirect);
-	}
-	for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-auth-checkout-login]')) {
-		link.href = authHref('/logowanie/', redirect);
-	}
-	for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-auth-checkout-forgot]')) {
-		link.href = authHref('/nie-pamietam-hasla/', redirect);
+	const linkRedirect = redirect || (handoffError ? 'checkout' : null);
+	if (linkRedirect) {
+		for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-auth-checkout-register]')) {
+			link.href = authHref('/rejestracja/', linkRedirect);
+		}
+		for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-auth-checkout-login]')) {
+			link.href = authHref('/logowanie/', linkRedirect);
+		}
+		for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-auth-checkout-forgot]')) {
+			link.href = authHref('/nie-pamietam-hasla/', linkRedirect);
+		}
 	}
 }
 
@@ -186,13 +204,18 @@ function initLoginForm() {
 
 		try {
 			const woo = getBrowserWooClient();
-			const result = await woo.auth.login(username, password);
+			// Checkout handoff merges the guest cart on WP - keep the pre-login Cart-Token.
+			const forCheckout = isCheckoutAuthRedirect(currentAuthRedirect());
+			const result = await woo.auth.login(username, password, {
+				mergeGuestCart: !forCheckout,
+			});
 			if (!result.success) {
 				setStatus(status, polishAuthError(result.error ?? ''));
 				return;
 			}
+			setAuthRememberPreference(remember);
 			persistRememberMe(remember);
-			redirectAfterAuth();
+			await redirectAfterAuth();
 		} catch (error) {
 			setStatus(status, polishAuthError(error));
 		} finally {
@@ -233,13 +256,19 @@ function initRegisterForm() {
 		setLoading(submit, true);
 		try {
 			const woo = getBrowserWooClient();
-			await woo.auth.register({
-				email,
-				username,
-				password,
-				authenticate: true,
+			const forCheckout = isCheckoutAuthRedirect(currentAuthRedirect());
+			await woo.auth.register(
+				{
+					email,
+					username,
+					password,
+					authenticate: true,
+				},
+				{ mergeGuestCart: !forCheckout },
+			);
+			const login = await woo.auth.login(username, password, {
+				mergeGuestCart: !forCheckout,
 			});
-			const login = await woo.auth.login(username, password);
 			if (!login.success) {
 				setStatus(
 					status,
@@ -251,7 +280,8 @@ function initRegisterForm() {
 				}, 1600);
 				return;
 			}
-			redirectAfterAuth();
+			setAuthRememberPreference(false);
+			await redirectAfterAuth();
 		} catch (error) {
 			setStatus(status, polishAuthError(error));
 		} finally {

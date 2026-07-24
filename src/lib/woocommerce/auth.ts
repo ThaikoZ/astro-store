@@ -5,7 +5,8 @@ import type {
   ResetPasswordKeyMutationVariables,
   UpdatePasswordMutationVariables,
 } from './generated/sdk';
-import type { WooClientInternals } from './types';
+import type { SessionStore } from './session';
+import type { WooClientInternals, WooRequest } from './types';
 
 export type AuthResult = {
   success: boolean;
@@ -13,23 +14,75 @@ export type AuthResult = {
   login?: NonNullable<LoginMutation['login']>;
 };
 
+export type AuthCartOptions = {
+  /**
+   * When true (default), re-fetch the cart after auth so WooGraphQL can merge the guest cart.
+   * Set false for checkout handoff: keep the pre-auth Cart-Token so WP can merge once.
+   */
+  mergeGuestCart?: boolean;
+};
+
 export type AuthApi = ReturnType<typeof createAuthApi>;
+
+/**
+ * Login/register responses often return an empty customer cart-token and overwrite
+ * the guest Cart-Token, wiping the headless cart. Restore the pre-auth session and
+ * optionally re-fetch the cart so WooGraphQL can transfer guest items.
+ */
+async function restoreGuestCartAfterAuth(
+  request: WooRequest,
+  session: SessionStore,
+  sessionBeforeAuth: string | null,
+  mergeGuestCart: boolean,
+): Promise<void> {
+  if (!sessionBeforeAuth) return;
+
+  session.setSessionToken(sessionBeforeAuth);
+
+  if (!mergeGuestCart) return;
+
+  try {
+    await request((sdk) => sdk.getCart(), { skipAuthRefresh: true });
+  } catch {
+    // Keep the restored guest session even if cart reload fails.
+  }
+}
 
 export function createAuthApi(internals: WooClientInternals) {
   const { request, session, refreshAuthToken } = internals;
 
   return {
-    async login(username: string, password: string): Promise<AuthResult> {
+    async login(
+      username: string,
+      password: string,
+      options: AuthCartOptions = {},
+    ): Promise<AuthResult> {
+      const mergeGuestCart = options.mergeGuestCart !== false;
+      const sessionBeforeAuth = session.getSessionToken();
+
       try {
-        const result = await request((sdk) => sdk.login({ username, password }), { skipAuthRefresh: true });
+        const result = await request((sdk) => sdk.login({ username, password }), {
+          skipAuthRefresh: true,
+        });
         const login = result.login;
         if (!login?.authToken) {
           return { success: false, error: 'Login failed: no auth token returned' };
         }
         session.setAuthToken(login.authToken);
         session.setRefreshToken(login.refreshToken ?? null);
-        if (login.cartToken) session.syncCartToken(login.cartToken);
-        if (login.customer?.cartToken) session.syncCartToken(login.customer.cartToken);
+
+        if (sessionBeforeAuth) {
+          await restoreGuestCartAfterAuth(
+            request,
+            session,
+            sessionBeforeAuth,
+            mergeGuestCart,
+          );
+        } else {
+          if (login.cartToken) session.syncCartToken(login.cartToken);
+          if (login.customer?.cartToken) session.syncCartToken(login.customer.cartToken);
+        }
+
         return { success: true, login };
       } catch (error) {
         return {
@@ -39,8 +92,23 @@ export function createAuthApi(internals: WooClientInternals) {
       }
     },
 
-    async register(input: RegisterCustomerInput) {
-      return request((sdk) => sdk.registerCustomer({ input }), { skipAuthRefresh: true });
+    async register(input: RegisterCustomerInput, options: AuthCartOptions = {}) {
+      const mergeGuestCart = options.mergeGuestCart !== false;
+      const sessionBeforeAuth = session.getSessionToken();
+      const result = await request((sdk) => sdk.registerCustomer({ input }), {
+        skipAuthRefresh: true,
+      });
+
+      if (sessionBeforeAuth) {
+        await restoreGuestCartAfterAuth(
+          request,
+          session,
+          sessionBeforeAuth,
+          mergeGuestCart,
+        );
+      }
+
+      return result;
     },
 
     async logout(): Promise<void> {

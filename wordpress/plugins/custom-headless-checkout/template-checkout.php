@@ -2,7 +2,7 @@
 /**
  * Blank checkout shell (card layout lives in form-checkout.php).
  *
- * @package AstroCheckoutUI
+ * @package CustomHeadlessCheckout
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
