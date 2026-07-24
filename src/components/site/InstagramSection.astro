@@ -1,0 +1,85 @@
+---
+import Button from '../ui/Button.astro';
+
+export type InstagramItem = {
+	href: string;
+	image: string;
+	label: string;
+};
+
+interface Props {
+	heading: string;
+	description: string;
+	ctaLabel: string;
+	ctaHref: string;
+	items: readonly InstagramItem[];
+	id?: string;
+	ctaTarget?: string;
+	ctaRel?: string;
+}
+
+const {
+	heading,
+	description,
+	ctaLabel,
+	ctaHref,
+	items,
+	id = 'instagram',
+	ctaTarget,
+	ctaRel,
+} = Astro.props;
+
+const headingId = `${id}-heading`;
+---
+
+<section
+	id={id}
+	class="bg-ink px-6 py-20 text-foam md:px-10 md:py-28"
+	aria-labelledby={headingId}
+>
+	<div class="mx-auto max-w-6xl text-center">
+		<h2
+			id={headingId}
+			class="m-0 font-display text-[clamp(1.5rem,3vw,2.1rem)] font-normal tracking-[0.06em] text-foam"
+		>
+			{heading}
+		</h2>
+		<p
+			class="mx-auto mt-5 m-0 max-w-xl font-sans text-sm leading-relaxed text-foam/85 md:text-[0.95rem] md:leading-7"
+		>
+			{description}
+		</p>
+
+		<ul
+			class="mx-auto mt-12 m-0 grid max-w-5xl list-none grid-cols-2 gap-3 p-0 sm:grid-cols-2 md:mt-14 md:grid-cols-5 md:gap-4"
+		>
+			{
+				items.map((item, index) => (
+					<li class:list={[index >= 4 && 'hidden md:block']}>
+						<a href={item.href} class="block overflow-hidden rounded-[5rem] sm:rounded-2xl">
+							<img
+								src={item.image}
+								alt={item.label}
+								class="aspect-square size-full object-cover transition-transform duration-500 hover:scale-105 motion-reduce:transition-none motion-reduce:hover:scale-100"
+								loading="lazy"
+								width="400"
+								height="400"
+							/>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+
+		<Button
+			href={ctaHref}
+			variant="solid"
+			tone="foam"
+			class="mt-12 min-w-[min(100%,22rem)] px-10 py-4 md:mt-14"
+			target={ctaTarget}
+			rel={ctaRel}
+		>
+			{ctaLabel}
+		</Button>
+	</div>
+</section>

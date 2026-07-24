@@ -1,9 +1,14 @@
 ---
+import InstagramSection from './site/InstagramSection.astro';
 import SiteFooter from './site/SiteFooter.astro';
 import SiteHeader from './site/SiteHeader.astro';
+import Button from './ui/Button.astro';
+import ImageFrame from './ui/ImageFrame.astro';
 import { IMAGES, OFFER_LINKS, SOCIAL, TESTIMONIALS } from '../lib/site';
 
 const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
+const DEFAULT_OFFER_INDEX = OFFER_LINKS.findIndex((item) => item.href === '/lekcja-makijazu/');
+const defaultOfferIndex = DEFAULT_OFFER_INDEX >= 0 ? DEFAULT_OFFER_INDEX : 0;
 ---
 
 <div class="min-h-full bg-foam text-ink">
@@ -38,12 +43,14 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 					<br />
 					oraz szkoleniowcem.
 				</h1>
-				<a
-					class="font-display text-[clamp(0.95rem,2vw,1.1rem)] font-normal tracking-[0.14em] text-foam no-underline uppercase transition-opacity duration-200 hover:opacity-70 animate-rise motion-reduce:animate-none [animation-delay:140ms]"
+				<Button
 					href="#oferta"
+					variant="text"
+					tone="foam"
+					class="animate-rise motion-reduce:animate-none [animation-delay:140ms]"
 				>
 					Poznaj moją ofertę
-				</a>
+				</Button>
 				<a
 					href="#oferta"
 					class="mt-2 text-foam/80 transition-opacity hover:opacity-100 animate-rise motion-reduce:animate-none [animation-delay:240ms]"
@@ -87,27 +94,28 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 			class="bg-paper px-6 py-20 md:px-10 md:py-28"
 			aria-labelledby="oferta-heading"
 			data-offer
+			data-offer-default={defaultOfferIndex}
 		>
 			<div class="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-16 lg:gap-20">
-				<div class="relative mx-auto aspect-5/6 w-full max-w-md overflow-hidden rounded-[10rem] md:mx-0">
+				<ImageFrame class="md:mx-0 md:aspect-5/6 md:max-w-md md:rounded-[10rem]">
 					{
 						OFFER_LINKS.map((item, index) => (
 							<img
 								src={item.image}
 								alt=""
 								class:list={[
-									'absolute inset-0 size-full object-cover object-center transition-opacity duration-500 ease-out motion-reduce:transition-none',
-									index === 0 ? 'opacity-100' : 'opacity-0',
+									'absolute inset-0 size-full object-cover object-[center_32%] transition-opacity duration-500 ease-out motion-reduce:transition-none',
+									index === defaultOfferIndex ? 'opacity-100' : 'opacity-0',
 								]}
 								data-offer-image
 								data-index={index}
-								loading={index === 0 ? 'eager' : 'lazy'}
+								loading={index === defaultOfferIndex ? 'eager' : 'lazy'}
 								width="800"
 								height="1067"
 							/>
 						))
 					}
-				</div>
+				</ImageFrame>
 
 				<div>
 					<h2
@@ -122,10 +130,10 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 								<li class="border-b border-ink">
 									<a
 										href={item.href}
-										class="group flex items-center justify-between gap-4 py-2.5 font-display text-[clamp(1rem,2.2vw,1.2rem)] tracking-[0.04em] text-ink no-underline transition-opacity hover:opacity-70 md:py-3"
+										class="group flex items-center justify-between gap-4 py-4 font-display text-[clamp(1rem,2.2vw,1.2rem)] tracking-[0.04em] text-ink no-underline transition-opacity hover:opacity-70 md:py-3"
 										data-offer-link
 										data-index={index}
-										aria-current={index === 0 ? 'true' : undefined}
+										aria-current={index === defaultOfferIndex ? 'true' : undefined}
 									>
 										<span>{item.label}</span>
 										<svg
@@ -154,7 +162,7 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 			aria-labelledby="about-heading"
 		>
 			<div class="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-16 lg:gap-20">
-				<div class="order-2 text-left md:order-1">
+				<div class="order-2 text-center md:order-1 md:text-left">
 					<h3
 						id="about-heading"
 						class="m-0 font-display text-[clamp(1.45rem,3vw,2.1rem)] font-normal leading-tight text-ink"
@@ -164,27 +172,22 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 							pięknie i pewnie!
 						</span>
 					</h3>
-					<p class="mt-6 m-0 max-w-xl font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7">
+					<p class="mx-auto mt-6 m-0 max-w-xl font-sans text-sm leading-relaxed text-ink/80 md:mx-0 md:text-[0.95rem] md:leading-7">
 						Moja pasja do makijażu to połączenie doświadczenia, wiedzy i indywidualnego
 						podejścia do każdego klienta.
 					</p>
-					<p class="mt-5 m-0 max-w-xl font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7">
+					<p class="mx-auto mt-5 m-0 max-w-xl font-sans text-sm leading-relaxed text-ink/80 md:mx-0 md:text-[0.95rem] md:leading-7">
 						Moim celem nie jest tylko wykonanie pięknego makijażu - chcę, aby każda kobieta,
 						która siada na moim fotelu, poczuła się wyjątkowo i komfortowo. Niezależnie od
 						tego, czy przygotowujesz się do ślubu, ważnego wydarzenia, sesji zdjęciowej, czy
 						po prostu chcesz poczuć się pięknie - jestem tu, aby sprawić, byś poczuła się
 						pięknie i pewnie!
 					</p>
-					<a
-						href="/kontakt/"
-						class="mt-10 inline-block bg-ink px-8 py-3.5 font-sans text-xs tracking-[0.18em] text-foam no-underline uppercase shadow-sm transition-opacity hover:opacity-80"
-					>
+					<Button href="/kontakt/" variant="solid" tone="ink" class="mt-10">
 						Dowiedz się więcej
-					</a>
+					</Button>
 				</div>
-				<div
-					class="relative order-1 mx-auto aspect-5/6 w-full max-w-md overflow-hidden rounded-[10rem] md:order-2 md:ml-auto md:mr-0"
-				>
+				<ImageFrame class="order-1 -mx-6 w-[calc(100%+3rem)] max-w-none md:order-2 md:mx-0 md:ml-auto md:mr-0 md:w-full lg:max-w-md">
 					<img
 						class="size-full object-cover object-top"
 						src={IMAGES.about}
@@ -193,7 +196,7 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 						width="750"
 						height="1024"
 					/>
-				</div>
+				</ImageFrame>
 			</div>
 		</section>
 
@@ -295,54 +298,15 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 			</div>
 		</section>
 
-		<section
-			id="instagram"
-			class="bg-ink px-6 py-20 text-foam md:px-10 md:py-28"
-			aria-labelledby="instagram-heading"
-		>
-			<div class="mx-auto max-w-6xl text-center">
-				<h2
-					id="instagram-heading"
-					class="m-0 font-display text-[clamp(1.5rem,3vw,2.1rem)] font-normal tracking-[0.06em] text-foam"
-				>
-					Zobacz jak pracuję!
-				</h2>
-				<p class="mx-auto mt-5 m-0 max-w-xl font-sans text-sm leading-relaxed text-foam/85 md:text-[0.95rem] md:leading-7">
-					Zajrzyj na Instagram - tam czeka więcej makijażowych metamorfoz, kulisy pracy i
-					inspiracje!
-				</p>
-
-				<ul
-					class="mx-auto mt-12 m-0 grid max-w-5xl list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 md:mt-14 md:grid-cols-5 md:gap-4"
-				>
-					{
-						OFFER_LINKS.map((item) => (
-							<li>
-								<a href={item.href} class="block overflow-hidden rounded-2xl">
-									<img
-										src={item.image}
-										alt={item.label}
-										class="aspect-square size-full object-cover transition-transform duration-500 hover:scale-105 motion-reduce:transition-none motion-reduce:hover:scale-100"
-										loading="lazy"
-										width="400"
-										height="400"
-									/>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-
-				<a
-					href={SOCIAL.instagram}
-					class="mt-12 inline-flex min-w-[min(100%,22rem)] items-center justify-center bg-foam px-10 py-4 font-sans text-xs tracking-[0.18em] text-ink no-underline uppercase transition-opacity hover:opacity-85 md:mt-14"
-					rel="noopener noreferrer"
-					target="_blank"
-				>
-					Obserwuj mnie na Insta!
-				</a>
-			</div>
-		</section>
+		<InstagramSection
+			heading="Zobacz jak pracuję!"
+			description="Zajrzyj na Instagram - tam czeka więcej makijażowych metamorfoz, kulisy pracy i inspiracje!"
+			ctaLabel="Obserwuj mnie na Insta!"
+			ctaHref={SOCIAL.instagram}
+			ctaTarget="_blank"
+			ctaRel="noopener noreferrer"
+			items={OFFER_LINKS}
+		/>
 	</main>
 
 	<SiteFooter />
@@ -359,6 +323,8 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 		const links = [...root.querySelectorAll('[data-offer-link]')];
 		if (images.length === 0 || links.length === 0) return;
 
+		const defaultIndex = Number(root.getAttribute('data-offer-default') ?? '0');
+
 		const setActive = (index: number) => {
 			images.forEach((image, i) => {
 				image.classList.toggle('opacity-100', i === index);
@@ -369,6 +335,8 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 				else link.removeAttribute('aria-current');
 			});
 		};
+
+		setActive(Number.isNaN(defaultIndex) ? 0 : defaultIndex);
 
 		links.forEach((link) => {
 			const index = Number(link.getAttribute('data-index'));

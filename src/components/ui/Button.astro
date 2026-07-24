@@ -1,0 +1,82 @@
+---
+/**
+ * Brand CTA. Renders an `<a>` when `href` is set, otherwise a `<button>`.
+ *
+ * - solid: filled Montserrat pill (tone = background)
+ * - ghost: Playfair bordered CTA for light surfaces
+ * - text: Playfair text link (tone = text color)
+ */
+type Variant = 'solid' | 'ghost' | 'text';
+type Tone = 'ink' | 'foam';
+
+interface Props {
+	href?: string;
+	variant?: Variant;
+	tone?: Tone;
+	type?: 'button' | 'submit' | 'reset';
+	class?: string;
+	target?: string;
+	rel?: string;
+	'aria-label'?: string;
+}
+
+const {
+	href,
+	variant = 'solid',
+	tone = 'ink',
+	type = 'button',
+	class: className,
+	target,
+	rel,
+	'aria-label': ariaLabel,
+} = Astro.props;
+
+const isLink = typeof href === 'string';
+
+const base = 'inline-flex items-center justify-center no-underline uppercase transition-opacity';
+
+const variants: Record<Variant, string> = {
+	solid:
+		'px-8 py-3.5 font-sans text-xs tracking-[0.18em] shadow-sm hover:opacity-80',
+	ghost:
+		'border border-border-soft px-8 py-3.5 font-display text-sm tracking-[0.14em] text-ink hover:opacity-70',
+	text: 'font-display text-[clamp(0.95rem,2vw,1.1rem)] font-normal tracking-[0.14em] hover:opacity-70',
+};
+
+const tones: Record<Variant, Record<Tone, string>> = {
+	solid: {
+		ink: 'bg-ink text-foam',
+		foam: 'bg-foam text-ink hover:opacity-85',
+	},
+	ghost: {
+		ink: 'text-ink',
+		foam: 'border-foam/40 text-foam',
+	},
+	text: {
+		ink: 'text-ink',
+		foam: 'text-foam',
+	},
+};
+---
+
+{
+	isLink ? (
+		<a
+			href={href}
+			class:list={[base, variants[variant], tones[variant][tone], className]}
+			target={target}
+			rel={rel}
+			aria-label={ariaLabel}
+		>
+			<slot />
+		</a>
+	) : (
+		<button
+			type={type}
+			class:list={[base, variants[variant], tones[variant][tone], className]}
+			aria-label={ariaLabel}
+		>
+			<slot />
+		</button>
+	)
+}
