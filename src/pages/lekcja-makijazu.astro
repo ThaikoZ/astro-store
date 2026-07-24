@@ -1,5 +1,44 @@
 ---
-import StubPage from '../layouts/StubPage.astro';
+import LessonOfferCard from '../components/site/LessonOfferCard.astro';
+import SiteFooter from '../components/site/SiteFooter.astro';
+import SiteHeader from '../components/site/SiteHeader.astro';
+import Layout from '../layouts/Layout.astro';
+import { LEKCJA_MAKIJAZU } from '../lib/site';
 ---
 
-<StubPage title="Lekcja Makijażu - Klaudia Jaranowska Makeup" heading="Lekcja Makijażu" />
+<Layout title="Lekcja Makijażu - Klaudia Jaranowska Makeup" withTopMargin>
+	<div class="min-h-full bg-paper text-ink">
+		<SiteHeader variant="solid" />
+
+		<main>
+			<section class="px-6 py-20 md:px-10 md:py-28" aria-labelledby="lekcja-heading">
+				<div class="mx-auto max-w-6xl">
+					<h1
+						id="lekcja-heading"
+						class="m-0 text-center font-display text-[clamp(1.75rem,3.5vw,2.5rem)] font-normal tracking-[0.14em] text-ink uppercase"
+					>
+						Lekcja makijażu
+					</h1>
+
+					<div class="mt-14 grid items-stretch gap-14 md:mt-16 md:grid-cols-2 md:gap-10 lg:gap-14">
+						{
+							LEKCJA_MAKIJAZU.map((lesson) => (
+								<LessonOfferCard
+									title={lesson.title}
+									subtitle={lesson.subtitle}
+									price={lesson.price}
+									duration={lesson.duration}
+									image={lesson.image}
+									scope={lesson.scope}
+									notes={lesson.notes}
+								/>
+							))
+						}
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<SiteFooter />
+	</div>
+</Layout>

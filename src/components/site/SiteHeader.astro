@@ -1,5 +1,5 @@
 ---
-import { IMAGES, PRIMARY_NAV } from '../../lib/site';
+import { IMAGES, PRIMARY_NAV, type NavItem } from '../../lib/site';
 
 interface Props {
 	/** Transparent over hero photo; solid black on inner pages. */
@@ -8,6 +8,23 @@ interface Props {
 
 const { variant = 'overlay' } = Astro.props;
 const isOverlay = variant === 'overlay';
+
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+
+function normalizePath(href: string) {
+	return href.replace(/\/+$/, '') || '/';
+}
+
+function isActiveHref(href: string) {
+	return currentPath === normalizePath(href);
+}
+
+function isNavItemActive(item: NavItem) {
+	if (item.children?.length) {
+		return item.children.some((child) => isActiveHref(child.href));
+	}
+	return isActiveHref(item.href);
+}
 ---
 
 <header
@@ -33,36 +50,70 @@ const isOverlay = variant === 'overlay';
 		<nav class="hidden lg:block" aria-label="Główne">
 			<ul class="m-0 flex list-none items-center gap-8 p-0">
 				{
-					PRIMARY_NAV.map((item) => (
-						<li class="relative group">
-							{item.children ? (
-								<>
-									<span class="nav-link nav-link--static inline-block whitespace-nowrap font-display text-sm tracking-[0.14em] text-foam uppercase">
+					PRIMARY_NAV.map((item) => {
+						const active = isNavItemActive(item);
+						return (
+							<li class="relative group">
+								{item.children ? (
+									<>
+										<span
+											class:list={[
+												'nav-link nav-link--static inline-flex items-center gap-1.5 whitespace-nowrap font-display text-sm tracking-[0.14em] text-foam uppercase',
+												active && 'is-active',
+											]}
+											aria-current={active ? 'true' : undefined}
+										>
+											{item.label}
+											<svg
+												class="size-2.5 shrink-0 opacity-90 transition-transform duration-200 group-hover:rotate-180 group-focus-within:rotate-180 motion-reduce:transition-none"
+												viewBox="0 0 12 8"
+												fill="none"
+												aria-hidden="true"
+											>
+												<path
+													d="M1 1.5L6 6.5L11 1.5"
+													stroke="currentColor"
+													stroke-width="1.4"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+												/>
+											</svg>
+										</span>
+										<ul class="invisible absolute left-1/2 top-full z-40 m-0 min-w-[14rem] -translate-x-1/2 list-none bg-ink p-3 opacity-0 shadow-lg transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+											{item.children.map((child) => {
+												const childActive = isActiveHref(child.href);
+												return (
+													<li>
+														<a
+															href={child.href}
+															class:list={[
+																'nav-link block whitespace-nowrap px-3 py-2 font-display text-sm tracking-[0.12em] text-foam no-underline uppercase',
+																childActive && 'is-active',
+															]}
+															aria-current={childActive ? 'page' : undefined}
+														>
+															{child.label}
+														</a>
+													</li>
+												);
+											})}
+										</ul>
+									</>
+								) : (
+									<a
+										href={item.href}
+										class:list={[
+											'nav-link inline-block whitespace-nowrap font-display text-sm tracking-[0.14em] text-foam no-underline uppercase',
+											active && 'is-active',
+										]}
+										aria-current={active ? 'page' : undefined}
+									>
 										{item.label}
-									</span>
-									<ul class="invisible absolute left-1/2 top-full z-40 m-0 min-w-[14rem] -translate-x-1/2 list-none bg-ink p-3 opacity-0 shadow-lg transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-										{item.children.map((child) => (
-											<li>
-												<a
-													href={child.href}
-													class="nav-link block whitespace-nowrap px-3 py-2 font-display text-sm tracking-[0.12em] text-foam no-underline uppercase"
-												>
-													{child.label}
-												</a>
-											</li>
-										))}
-									</ul>
-								</>
-							) : (
-								<a
-									href={item.href}
-									class="nav-link inline-block whitespace-nowrap font-display text-sm tracking-[0.14em] text-foam no-underline uppercase"
-								>
-									{item.label}
-								</a>
-							)}
-						</li>
-					))
+									</a>
+								)}
+							</li>
+						);
+					})
 				}
 			</ul>
 		</nav>
@@ -106,36 +157,72 @@ const isOverlay = variant === 'overlay';
 			<nav aria-label="Menu mobilne">
 				<ul class="m-0 flex list-none flex-col gap-5 p-0">
 					{
-						PRIMARY_NAV.map((item) => (
-							<li>
-								{item.children ? (
-									<div class="flex flex-col gap-3">
-										<span class="whitespace-nowrap font-display text-lg tracking-[0.14em] uppercase">{item.label}</span>
-										<ul class="m-0 flex list-none flex-col gap-2 border-l border-foam/25 pl-4">
-											{item.children.map((child) => (
-												<li>
-													<a
-														href={child.href}
-														class="nav-link inline-block whitespace-nowrap font-display text-base tracking-[0.12em] text-foam no-underline uppercase opacity-90 transition-opacity hover:opacity-100"
-														data-site-menu-link
-													>
-														{child.label}
-													</a>
-												</li>
-											))}
-										</ul>
-									</div>
-								) : (
-									<a
-										href={item.href}
-										class="nav-link inline-block whitespace-nowrap font-display text-lg tracking-[0.14em] text-foam no-underline uppercase"
-										data-site-menu-link
-									>
-										{item.label}
-									</a>
-								)}
-							</li>
-						))
+						PRIMARY_NAV.map((item) => {
+							const active = isNavItemActive(item);
+							return (
+								<li>
+									{item.children ? (
+										<div class="flex flex-col gap-3">
+											<span
+												class:list={[
+													'nav-link nav-link--static inline-flex items-center gap-2 whitespace-nowrap font-display text-lg tracking-[0.14em] uppercase',
+													active && 'is-active',
+												]}
+												aria-current={active ? 'true' : undefined}
+											>
+												{item.label}
+												<svg
+													class="size-3 shrink-0 opacity-90"
+													viewBox="0 0 12 8"
+													fill="none"
+													aria-hidden="true"
+												>
+													<path
+														d="M1 1.5L6 6.5L11 1.5"
+														stroke="currentColor"
+														stroke-width="1.4"
+														stroke-linecap="round"
+														stroke-linejoin="round"
+													/>
+												</svg>
+											</span>
+											<ul class="m-0 flex list-none flex-col gap-2 border-l border-foam/25 pl-4">
+												{item.children.map((child) => {
+													const childActive = isActiveHref(child.href);
+													return (
+														<li>
+															<a
+																href={child.href}
+																class:list={[
+																	'nav-link inline-block whitespace-nowrap font-display text-base tracking-[0.12em] text-foam no-underline uppercase opacity-90 transition-opacity hover:opacity-100',
+																	childActive && 'is-active',
+																]}
+																aria-current={childActive ? 'page' : undefined}
+																data-site-menu-link
+															>
+																{child.label}
+															</a>
+														</li>
+													);
+												})}
+											</ul>
+										</div>
+									) : (
+										<a
+											href={item.href}
+											class:list={[
+												'nav-link inline-block whitespace-nowrap font-display text-lg tracking-[0.14em] text-foam no-underline uppercase',
+												active && 'is-active',
+											]}
+											aria-current={active ? 'page' : undefined}
+											data-site-menu-link
+										>
+											{item.label}
+										</a>
+									)}
+								</li>
+							);
+						})
 					}
 				</ul>
 			</nav>
@@ -168,6 +255,7 @@ const isOverlay = variant === 'overlay';
 
 	.nav-link:hover::after,
 	.nav-link:focus-visible::after,
+	.nav-link.is-active::after,
 	.group:hover > .nav-link--static::after,
 	.group:focus-within > .nav-link--static::after {
 		opacity: 1;

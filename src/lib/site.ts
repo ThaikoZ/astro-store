@@ -95,6 +95,52 @@ export const PAKIET_SLUBNY = {
 	salons: ['Łódź, Mikołaja Kopernika 17', 'Sieradz, Ogrodowa 5'],
 } as const;
 
+const LEKCJA_NOTES = [
+	'Zapewniam kosmetyki na lekcję makijażu dziennego i wieczorowego',
+	'W czasie trwania kursu dostępne są napoje i poczęstunek.',
+	'Lekcja makijażu odbywa się w moim salonie w Łodzi, Mikołaja Kopernika 17',
+] as const;
+
+export const LEKCJA_MAKIJAZU = [
+	{
+		id: 'dzienny',
+		title: 'Makijaż dzienny',
+		subtitle: 'lekcja indywidualna',
+		price: '600zł',
+		duration: '2-2,5h',
+		image: `${MEDIA}/2026/03/IMG_7173-e1772373869452.png`,
+		scope: [
+			'Określenie typu skóry i jej potrzeb',
+			'Dobór odpowiedniej pielęgnacji',
+			'Dobór i aplikacja podkładu, korektora, pudru',
+			'Modelowanie twarzy, techniką na mokro i na sucho',
+			'Subtelne podkreślenie oka - cienie, kreski, tusz do rzęs',
+			'Stylizacja i wypełnianie brwi',
+			'Modelowanie kształtu ust - wyrównanie proporcji i nadanie objętości makijażem',
+		],
+		notes: LEKCJA_NOTES,
+	},
+	{
+		id: 'wieczorowy',
+		title: 'Makijaż wieczorowy',
+		subtitle: 'lekcja indywidualna',
+		price: '700zł',
+		duration: '2,5-3h',
+		image: `${MEDIA}/2025/09/IMG_3312-scaled-e1763841505975.jpeg`,
+		scope: [
+			'Dostosowanie pielęgnacji do jej indywidualnych wymagań',
+			'Techniki aplikacji korektora, podkładu i pudru dopasowanych do typu cery',
+			'Trójwymiarowe modelowanie twarzy z użyciem metod konturowania na sucho i mokro',
+			'Techniki pracy z cieniami i pigmentami',
+			'Perfekcyjna kreska',
+			'Klejenie kępek rzęs',
+			'Stylizacja i wypełnianie brwi',
+			'Podkreślenie ust z uwzględnieniem korekty asymetrii i technik optycznego powiększenia',
+		],
+		notes: LEKCJA_NOTES,
+	},
+] as const;
+
 export const TESTIMONIALS = [
 	{
 		quote:
