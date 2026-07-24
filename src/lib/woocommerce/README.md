@@ -127,6 +127,33 @@ Other statuses throw and must not proceed to checkout as paid.
 - `woo.orders` - order list/detail
 - `woo.payments` - cod, cheque, paypal redirect helpers, stripe confirm
 
-## Queries
+## Live integration tests
 
-GraphQL documents live in [`queries/`](./queries/). Generated SDK: [`generated/sdk.ts`](./generated/sdk.ts).
+```bash
+npm run test:live
+```
+
+These hit your real WordPress shop end-to-end:
+
+1. Register a fresh customer (`authenticate: true`)
+2. Login / logout (JWT refresh attempted when a refresh token exists)
+3. Catalog + cart session persistence (`cart-token`)
+4. Update customer address / shipping
+5. Place an order via an available offline gateway (prefers COD, then cheque)
+6. Fetch orders
+7. Cleanup via admin-capable account: `deleteOrder` + `deleteUser`
+
+Required env (see [`.env.example`](../../../.env.example)):
+
+```bash
+WORDPRESS_GRAPHQL_URL=...
+PUBLIC_APP_ORIGIN=...
+WORDPRESS_ADMIN_USER=...      # can deleteOrder + deleteUser
+WORDPRESS_ADMIN_PASSWORD=...
+# or fallback:
+# WORDPRESS_TEST_USER=...
+# WORDPRESS_TEST_PASSWORD=...
+```
+
+Enable **Cash on delivery** (or Cheque) in WooCommerce for automated checkout.
+Unit tests (`npm test`) stay offline and do not create shop data.

@@ -1,4 +1,5 @@
 import type {
+  DeleteUserMutationVariables,
   LoginMutation,
   RegisterCustomerInput,
   ResetPasswordKeyMutationVariables,
@@ -61,6 +62,11 @@ export function createAuthApi(internals: WooClientInternals) {
 
     async updatePassword(variables: UpdatePasswordMutationVariables) {
       return request((sdk) => sdk.updatePassword(variables));
+    },
+
+    /** Requires elevated WP capabilities (shop manager / admin). Used by live test cleanup. */
+    async deleteUser(variables: DeleteUserMutationVariables) {
+      return request((sdk) => sdk.deleteUser(variables));
     },
 
     getViewerFromCart() {

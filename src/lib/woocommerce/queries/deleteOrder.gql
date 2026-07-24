@@ -1,0 +1,9 @@
+mutation deleteOrder($id: ID!, $forceDelete: Boolean = true) {
+  deleteOrder(input: { id: $id, forceDelete: $forceDelete }) {
+    order {
+      databaseId
+      id
+      status
+    }
+  }
+}

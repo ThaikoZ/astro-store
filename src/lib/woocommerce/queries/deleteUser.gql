@@ -1,0 +1,10 @@
+mutation deleteUser($id: ID!) {
+  deleteUser(input: { id: $id }) {
+    user {
+      databaseId
+      id
+      username
+    }
+    deletedId
+  }
+}

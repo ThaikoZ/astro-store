@@ -38,7 +38,7 @@ export function toWooGraphQLError(error: unknown): WooGraphQLError {
   if (error && typeof error === 'object') {
     const maybe = error as {
       message?: string;
-      response?: { status?: number; errors?: GraphQLErrorLike[] };
+      response?: { status?: number; errors?: GraphQLErrorLike[]; data?: unknown };
       errors?: GraphQLErrorLike[];
     };
     const errors = maybe.response?.errors ?? maybe.errors ?? [];
@@ -51,4 +51,16 @@ export function toWooGraphQLError(error: unknown): WooGraphQLError {
   }
 
   return new WooGraphQLError(error instanceof Error ? error.message : 'Unknown GraphQL error', { cause: error });
+}
+
+/**
+ * WooGraphQL JWT sometimes returns HTTP 403 with a full GraphQL `data` payload.
+ * graphql-request throws ClientError in that case; recover usable data when present.
+ */
+export function extractGraphQLDataFromError<T = unknown>(error: unknown): T | null {
+  if (!error || typeof error !== 'object') return null;
+  const response = (error as { response?: { data?: T; errors?: GraphQLErrorLike[] } }).response;
+  if (!response || response.data == null) return null;
+  if (Array.isArray(response.errors) && response.errors.length > 0) return null;
+  return response.data;
 }

@@ -1,7 +1,7 @@
 import { GraphQLClient } from 'graphql-request';
 import { getSdk, type Sdk } from './generated/sdk';
 import { createBrowserCookieAdapter, createMemoryCookieAdapter, type CookieAdapter } from './cookies';
-import { toWooGraphQLError } from './errors';
+import { extractGraphQLDataFromError, toWooGraphQLError } from './errors';
 import {
   applySessionFromResponseHeaders,
   createSessionStore,
@@ -94,13 +94,13 @@ export function createWooClient(config: WooClientConfig): WooClient {
         const result = await sdk.refreshJwtAuthToken({ jwtRefreshToken: refreshToken });
         const authToken = result.refreshJwtAuthToken?.authToken;
         if (!authToken) {
-          session.clearAuth();
+          if (!isTokenReusable(session.getAuthToken(), 0)) session.clearAuth();
           return false;
         }
         session.setAuthToken(authToken);
         return true;
       } catch {
-        session.clearAuth();
+        if (!isTokenReusable(session.getAuthToken(), 0)) session.clearAuth();
         return false;
       } finally {
         refreshInFlight = null;
@@ -122,8 +122,18 @@ export function createWooClient(config: WooClientConfig): WooClient {
       await ensureAuthToken();
     }
 
+    const run = async () => {
+      try {
+        return await operation(sdk);
+      } catch (error) {
+        const recovered = extractGraphQLDataFromError(error);
+        if (recovered != null) return recovered as Awaited<ReturnType<typeof operation>>;
+        throw error;
+      }
+    };
+
     try {
-      const result = await operation(sdk);
+      const result = await run();
       syncSessionFromResult(session, result);
       return result;
     } catch (error) {
@@ -132,7 +142,7 @@ export function createWooClient(config: WooClientConfig): WooClient {
         const refreshed = await refreshAuthToken(true);
         if (refreshed) {
           try {
-            const retryResult = await operation(sdk);
+            const retryResult = await run();
             syncSessionFromResult(session, retryResult);
             return retryResult;
           } catch (retryError) {

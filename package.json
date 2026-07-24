@@ -13,7 +13,8 @@
     "graphql:codegen": "graphql-codegen --config codegen.ts",
     "smoke:woo": "tsx scripts/smoke-woo.ts",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:live": "vitest run --config vitest.live.config.ts"
   },
   "dependencies": {
     "@stripe/stripe-js": "^9.12.0",

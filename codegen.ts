@@ -31,7 +31,8 @@ const config: CodegenConfig = {
               '/* eslint-disable */\n// @ts-nocheck\n// This file is auto-generated. Do not edit manually - run `npm run graphql:codegen` to regenerate.\n',
           },
         },
-        'typescript',
+        // Avoid the `typescript` plugin here: with current codegen versions it
+        // duplicates operation input types and breaks Vitest/OXC transforms.
         'typescript-operations',
         'typescript-graphql-request',
       ],
@@ -40,6 +41,8 @@ const config: CodegenConfig = {
         useTypeImports: true,
         enumsAsTypes: true,
         onlyOperationTypes: true,
+        preResolveTypes: true,
+        skipTypename: true,
       },
     },
   },
