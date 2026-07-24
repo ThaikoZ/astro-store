@@ -22,21 +22,22 @@ export const CONTACT = {
 	brand: 'Klaudia Jaranowska Makeup',
 	email: 'klaudia.jaranowska@vp.pl',
 	phone: '530806940',
+	phoneDisplay: '+48 530 806 940',
 	phoneHref: 'tel:+48530806940',
 	salons: [
 		{
-			id: 'sieradz',
-			label: 'Salon Sieradz',
-			line1: 'Ul. Ogrodowa 5',
-			line2: '98-200 Sieradz',
-			mapQuery: 'Ogrodowa 5, 98-200 Sieradz, Poland',
-		},
-		{
 			id: 'lodz',
 			label: 'Salon Łódź',
-			line1: 'Ul. Mikołaja Kopernika 17',
+			line1: 'ul. Mikołaja Kopernika 17',
 			line2: '90-503 Łódź',
 			mapQuery: 'Mikołaja Kopernika 17, 90-503 Łódź, Poland',
+		},
+		{
+			id: 'sieradz',
+			label: 'Salon Sieradz',
+			line1: 'ul. Ogrodowa 5',
+			line2: '98-200 Sieradz',
+			mapQuery: 'Ogrodowa 5, 98-200 Sieradz, Poland',
 		},
 	],
 } as const;
