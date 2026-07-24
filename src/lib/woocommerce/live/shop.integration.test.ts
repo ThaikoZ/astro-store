@@ -13,6 +13,7 @@ import { afterAll, describe, expect, it } from 'vitest';
 import {
   cleanupOrderAndUser,
   createLiveClient,
+  findSimpleProduct,
   getLiveTestEnv,
   testBillingAddress,
   uniqueTestIdentity,
@@ -49,15 +50,14 @@ describe.runIf(Boolean(env.endpoint))('WooCommerce SDK live shop', () => {
       const woo = createLiveClient(env);
       const identity = uniqueTestIdentity();
 
-      // Catalog
-      const products = await woo.catalog.getProducts({ first: 5 });
-      const product = products.products?.nodes?.[0];
-      expect(product?.databaseId).toBeTruthy();
+      // Catalog - prefer a simple product so addToCart does not require variation options
+      const product = await findSimpleProduct(woo);
+      expect(product.databaseId).toBeTruthy();
 
       const categories = await woo.catalog.getCategories();
       expect(categories.productCategories?.nodes?.length).toBeGreaterThan(0);
 
-      if (product?.slug) {
+      if (product.slug) {
         const detail = await woo.catalog.getProduct(product.slug);
         expect(detail.product?.databaseId).toBe(product.databaseId);
       }
@@ -93,7 +93,7 @@ describe.runIf(Boolean(env.endpoint))('WooCommerce SDK live shop', () => {
 
       // Session cart
       await woo.cart.emptyCart().catch(() => undefined);
-      await woo.cart.addToCart({ productId: product!.databaseId, quantity: 1 });
+      await woo.cart.addToCart({ productId: product.databaseId, quantity: 1 });
       expect(woo.session.getSessionToken()).toBeTruthy();
 
       const cart = await woo.cart.getCart();

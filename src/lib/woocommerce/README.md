@@ -3,6 +3,18 @@
 Framework-agnostic TypeScript client for WPGraphQL + WooCommerce GraphQL.
 Ported from WooNuxt’s commerce layer for use in Astro (server or future islands).
 
+## WordPress plugins
+
+Install and activate these on the WordPress site (plus WooCommerce itself):
+
+| Plugin | Role |
+| --- | --- |
+| [WPGraphQL](https://wordpress.org/plugins/wp-graphql/) (`wp-graphql`) | GraphQL endpoint at `/graphql` |
+| [WPGraphQL for WooCommerce](https://wordpress.org/plugins/wp-graphql-woocommerce/) (`wp-graphql-woocommerce`) | Products, cart, checkout, orders schema |
+| [WPGraphQL JWT Authentication](https://github.com/wp-graphql/wp-graphql-jwt-authentication) (`wp-graphql-jwt-authentication`) | `login` / `refreshJwtAuthToken` used by `woo.auth` |
+
+Without JWT Authentication, catalog/cart queries may still work for guests, but customer login and authenticated orders will not.
+
 ## Setup
 
 1. Set env vars (see [`.env.example`](../../../.env.example)):
@@ -133,27 +145,36 @@ Other statuses throw and must not proceed to checkout as paid.
 npm run test:live
 ```
 
-These hit your real WordPress shop end-to-end:
+Tests live under `src/lib/woocommerce/live/` (`*.integration.test.ts`):
 
-1. Register a fresh customer (`authenticate: true`)
-2. Login / logout (JWT refresh attempted when a refresh token exists)
-3. Catalog + cart session persistence (`cart-token`)
-4. Update customer address / shipping
-5. Place an order via an available offline gateway (prefers COD, then cheque)
-6. Fetch orders
-7. Cleanup via admin-capable account: `deleteOrder` + `deleteUser`
+| Suite | What it covers |
+| --- | --- |
+| `shop.integration.test.ts` | Register → login → cart → ship → COD/cheque checkout → orders → admin cleanup |
+| `guest-cart.integration.test.ts` | Guest `addToCart` + cart-token persistence across a new client |
+| `cart-mutations.integration.test.ts` | Quantity update, remove item, empty cart |
+| `shipping.integration.test.ts` | `getAllowedCountries` / `getStates` + location/country updates |
+| `variable-product.integration.test.ts` | Variable product `addToCart` with `variationId` |
+| `coupons.integration.test.ts` | Apply/remove coupon (opt-in via `WORDPRESS_TEST_COUPON`) |
 
 Required env (see [`.env.example`](../../../.env.example)):
 
 ```bash
 WORDPRESS_GRAPHQL_URL=...
 PUBLIC_APP_ORIGIN=...
-WORDPRESS_ADMIN_USER=...      # can deleteOrder + deleteUser
+WORDPRESS_ADMIN_USER=...      # can deleteOrder + deleteUser (shop suite)
 WORDPRESS_ADMIN_PASSWORD=...
 # or fallback:
 # WORDPRESS_TEST_USER=...
 # WORDPRESS_TEST_PASSWORD=...
+# Optional coupon suite:
+# WORDPRESS_TEST_COUPON=ASTROSDK
 ```
 
-Enable **Cash on delivery** (or Cheque) in WooCommerce for automated checkout.
+Shop fixtures expected by the live suites:
+
+- At least one in-stock **simple** product
+- Optional: a **variable** product with an in-stock variation (`variable-product` suite skips if missing)
+- **Cash on delivery** (or Cheque) enabled for `shop.integration.test.ts`
+- Optional: a WooCommerce coupon matching `WORDPRESS_TEST_COUPON`
+
 Unit tests (`npm test`) stay offline and do not create shop data.

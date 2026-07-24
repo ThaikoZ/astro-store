@@ -1,6 +1,12 @@
 import { config as loadEnv } from 'dotenv';
-import { createMemoryCookieAdapter, createWooClient, type WooClient } from '../index';
-import type { CountriesEnum } from '../generated/sdk';
+import {
+  COOKIE_NAMES,
+  createMemoryCookieAdapter,
+  createWooClient,
+  type CookieAdapter,
+  type WooClient,
+} from '../index';
+import type { CountriesEnum, ProductTypesEnum, StockStatusEnum } from '../generated/sdk';
 
 loadEnv();
 
@@ -9,6 +15,21 @@ export type LiveTestEnv = {
   origin?: string;
   adminUser?: string;
   adminPassword?: string;
+  testCoupon?: string;
+};
+
+export type SimpleProductFixture = {
+  databaseId: number;
+  slug: string | null;
+  name: string | null;
+};
+
+export type VariableProductFixture = {
+  databaseId: number;
+  slug: string;
+  name: string | null;
+  variationId: number;
+  variation: Array<{ attributeName: string; attributeValue: string }>;
 };
 
 export function getLiveTestEnv(): LiveTestEnv {
@@ -22,15 +43,31 @@ export function getLiveTestEnv(): LiveTestEnv {
     origin: process.env.PUBLIC_APP_ORIGIN,
     adminUser: process.env.WORDPRESS_ADMIN_USER || process.env.WORDPRESS_TEST_USER || undefined,
     adminPassword: process.env.WORDPRESS_ADMIN_PASSWORD || process.env.WORDPRESS_TEST_PASSWORD || undefined,
+    testCoupon: process.env.WORDPRESS_TEST_COUPON || undefined,
   };
 }
 
-export function createLiveClient(env: LiveTestEnv = getLiveTestEnv()): WooClient {
+export function createLiveClient(
+  env: LiveTestEnv = getLiveTestEnv(),
+  cookies: CookieAdapter = createMemoryCookieAdapter(),
+): WooClient {
   return createWooClient({
     endpoint: env.endpoint,
     origin: env.origin,
-    cookies: createMemoryCookieAdapter(),
+    cookies,
   });
+}
+
+/** Snapshot session cookies so a new client can resume the same guest cart. */
+export function snapshotSessionCookies(woo: WooClient): Record<string, string> {
+  const cookies: Record<string, string> = {};
+  const session = woo.session.getSessionToken();
+  const auth = woo.session.getAuthToken();
+  const refresh = woo.session.getRefreshToken();
+  if (session) cookies[COOKIE_NAMES.session] = session;
+  if (auth) cookies[COOKIE_NAMES.authToken] = auth;
+  if (refresh) cookies[COOKIE_NAMES.refreshToken] = refresh;
+  return cookies;
 }
 
 export function uniqueTestIdentity(prefix = 'astro-sdk') {
@@ -56,6 +93,100 @@ export function testBillingAddress(email: string, firstName = 'Astro', lastName 
     country: 'PL' as CountriesEnum,
     state: '',
   };
+}
+
+function isInStock(status: StockStatusEnum | null | undefined): boolean {
+  return status === 'IN_STOCK' || status == null;
+}
+
+export async function findSimpleProduct(woo: WooClient): Promise<SimpleProductFixture> {
+  const result = await woo.catalog.getProducts({ first: 50 });
+  const nodes = result.products?.nodes ?? [];
+
+  for (const node of nodes) {
+    if (!node?.databaseId) continue;
+    const type = (node as { type?: ProductTypesEnum | null }).type;
+    if (type && type !== 'SIMPLE') continue;
+    // Variable/external fragments also match getProducts; prefer nodes without variations.
+    const maybeVariable = node as { variations?: { nodes?: unknown[] | null } | null };
+    if (maybeVariable.variations?.nodes?.length) continue;
+    const stockStatus = (node as { stockStatus?: StockStatusEnum | null }).stockStatus;
+    if (!isInStock(stockStatus)) continue;
+    return {
+      databaseId: node.databaseId,
+      slug: node.slug ?? null,
+      name: node.name ?? null,
+    };
+  }
+
+  throw new Error(
+    'No purchasable simple product found in the catalog. Publish at least one in-stock simple product for live tests.',
+  );
+}
+
+export async function findVariableProductWithVariation(
+  woo: WooClient,
+): Promise<VariableProductFixture | null> {
+  const result = await woo.catalog.getProducts({ first: 50 });
+  const candidates =
+    result.products?.nodes?.filter((node) => {
+      if (!node?.slug || !node.databaseId) return false;
+      const type = (node as { type?: ProductTypesEnum | null }).type;
+      if (type === 'VARIABLE') return true;
+      const variations = (node as { variations?: { nodes?: unknown[] | null } | null }).variations;
+      return Boolean(variations?.nodes?.length);
+    }) ?? [];
+
+  for (const candidate of candidates) {
+    if (!candidate?.slug) continue;
+    const detail = await woo.catalog.getProduct(candidate.slug);
+    const product = detail.product as {
+      databaseId?: number;
+      slug?: string | null;
+      name?: string | null;
+      type?: ProductTypesEnum | null;
+      variations?: {
+        nodes?: Array<{
+          databaseId: number;
+          stockStatus?: StockStatusEnum | null;
+          attributes?: {
+            nodes?: Array<{
+              name?: string | null;
+              value?: string | null;
+            } | null> | null;
+          } | null;
+        } | null> | null;
+      } | null;
+    } | null;
+
+    if (!product?.databaseId || !product.slug) continue;
+    if (product.type && product.type !== 'VARIABLE') continue;
+
+    const variation = product.variations?.nodes?.find(
+      (node) => node?.databaseId && isInStock(node.stockStatus),
+    );
+    if (!variation?.databaseId) continue;
+
+    const attributes =
+      variation.attributes?.nodes
+        ?.filter((attr): attr is { name: string; value: string } =>
+          Boolean(attr?.name && attr?.value),
+        )
+        .map((attr) => ({
+          attributeName: attr.name,
+          attributeValue: attr.value,
+        })) ?? [];
+
+    return {
+      databaseId: product.databaseId,
+      slug: product.slug,
+      name: product.name ?? null,
+      variationId: variation.databaseId,
+      variation: attributes,
+    };
+  }
+
+  return null;
 }
 
 export async function loginAsAdmin(env: LiveTestEnv = getLiveTestEnv()): Promise<WooClient> {
