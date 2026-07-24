@@ -7,7 +7,7 @@ export const IMAGES = {
 	marqueeLogo: `${MEDIA}/2025/06/logo-napis.png`,
 	footerLogo: `${MEDIA}/2025/05/image8.png`,
 	hero: `${MEDIA}/2025/10/IMG_2031-scaled-e1761149728406.jpeg`,
-	about: `${MEDIA}/2025/06/IMG_0147-scaled-e1768179865534.jpeg`,
+	about: `${MEDIA}/2025/10/IMG_2036-scaled-e1761149605175.jpeg`,
 	instagram: `${MEDIA}/2025/10/IMG_2036-scaled-e1761149605175.jpeg`,
 	quoteMarks: `${MEDIA}/2025/06/Group-91-1.png`,
 } as const;

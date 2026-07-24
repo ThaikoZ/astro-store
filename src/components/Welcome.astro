@@ -155,28 +155,22 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 			class="bg-foam px-6 py-16 md:px-10 md:py-24"
 			aria-labelledby="about-heading"
 		>
-			<div class="mx-auto grid max-w-5xl items-center gap-12 md:grid-cols-2 md:gap-16">
-				<img
-					class="mx-auto aspect-4/5 w-full max-w-md object-cover object-top"
-					src={IMAGES.about}
-					alt="Klaudia Jaranowska przy pracy"
-					loading="lazy"
-					width="750"
-					height="1024"
-				/>
-				<div class="text-center md:text-left">
+			<div class="mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-2 md:gap-14 lg:gap-20">
+				<div class="order-2 text-left md:order-1">
 					<h3
 						id="about-heading"
-						class="m-0 font-display text-[clamp(1.45rem,3vw,2rem)] font-normal leading-tight text-ink"
+						class="m-0 font-display text-[clamp(1.45rem,3vw,2.1rem)] font-normal leading-tight text-ink"
 					>
 						Sprawię, że poczujesz się
-						<span class="mt-2 block tracking-[0.1em] uppercase">pięknie i pewnie!</span>
+						<span class="mt-2 block font-display italic tracking-[0.08em] uppercase">
+							pięknie i pewnie!
+						</span>
 					</h3>
-					<p class="mt-6 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-base">
+					<p class="mt-6 m-0 max-w-xl font-sans text-sm leading-relaxed text-ink/80 md:text-base">
 						Moja pasja do makijażu to połączenie doświadczenia, wiedzy i indywidualnego
 						podejścia do każdego klienta.
 					</p>
-					<p class="mt-4 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-base">
+					<p class="mt-4 m-0 max-w-xl font-sans text-sm leading-relaxed text-ink/80 md:text-base">
 						Moim celem nie jest tylko wykonanie pięknego makijażu - chcę, aby każda kobieta,
 						która siada na moim fotelu, poczuła się wyjątkowo i komfortowo. Niezależnie od
 						tego, czy przygotowujesz się do ślubu, ważnego wydarzenia, sesji zdjęciowej, czy
@@ -185,10 +179,22 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 					</p>
 					<a
 						href="/kontakt/"
-						class="mt-8 inline-block border border-border-soft px-8 py-3 font-display text-sm tracking-[0.12em] text-ink no-underline uppercase transition-opacity hover:opacity-70"
+						class="mt-8 inline-block bg-ink px-8 py-3.5 font-sans text-xs tracking-[0.18em] text-foam no-underline uppercase shadow-sm transition-opacity hover:opacity-80"
 					>
 						Dowiedz się więcej
 					</a>
+				</div>
+				<div
+					class="relative order-1 mx-auto aspect-5/6 w-full max-w-md overflow-hidden rounded-[10rem] md:order-2 md:ml-auto md:mr-0"
+				>
+					<img
+						class="size-full object-cover object-top"
+						src={IMAGES.about}
+						alt="Klaudia Jaranowska przy pracy"
+						loading="lazy"
+						width="750"
+						height="1024"
+					/>
 				</div>
 			</div>
 		</section>
