@@ -1,8 +1,142 @@
 ---
-import StubPage from '../layouts/StubPage.astro';
+import SiteFooter from '../components/site/SiteFooter.astro';
+import SiteHeader from '../components/site/SiteHeader.astro';
+import TrainingPackageCard from '../components/site/TrainingPackageCard.astro';
+import Button from '../components/ui/Button.astro';
+import Container from '../components/ui/Container.astro';
+import Layout from '../layouts/Layout.astro';
+import { SZKOLENIA_STACJONARNE } from '../lib/site';
 ---
 
-<StubPage
-	title="Szkolenia Stacjonarne - Klaudia Jaranowska Makeup"
-	heading="Szkolenia Stacjonarne"
-/>
+<Layout title="Szkolenia Stacjonarne - Klaudia Jaranowska Makeup" withTopMargin>
+	<div class="min-h-full bg-paper text-ink">
+		<SiteHeader variant="solid" />
+
+		<main>
+			<section class="pt-20 pb-16 md:pt-28 md:pb-20" aria-labelledby="szkolenia-heading">
+				<Container>
+					<div class="grid items-start gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-20">
+						<div>
+							<h1
+								id="szkolenia-heading"
+								class="m-0 font-display text-[clamp(1.75rem,3.5vw,2.5rem)] font-normal tracking-[0.14em] text-ink uppercase"
+							>
+								Szkolenia
+							</h1>
+							<p
+								class="mt-6 m-0 max-w-xl font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7"
+							>
+								{SZKOLENIA_STACJONARNE.intro}
+							</p>
+						</div>
+
+						<div>
+							<div class="border-t border-ink" data-accordion>
+								{
+									SZKOLENIA_STACJONARNE.faq.map((item) => {
+										const triggerId = `faq-trigger-${item.id}`;
+										const panelId = `faq-panel-${item.id}`;
+										return (
+											<div class="border-b border-ink" data-accordion-item>
+												<button
+													type="button"
+													id={triggerId}
+													class="flex w-full cursor-pointer items-center justify-between gap-4 border-0 bg-transparent py-4 text-left font-sans text-xs tracking-[0.12em] text-ink uppercase md:text-sm"
+													aria-expanded="false"
+													aria-controls={panelId}
+													data-accordion-trigger
+												>
+													{item.title}
+													<span
+														class="relative inline-block size-4 shrink-0 text-lg leading-none"
+														aria-hidden="true"
+													>
+														<span class="accordion-icon-plus absolute inset-0 flex items-center justify-center">
+															+
+														</span>
+														<span class="accordion-icon-minus absolute inset-0 flex items-center justify-center opacity-0">
+															−
+														</span>
+													</span>
+												</button>
+												<div
+													id={panelId}
+													class="accordion-panel grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none"
+													role="region"
+													aria-labelledby={triggerId}
+													data-accordion-panel
+												>
+													<div class="overflow-hidden">
+														<ul
+															class="m-0 list-none space-y-2 pb-5 pl-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7"
+														>
+															{item.items.map((line) => (
+																<li>• {line}</li>
+															))}
+														</ul>
+													</div>
+												</div>
+											</div>
+										);
+									})
+								}
+							</div>
+
+							<p
+								class="mt-8 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7"
+							>
+								{SZKOLENIA_STACJONARNE.schedule}
+							</p>
+						</div>
+					</div>
+				</Container>
+			</section>
+
+			<section class="pb-16 md:pb-20" aria-label="Pakiety szkoleń">
+				<Container>
+					<div class="grid gap-10 md:grid-cols-3 md:gap-6 xl:gap-8">
+						{
+							SZKOLENIA_STACJONARNE.packages.map((pkg) => (
+								<TrainingPackageCard
+									days={pkg.days}
+									types={pkg.types}
+									price={pkg.price}
+									duration={pkg.duration}
+									image={pkg.image}
+								/>
+							))
+						}
+					</div>
+				</Container>
+			</section>
+
+			<section
+				class="pb-20 md:pb-28"
+				aria-labelledby="szkolenia-cta-heading"
+			>
+				<Container class="text-center">
+					<h2
+						id="szkolenia-cta-heading"
+						class="mx-auto m-0 max-w-2xl font-display text-[clamp(1.25rem,2.5vw,1.65rem)] font-normal leading-snug tracking-[0.02em] text-ink"
+					>
+						Skontaktuj się ze mną, aby poznać dostępne terminy i umówić się na szkolenie.
+					</h2>
+					<div class="mt-10 flex justify-center">
+						<Button href="/kontakt/" variant="solid" tone="ink" class="min-w-[min(100%,22rem)]">
+							Skontaktuj się ze mną
+						</Button>
+					</div>
+				</Container>
+			</section>
+		</main>
+
+		<SiteFooter />
+	</div>
+</Layout>
+
+<script>
+	import { initSiteAccordions } from '../scripts/site-accordion';
+
+	initSiteAccordions();
+	document.addEventListener('astro:page-load', initSiteAccordions);
+</script>

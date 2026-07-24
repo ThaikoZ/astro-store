@@ -34,3 +34,27 @@
     transform: translateX(-50%);
   }
 }
+
+.accordion-panel.is-open {
+  grid-template-rows: 1fr;
+}
+
+button[aria-expanded='true'] .accordion-icon-plus {
+  opacity: 0;
+}
+
+button[aria-expanded='true'] .accordion-icon-minus {
+  opacity: 1;
+}
+
+.accordion-icon-plus,
+.accordion-icon-minus {
+  transition: opacity 200ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordion-icon-plus,
+  .accordion-icon-minus {
+    transition: none;
+  }
+}

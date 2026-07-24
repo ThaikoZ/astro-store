@@ -1,4 +1,5 @@
 ---
+import Container from '../ui/Container.astro';
 import { IMAGES, PRIMARY_NAV, type NavItem } from '../../lib/site';
 
 interface Props {
@@ -35,12 +36,12 @@ function isNavItemActive(item: NavItem) {
 	data-site-header
 	data-variant={variant}
 >
-	<div class="relative z-50 flex items-center justify-between gap-6 px-5 py-5 md:px-10 md:py-6">
+	<Container class="relative z-50 flex items-center justify-between gap-6 py-5 md:py-6">
 		<a href="/" class="shrink-0 text-foam no-underline" aria-label="Klaudia Jaranowska Makeup - strona główna">
 			<img
 				src={IMAGES.headerLogo}
 				alt="Klaudia Jaranowska Make Up Artist"
-				class="h-10 w-auto md:h-12"
+				class="h-10 w-auto md:h-12 lg:h-9"
 				width="220"
 				height="48"
 				fetchpriority="high"
@@ -142,7 +143,7 @@ function isNavItemActive(item: NavItem) {
 				></span>
 			</span>
 		</button>
-	</div>
+	</Container>
 
 	<div
 		id="site-mobile-nav"

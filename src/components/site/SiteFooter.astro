@@ -1,11 +1,12 @@
 ---
+import Container from '../ui/Container.astro';
 import { FOOTER_LINKS, IMAGES, SOCIAL } from '../../lib/site';
 
 const year = new Date().getFullYear();
 ---
 
 <footer class="border-t border-border-soft bg-foam text-ink">
-	<div class="mx-auto max-w-6xl px-6 pt-16 pb-12 md:px-10 md:pt-20 md:pb-14">
+	<Container class="pt-16 pb-12 md:pt-20 md:pb-14">
 		<div class="grid items-start gap-12 md:grid-cols-[1fr_auto_1fr] md:gap-10 lg:gap-16">
 			<div class="order-2 mx-auto max-w-xs text-center md:order-1 md:mx-0 md:pt-4 md:text-left">
 				<p
@@ -136,12 +137,10 @@ const year = new Date().getFullYear();
 				</div>
 			</div>
 		</div>
-	</div>
+	</Container>
 
-	<div class="bg-ink px-6 py-3.5 md:px-10">
-		<div
-			class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2.5 sm:flex-row"
-		>
+	<div class="bg-ink py-3.5">
+		<Container class="flex flex-col items-center justify-between gap-2.5 sm:flex-row">
 			<p class="m-0 font-sans text-[0.7rem] tracking-[0.08em] text-foam/90">
 				© Copyright {year} Klaudia Jaranowska Make Up
 			</p>
@@ -156,6 +155,6 @@ const year = new Date().getFullYear();
 					TruetoWeb
 				</a>
 			</p>
-		</div>
+		</Container>
 	</div>
 </footer>

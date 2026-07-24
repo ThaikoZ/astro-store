@@ -1,6 +1,7 @@
 ---
 import SiteFooter from '../components/site/SiteFooter.astro';
 import SiteHeader from '../components/site/SiteHeader.astro';
+import Container from '../components/ui/Container.astro';
 import Layout from './Layout.astro';
 
 interface Props {
@@ -14,21 +15,25 @@ const { title, heading } = Astro.props;
 <Layout title={title} withTopMargin>
 	<div class="min-h-full bg-paper text-ink">
 		<SiteHeader variant="solid" />
-		<main class="mx-auto max-w-3xl px-6 py-16 text-center md:px-10 md:py-24">
-			<h1
-				class="m-0 font-display text-[clamp(1.6rem,3.2vw,2.25rem)] font-normal tracking-[0.14em] text-ink uppercase"
-			>
-				{heading}
-			</h1>
-			<p class="mt-6 m-0 font-sans text-sm leading-relaxed text-ink/75 md:text-base">
-				Strona w przygotowaniu.
-			</p>
-			<a
-				href="/"
-				class="mt-10 inline-block border border-border-soft px-8 py-3 font-display text-sm tracking-[0.12em] text-ink no-underline uppercase transition-opacity hover:opacity-70"
-			>
-				Wróć na stronę główną
-			</a>
+		<main class="py-16 md:py-24">
+			<Container>
+				<div class="mx-auto max-w-3xl text-center">
+					<h1
+						class="m-0 font-display text-[clamp(1.6rem,3.2vw,2.25rem)] font-normal tracking-[0.14em] text-ink uppercase"
+					>
+						{heading}
+					</h1>
+					<p class="mt-6 m-0 font-sans text-sm leading-relaxed text-ink/75 md:text-base">
+						Strona w przygotowaniu.
+					</p>
+					<a
+						href="/"
+						class="mt-10 inline-block border border-border-soft px-8 py-3 font-display text-sm tracking-[0.12em] text-ink no-underline uppercase transition-opacity hover:opacity-70"
+					>
+						Wróć na stronę główną
+					</a>
+				</div>
+			</Container>
 		</main>
 		<SiteFooter />
 	</div>

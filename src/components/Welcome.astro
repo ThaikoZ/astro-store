@@ -3,6 +3,7 @@ import InstagramSection from './site/InstagramSection.astro';
 import SiteFooter from './site/SiteFooter.astro';
 import SiteHeader from './site/SiteHeader.astro';
 import Button from './ui/Button.astro';
+import Container from './ui/Container.astro';
 import ImageFrame from './ui/ImageFrame.astro';
 import { IMAGES, OFFER_LINKS, SOCIAL, TESTIMONIALS } from '../lib/site';
 
@@ -31,8 +32,8 @@ const defaultOfferIndex = DEFAULT_OFFER_INDEX >= 0 ? DEFAULT_OFFER_INDEX : 0;
 			>
 			</div>
 
-			<div
-				class="flex flex-1 flex-col items-center justify-end gap-7 px-6 pb-12 pt-28 text-center md:px-10 md:pb-16"
+			<Container
+				class="flex flex-1 flex-col items-center justify-end gap-7 pb-12 pt-28 text-center md:pb-16"
 			>
 				<h1
 					class="m-0 max-w-[28ch] font-display text-[clamp(1.45rem,3.6vw,2.15rem)] font-normal leading-[1.35] text-foam animate-rise motion-reduce:animate-none"
@@ -68,7 +69,7 @@ const defaultOfferIndex = DEFAULT_OFFER_INDEX >= 0 ? DEFAULT_OFFER_INDEX : 0;
 						<path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"></path>
 					</svg>
 				</a>
-			</div>
+			</Container>
 			<p class="sr-only">Klaudia Jaranowska</p>
 		</section>
 
@@ -91,12 +92,12 @@ const defaultOfferIndex = DEFAULT_OFFER_INDEX >= 0 ? DEFAULT_OFFER_INDEX : 0;
 
 		<section
 			id="oferta"
-			class="bg-paper px-6 py-20 md:px-10 md:py-28"
+			class="bg-paper py-20 md:py-28"
 			aria-labelledby="oferta-heading"
 			data-offer
 			data-offer-default={defaultOfferIndex}
 		>
-			<div class="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-16 lg:gap-20">
+			<Container class="grid items-center gap-12 md:grid-cols-2 md:gap-16 lg:gap-20">
 				<ImageFrame class="md:mx-0 md:aspect-5/6 md:max-w-md md:rounded-[10rem]">
 					{
 						OFFER_LINKS.map((item, index) => (
@@ -153,15 +154,15 @@ const defaultOfferIndex = DEFAULT_OFFER_INDEX >= 0 ? DEFAULT_OFFER_INDEX : 0;
 						}
 					</ul>
 				</div>
-			</div>
+			</Container>
 		</section>
 
 		<section
 			id="o-mnie"
-			class="bg-foam px-6 py-20 md:px-10 md:py-28"
+			class="bg-foam py-20 md:py-28"
 			aria-labelledby="about-heading"
 		>
-			<div class="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-16 lg:gap-20">
+			<Container class="grid items-center gap-12 md:grid-cols-2 md:gap-16 lg:gap-20">
 				<div class="order-2 text-center md:order-1 md:text-left">
 					<h3
 						id="about-heading"
@@ -197,34 +198,37 @@ const defaultOfferIndex = DEFAULT_OFFER_INDEX >= 0 ? DEFAULT_OFFER_INDEX : 0;
 						height="1024"
 					/>
 				</ImageFrame>
-			</div>
+			</Container>
 		</section>
 
-		<div class="bg-brand-gray px-6 py-5 md:px-10 md:py-6">
-			<a
-				href="/szkolenia-stacjonarne/"
-				class="mx-auto flex max-w-6xl items-center justify-center gap-3 font-display text-sm tracking-[0.16em] text-ink no-underline uppercase transition-opacity hover:opacity-70 md:text-base"
-			>
-				Zobacz szkolenia stacjonarne
-				<svg
-					class="size-5 shrink-0"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="1.25"
-					aria-hidden="true"
+		<div class="bg-brand-gray py-5 md:py-6">
+			<Container>
+				<a
+					href="/szkolenia-stacjonarne/"
+					class="flex items-center justify-center gap-3 font-display text-sm tracking-[0.16em] text-ink no-underline uppercase transition-opacity hover:opacity-70 md:text-base"
 				>
-					<path d="M4 12h15" stroke-linecap="round"></path>
-					<path d="M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"></path>
-				</svg>
-			</a>
+					Zobacz szkolenia stacjonarne
+					<svg
+						class="size-5 shrink-0"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.25"
+						aria-hidden="true"
+					>
+						<path d="M4 12h15" stroke-linecap="round"></path>
+						<path d="M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"></path>
+					</svg>
+				</a>
+			</Container>
 		</div>
 
 		<section
 			id="opinie"
-			class="bg-foam px-6 py-20 md:px-10 md:py-28"
+			class="bg-foam py-20 md:py-28"
 			aria-labelledby="testimonials-heading"
 		>
+			<Container>
 			<header class="mx-auto mb-12 max-w-2xl text-center md:mb-16">
 				<h2
 					id="testimonials-heading"
@@ -239,7 +243,7 @@ const defaultOfferIndex = DEFAULT_OFFER_INDEX >= 0 ? DEFAULT_OFFER_INDEX : 0;
 				</p>
 			</header>
 
-			<div class="mx-auto flex max-w-6xl items-center gap-2 md:gap-4" data-testimonials>
+			<div class="flex items-center gap-2 md:gap-4" data-testimonials>
 				<button
 					type="button"
 					class="flex size-10 shrink-0 cursor-pointer items-center justify-center border-0 bg-transparent text-ink transition-opacity hover:opacity-60"
@@ -296,6 +300,7 @@ const defaultOfferIndex = DEFAULT_OFFER_INDEX >= 0 ? DEFAULT_OFFER_INDEX : 0;
 					</svg>
 				</button>
 			</div>
+			</Container>
 		</section>
 
 		<InstagramSection

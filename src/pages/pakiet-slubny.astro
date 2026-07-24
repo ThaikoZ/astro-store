@@ -3,6 +3,7 @@ import InstagramSection from '../components/site/InstagramSection.astro';
 import SiteFooter from '../components/site/SiteFooter.astro';
 import SiteHeader from '../components/site/SiteHeader.astro';
 import Button from '../components/ui/Button.astro';
+import Container from '../components/ui/Container.astro';
 import ImageFrame from '../components/ui/ImageFrame.astro';
 import Layout from '../layouts/Layout.astro';
 import { OFFER_LINKS, PAKIET_SLUBNY, SOCIAL } from '../lib/site';
@@ -13,11 +14,8 @@ import { OFFER_LINKS, PAKIET_SLUBNY, SOCIAL } from '../lib/site';
 		<SiteHeader variant="solid" />
 
 		<main>
-			<section
-				class="px-6 pt-20 md:px-10 md:pt-28"
-				aria-labelledby="pakiet-slubny-heading"
-			>
-				<div class="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-16 lg:gap-20">
+			<section class="pt-20 md:pt-28" aria-labelledby="pakiet-slubny-heading">
+				<Container class="grid items-center gap-12 md:grid-cols-2 md:gap-16 lg:gap-20">
 					<ImageFrame class="order-2 md:order-1">
 						<img
 							src={PAKIET_SLUBNY.image}
@@ -67,51 +65,50 @@ import { OFFER_LINKS, PAKIET_SLUBNY, SOCIAL } from '../lib/site';
 							Zarezerwuj swój termin!
 						</Button>
 					</div>
-				</div>
+				</Container>
 			</section>
 
-			<section
-				class="px-6 py-20 md:px-10 md:py-28"
-				aria-labelledby="pakiet-info-heading"
-			>
-				<div
-					class="mx-auto max-w-6xl rounded-[5rem] bg-foam px-6 py-12 md:rounded-[7rem] md:px-10 md:py-16"
-				>
-					<h2
-						id="pakiet-info-heading"
-						class="m-0 text-center font-display text-[clamp(1.6rem,3vw,2.25rem)] font-normal tracking-[0.04em] text-ink"
+			<section class="py-20 md:py-28" aria-labelledby="pakiet-info-heading">
+				<Container>
+					<div
+						class="rounded-[5rem] bg-foam px-6 py-12 md:rounded-[7rem] md:px-10 md:py-16"
 					>
-						Dodatkowe informacje
-					</h2>
-					<div class="mx-auto mt-8 max-w-2xl text-left">
-						<ul
-							class="m-0 list-none space-y-4 p-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7"
+						<h2
+							id="pakiet-info-heading"
+							class="m-0 text-center font-display text-[clamp(1.6rem,3vw,2.25rem)] font-normal tracking-[0.04em] text-ink"
 						>
-							{
-								PAKIET_SLUBNY.notes.map((note) => (
-									<li>– {note}</li>
-								))
-							}
-						</ul>
-						<p class="mt-6 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7">
-							Makijaż próbny wykonuję w moich salonach:
-						</p>
-						<ul
-							class="mt-3 m-0 list-none space-y-2 p-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7"
-						>
-							{
-								PAKIET_SLUBNY.salons.map((salon) => (
-									<li>{salon}</li>
-								))
-							}
-						</ul>
-						<div class="mt-10 flex justify-center">
-							<Button href="/kontakt/" variant="solid" tone="ink">
-								Zarezerwuj swój termin!
-							</Button>
+							Dodatkowe informacje
+						</h2>
+						<div class="mx-auto mt-8 max-w-2xl text-left">
+							<ul
+								class="m-0 list-none space-y-4 p-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7"
+							>
+								{
+									PAKIET_SLUBNY.notes.map((note) => (
+										<li>– {note}</li>
+									))
+								}
+							</ul>
+							<p class="mt-6 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7">
+								Makijaż próbny wykonuję w moich salonach:
+							</p>
+							<ul
+								class="mt-3 m-0 list-none space-y-2 p-0 font-sans text-sm leading-relaxed text-ink/80 md:text-[0.95rem] md:leading-7"
+							>
+								{
+									PAKIET_SLUBNY.salons.map((salon) => (
+										<li>{salon}</li>
+									))
+								}
+							</ul>
+							<div class="mt-10 flex justify-center">
+								<Button href="/kontakt/" variant="solid" tone="ink">
+									Zarezerwuj swój termin!
+								</Button>
+							</div>
 						</div>
 					</div>
-				</div>
+				</Container>
 			</section>
 
 			<InstagramSection

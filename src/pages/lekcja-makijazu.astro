@@ -2,6 +2,7 @@
 import LessonOfferCard from '../components/site/LessonOfferCard.astro';
 import SiteFooter from '../components/site/SiteFooter.astro';
 import SiteHeader from '../components/site/SiteHeader.astro';
+import Container from '../components/ui/Container.astro';
 import Layout from '../layouts/Layout.astro';
 import { LEKCJA_MAKIJAZU } from '../lib/site';
 ---
@@ -11,8 +12,8 @@ import { LEKCJA_MAKIJAZU } from '../lib/site';
 		<SiteHeader variant="solid" />
 
 		<main>
-			<section class="px-6 py-20 md:px-10 md:py-28" aria-labelledby="lekcja-heading">
-				<div class="mx-auto max-w-6xl">
+			<section class="py-20 md:py-28" aria-labelledby="lekcja-heading">
+				<Container>
 					<h1
 						id="lekcja-heading"
 						class="m-0 text-center font-display text-[clamp(1.75rem,3.5vw,2.5rem)] font-normal tracking-[0.14em] text-ink uppercase"
@@ -35,7 +36,7 @@ import { LEKCJA_MAKIJAZU } from '../lib/site';
 							))
 						}
 					</div>
-				</div>
+				</Container>
 			</section>
 		</main>
 

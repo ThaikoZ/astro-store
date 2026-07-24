@@ -1,0 +1,60 @@
+---
+interface Props {
+	days: string;
+	types: string;
+	price: string;
+	duration: string;
+	image: string;
+}
+
+const { days, types, price, duration, image } = Astro.props;
+const headingId = `pakiet-${days.toLowerCase().replace(/\s+/g, '-')}`;
+---
+
+<article class="relative" aria-labelledby={headingId}>
+	<div class="aspect-3/4 overflow-hidden rounded-[2rem] md:rounded-[2.5rem]">
+		<img
+			src={image}
+			alt={`Szkolenie stacjonarne - ${days}`}
+			class="size-full object-cover object-[center_28%]"
+			loading="lazy"
+			decoding="async"
+		/>
+	</div>
+
+	<div
+		class="absolute inset-x-4 bottom-4 z-10 flex items-stretch gap-3 rounded-2xl bg-foam px-4 py-4 shadow-sm sm:inset-x-5 sm:bottom-5 sm:gap-4 sm:px-5 md:inset-x-6"
+	>
+		<div class="min-w-0 flex-1">
+			<h2
+				id={headingId}
+				class="m-0 font-display text-[clamp(0.95rem,1.8vw,1.1rem)] font-normal tracking-[0.1em] text-ink uppercase"
+			>
+				{days}
+			</h2>
+			<p class="mt-1 m-0 font-sans text-xs tracking-wide text-ink/70 sm:text-sm">
+				{types}
+			</p>
+			<p class="mt-2 m-0 font-display text-[clamp(1.35rem,2.5vw,1.7rem)] font-normal tracking-[0.04em] text-ink">
+				{price}
+			</p>
+		</div>
+
+		<div
+			class="flex shrink-0 flex-col items-center justify-center gap-1.5 border-l border-ink/15 pl-3 sm:gap-2 sm:pl-4"
+		>
+			<svg
+				class="size-5 text-ink sm:size-6"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.4"
+				aria-hidden="true"
+			>
+				<circle cx="12" cy="12" r="8.5"></circle>
+				<path d="M12 7.5V12l3 2" stroke-linecap="round" stroke-linejoin="round"></path>
+			</svg>
+			<span class="font-sans text-sm tracking-wide text-ink sm:text-base">{duration}</span>
+		</div>
+	</div>
+</article>
