@@ -39,11 +39,31 @@ export const PRIMARY_NAV: NavItem[] = [
 ];
 
 export const OFFER_LINKS = [
-	{ label: 'Szkolenia Stacjonarne', href: '/szkolenia-stacjonarne/' },
-	{ label: 'Szkolenia Online', href: '/szkolenia-online/' },
-	{ label: 'Lekcje Makijażu', href: '/lekcja-makijazu/' },
-	{ label: 'Pakiet Ślubny', href: '/pakiet-slubny/' },
-	{ label: 'Makijaże', href: '/makijaze/' },
+	{
+		label: 'Szkolenia Stacjonarne',
+		href: '/szkolenia-stacjonarne/',
+		image: `${MEDIA}/2026/03/IMG_7023-scaled-e1772372826108.jpeg`,
+	},
+	{
+		label: 'Szkolenia Online',
+		href: '/szkolenia-online/',
+		image: `${MEDIA}/2025/11/IMG_3040-scaled-e1763840610536.jpeg`,
+	},
+	{
+		label: 'Lekcje Makijażu',
+		href: '/lekcja-makijazu/',
+		image: `${MEDIA}/2026/01/IMG_7546-e1768179680339.jpeg`,
+	},
+	{
+		label: 'Pakiet Ślubny',
+		href: '/pakiet-slubny/',
+		image: `${MEDIA}/2025/06/IMG_0144-scaled-e1749246815865.jpeg`,
+	},
+	{
+		label: 'Makijaże',
+		href: '/makijaze/',
+		image: `${MEDIA}/2025/09/image2-scaled-e1758305707207.jpeg`,
+	},
 ] as const;
 
 export const FOOTER_LINKS = [

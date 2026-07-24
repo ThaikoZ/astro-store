@@ -6,7 +6,7 @@ import { IMAGES, OFFER_LINKS, SOCIAL, TESTIMONIALS } from '../lib/site';
 const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 ---
 
-<div class="min-h-full bg-paper text-ink">
+<div class="min-h-full bg-foam text-ink">
 	<SiteHeader variant="overlay" />
 
 	<main id="tresc">
@@ -88,34 +88,71 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 			id="oferta"
 			class="bg-paper px-6 py-16 md:px-10 md:py-24"
 			aria-labelledby="oferta-heading"
+			data-offer
 		>
-			<div class="mx-auto max-w-3xl text-center">
-				<h2
-					id="oferta-heading"
-					class="m-0 font-display text-[clamp(1.6rem,3.2vw,2.25rem)] font-normal tracking-[0.16em] text-ink uppercase"
-				>
-					Oferta
-				</h2>
-				<ul class="mx-auto mt-10 m-0 flex max-w-md list-none flex-col gap-5 p-0 md:mt-12 md:gap-6">
+			<div class="mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-2 md:gap-14 lg:gap-20">
+				<div class="relative mx-auto aspect-5/6 w-full max-w-md overflow-hidden rounded-[10rem] md:mx-0">
 					{
-						OFFER_LINKS.map((item) => (
-							<li>
-								<a
-									href={item.href}
-									class="font-display text-[clamp(1.05rem,2.4vw,1.35rem)] tracking-[0.08em] text-ink no-underline uppercase transition-opacity hover:opacity-60"
-								>
-									{item.label}
-								</a>
-							</li>
+						OFFER_LINKS.map((item, index) => (
+							<img
+								src={item.image}
+								alt=""
+								class:list={[
+									'absolute inset-0 size-full object-cover object-center transition-opacity duration-500 ease-out motion-reduce:transition-none',
+									index === 0 ? 'opacity-100' : 'opacity-0',
+								]}
+								data-offer-image
+								data-index={index}
+								loading={index === 0 ? 'eager' : 'lazy'}
+								width="800"
+								height="1067"
+							/>
 						))
 					}
-				</ul>
+				</div>
+
+				<div>
+					<h2
+						id="oferta-heading"
+						class="m-0 font-display text-[clamp(1.6rem,3.2vw,2.25rem)] font-normal tracking-[0.16em] text-ink uppercase"
+					>
+						Oferta
+					</h2>
+					<ul class="mt-8 m-0 list-none border-t border-ink p-0 md:mt-10">
+						{
+							OFFER_LINKS.map((item, index) => (
+								<li class="border-b border-ink">
+									<a
+										href={item.href}
+										class="group flex items-center justify-between gap-4 py-2.5 font-display text-[clamp(1rem,2.2vw,1.2rem)] tracking-[0.04em] text-ink no-underline transition-opacity hover:opacity-70 md:py-4"
+										data-offer-link
+										data-index={index}
+										aria-current={index === 0 ? 'true' : undefined}
+									>
+										<span>{item.label}</span>
+										<svg
+											class="w-6 shrink-0 transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="1"
+											aria-hidden="true"
+										>
+											<path d="M4 12h15" stroke-linecap="round"></path>
+											<path d="M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"></path>
+										</svg>
+									</a>
+								</li>
+							))
+						}
+					</ul>
+				</div>
 			</div>
 		</section>
 
 		<section
 			id="o-mnie"
-			class="bg-paper px-6 pb-16 md:px-10 md:pb-24"
+			class="bg-foam px-6 py-16 md:px-10 md:py-24"
 			aria-labelledby="about-heading"
 		>
 			<div class="mx-auto grid max-w-5xl items-center gap-12 md:grid-cols-2 md:gap-16">
@@ -158,7 +195,7 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 
 		<section
 			id="opinie"
-			class="bg-paper px-6 pb-16 md:px-10 md:pb-24"
+			class="bg-foam px-6 pb-16 md:px-10 md:pb-24"
 			aria-labelledby="testimonials-heading"
 		>
 			<header class="mx-auto mb-10 max-w-2xl text-center md:mb-14">
@@ -268,6 +305,35 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 </div>
 
 <script>
+	function initOffer() {
+		const root = document.querySelector('[data-offer]');
+		if (!(root instanceof HTMLElement)) return;
+		if (root.dataset.offerBound === 'true') return;
+		root.dataset.offerBound = 'true';
+
+		const images = [...root.querySelectorAll('[data-offer-image]')];
+		const links = [...root.querySelectorAll('[data-offer-link]')];
+		if (images.length === 0 || links.length === 0) return;
+
+		const setActive = (index: number) => {
+			images.forEach((image, i) => {
+				image.classList.toggle('opacity-100', i === index);
+				image.classList.toggle('opacity-0', i !== index);
+			});
+			links.forEach((link, i) => {
+				if (i === index) link.setAttribute('aria-current', 'true');
+				else link.removeAttribute('aria-current');
+			});
+		};
+
+		links.forEach((link) => {
+			const index = Number(link.getAttribute('data-index'));
+			if (Number.isNaN(index)) return;
+			link.addEventListener('mouseenter', () => setActive(index));
+			link.addEventListener('focus', () => setActive(index));
+		});
+	}
+
 	function initTestimonials() {
 		const root = document.querySelector('[data-testimonials]');
 		if (!(root instanceof HTMLElement)) return;
@@ -288,6 +354,11 @@ const marqueeLogos = Array.from({ length: 12 }, () => IMAGES.marqueeLogo);
 		root.querySelector('[data-testimonial-next]')?.addEventListener('click', () => show(index + 1));
 	}
 
-	initTestimonials();
-	document.addEventListener('astro:page-load', initTestimonials);
+	function initLanding() {
+		initOffer();
+		initTestimonials();
+	}
+
+	initLanding();
+	document.addEventListener('astro:page-load', initLanding);
 </script>
