@@ -1,7 +1,7 @@
 # Archiwa kursy - Klaudia Jaranowska Makeup
 
 - URL: https://klaudiajaranowskamakeup.pl/kategoria-produktu/kursy/
-- Source slug: `kategoria-produktu-kursy`
+- Doc file: `pages/kategoria-produktu-kursy.md`
 
 ## Headings
 
@@ -11,45 +11,60 @@
 
 ## Page text
 
-```
+```text
+Makijaże
+Pakiet Ślubny
+Lekcja Makijażu
+Szkolenia
+Szkolenia Online
+Szkolenia Stacjonarne
+Kontakt
+Makijaże
+Pakiet ślubny
+Lekcja Makijażu
+Szkolenia
+Szkolenia Online
+Szkolenia Stacjonarne
+Kontakt
+Makijaże
+Pakiet ślubny
+Lekcja Makijażu
+Szkolenia
+Szkolenia Online
+Szkolenia Stacjonarne
+Kontakt
+0,00
+zł
+0
 kursy
 Brak w magazynie
 Dowiedz się więcej
 CLASSY BRIDE MAKE-UP
+300,00
+zł
 Dowiedz się więcej
 Dodaj do koszyka
 Foxy Eye Masterclass
+550,00
+zł
 Dodaj do koszyka
+Klaudia Jaranowska | Sieradz |
+Makijaż tworzony z pasją – specjalistka od naturalnego glow i kobiecej elegancji.
+Klaudia Jaranowska Makeup
 ```
 
-## Images
+## Images used on this page
 
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-1024x133.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-300x39.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-600x78.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-768x99.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/08/image0-1-300x389.jpeg (alt: CLASSY BRIDE MAKE-UP)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/08/image0-1-600x778.jpeg (alt: CLASSY BRIDE MAKE-UP)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/08/image0-1-231x300.jpeg (alt: CLASSY BRIDE MAKE-UP)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/08/image0-1-790x1024.jpeg (alt: CLASSY BRIDE MAKE-UP)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/08/image0-1-768x996.jpeg (alt: CLASSY BRIDE MAKE-UP)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/08/image0-1-1184x1536.jpeg (alt: CLASSY BRIDE MAKE-UP)
+### Content / section images
+
 - https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/08/image0-1.jpeg (alt: CLASSY BRIDE MAKE-UP)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2026/05/thumnbail-foxy-eye-300x300.png (alt: foxy-eye)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2026/05/thumnbail-foxy-eye-1024x1024.png (alt: foxy-eye)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2026/05/thumnbail-foxy-eye-150x150.png (alt: foxy-eye)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2026/05/thumnbail-foxy-eye-768x768.png (alt: foxy-eye)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2026/05/thumnbail-foxy-eye-600x600.png (alt: foxy-eye)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2026/05/thumnbail-foxy-eye-100x100.png (alt: foxy-eye)
 - https://klaudiajaranowskamakeup.pl/wp-content/uploads/2026/05/thumnbail-foxy-eye.png (alt: foxy-eye)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8-300x478.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8-188x300.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-32x32.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-192x192.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-180x180.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-270x270.png
+
+### Shared chrome assets (header / footer / favicon)
+
+- `header-logo`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820.png
+- `footer-logo`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8.png
+- `favicon`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1.png
 
 ## Notable links
 

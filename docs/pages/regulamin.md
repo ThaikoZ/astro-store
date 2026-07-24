@@ -1,7 +1,7 @@
 # Regulamin - Klaudia Jaranowska Makeup
 
 - URL: https://klaudiajaranowskamakeup.pl/regulamin/
-- Source slug: `regulamin`
+- Doc file: `pages/regulamin.md`
 - Meta description: Regulamin Data publikacji: 18.08.2025 Niniejszy Regulamin skierowany jest zarówno do Konsumentów, jak i do Przedsiębiorców korzystających ze Sklepu. Określa zasady […]
 
 ## Headings
@@ -25,7 +25,31 @@
 
 ## Page text
 
-```
+```text
+Makijaże
+Pakiet Ślubny
+Lekcja Makijażu
+Szkolenia
+Szkolenia Online
+Szkolenia Stacjonarne
+Kontakt
+Makijaże
+Pakiet ślubny
+Lekcja Makijażu
+Szkolenia
+Szkolenia Online
+Szkolenia Stacjonarne
+Kontakt
+Makijaże
+Pakiet ślubny
+Lekcja Makijażu
+Szkolenia
+Szkolenia Online
+Szkolenia Stacjonarne
+Kontakt
+0,00
+zł
+0
 Regulamin
 Data publikacji: 18.08.2025
 Niniejszy Regulamin skierowany jest zarówno do Konsumentów, jak i do Przedsiębiorców korzystających ze Sklepu. Określa zasady korzystania ze Sklepu internetowego oraz zasady i tryb zawierania Umów Sprzedaży z Klientem na odległość za pośrednictwem Sklepu.
@@ -110,22 +134,22 @@ Spory rozstrzygane są polubownie, a w razie braku porozumienia – przez sąd w
 Regulamin obowiązuje od dnia publikacji w Sklepie.
 Załącznik nr 1: Oświadczenie o odstąpieniu od Umowy.
 Aktualna wersja Regulaminu obowiązuje od dnia 18.08.2025
+Klaudia Jaranowska | Sieradz |
+Makijaż tworzony z pasją – specjalistka od naturalnego glow i kobiecej elegancji.
+Klaudia Jaranowska Makeup
 ```
 
-## Images
+## Images used on this page
 
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-1024x133.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-300x39.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-600x78.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-768x99.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8-300x478.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8-188x300.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-32x32.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-192x192.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-180x180.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-270x270.png
+### Content / section images
+
+_None beyond shared chrome assets._
+
+### Shared chrome assets (header / footer / favicon)
+
+- `header-logo`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820.png
+- `footer-logo`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8.png
+- `favicon`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1.png
 
 ## Notable links
 

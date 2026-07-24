@@ -1,7 +1,7 @@
 # Kokpit - Klaudia Jaranowska Makeup
 
 - URL: https://klaudiajaranowskamakeup.pl/kokpit/
-- Source slug: `kokpit`
+- Doc file: `pages/kokpit.md`
 - Meta description: Kliknij Rejestracja, aby wyświetlić stronę
 
 ## Headings
@@ -10,29 +10,53 @@ _No headings found._
 
 ## Page text
 
-```
+```text
+Makijaże
+Pakiet Ślubny
+Lekcja Makijażu
+Szkolenia
+Szkolenia Online
+Szkolenia Stacjonarne
+Kontakt
+Makijaże
+Pakiet ślubny
+Lekcja Makijażu
+Szkolenia
+Szkolenia Online
+Szkolenia Stacjonarne
+Kontakt
+Makijaże
+Pakiet ślubny
+Lekcja Makijażu
+Szkolenia
+Szkolenia Online
+Szkolenia Stacjonarne
+Kontakt
+0,00
+zł
+0
 Hej! Witaj z powrotem!
 Nie wylogowuj mnie
 Nie pamiętasz hasła?
 Zaloguj się
 Nie masz jeszcze konta?
 Zarejestruj się
+Klaudia Jaranowska | Sieradz |
+Makijaż tworzony z pasją – specjalistka od naturalnego glow i kobiecej elegancji.
+Klaudia Jaranowska Makeup
 ```
 
-## Images
+## Images used on this page
 
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-1024x133.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-300x39.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-600x78.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-768x99.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8-300x478.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8-188x300.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-32x32.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-192x192.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-180x180.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-270x270.png
+### Content / section images
+
+_None beyond shared chrome assets._
+
+### Shared chrome assets (header / footer / favicon)
+
+- `header-logo`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820.png
+- `footer-logo`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8.png
+- `favicon`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1.png
 
 ## Notable links
 

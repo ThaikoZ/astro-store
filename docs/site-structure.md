@@ -1,12 +1,13 @@
 # Site structure - klaudiajaranowskamakeup.pl
 
-Source: [https://klaudiajaranowskamakeup.pl](https://klaudiajaranowskamakeup.pl)
+Source site: [https://klaudiajaranowskamakeup.pl](https://klaudiajaranowskamakeup.pl)
 
-Scraped from Yoast sitemaps (`page-sitemap.xml`, `product-sitemap.xml`, `courses-sitemap.xml`, `product_cat-sitemap.xml`, `course-category-sitemap.xml`) plus primary nav/footer links.
+Inventory built from Yoast sitemaps plus primary navigation and footer links.
+Per-page copy and image URLs: `docs/pages/`.
 
 ## Information architecture
 
-```
+```text
 Home (/)
 ├── Makijaże (/makijaze/)
 ├── Pakiet ślubny (/pakiet-slubny/)
@@ -18,12 +19,14 @@ Home (/)
 │   └── Szkolenia stacjonarne (/szkolenia-stacjonarne/)
 ├── Kontakt (/kontakt/)
 ├── Moje konto (/moje-konto/)
-├── Koszyk (/koszyk/)  [also /koszyk-2/, /zamowienie/ → redirects to cart]
+├── Koszyk (/koszyk/)
+│   ├── /koszyk-2/
+│   └── /zamowienie/  → currently redirects to /koszyk/
 ├── Checkout (/checkout/)
-├── Blog (/blog/)
+├── Blog (/blog/)  → currently a 404-style empty state
 ├── Regulamin (/regulamin/)
 ├── Polityka prywatności (/polityka-prywatnosci/)
-└── LMS / Tutor LMS surfaces
+└── LMS / Tutor LMS
     ├── Kokpit (/kokpit/)
     ├── Rejestracja studenta (/rejestracja-studenta/)
     ├── Rejestracja wykładowcy (/rejestracja-wykladowcy/)
@@ -31,36 +34,35 @@ Home (/)
     └── Kurs: Foxy Eye Masterclass (/szkoleniaa/foxy-eye-masterclass/)
 ```
 
-## Shared chrome (all marketing pages)
+## Shared chrome
 
 ### Header
 
-- Logo lockup linking to home
-- Primary nav: Makijaże, Pakiet ślubny, Lekcja Makijażu, Szkolenia (Online / Stacjonarne), Kontakt
+- Logo lockup linking home
+- Nav: Makijaże, Pakiet ślubny, Lekcja Makijażu, Szkolenia (Online / Stacjonarne), Kontakt
 - Utility: Moje Konto, Koszyk
 
 ### Footer
 
-- Location line: Klaudia Jaranowska | Sieradz |
-- Tagline: Makijaż tworzony z pasją – specjalistka od naturalnego glow i kobiecej elegancji.
+- Klaudia Jaranowska | Sieradz |
+- Makijaż tworzony z pasją – specjalistka od naturalnego glow i kobiecej elegancji.
 - Links: BLOG, REGULAMIN, POLITYKA PRYWATNOŚCI
-- Brand wordmark / miniature logo
-- Copyright: ©Copyright 2025 Klaudia Jaranowska Make Up
-- Credit: website by @dreamwavedigital
+- Social: Instagram, Facebook
+- Copyright + Dreamwave Digital credit
 
 ## Homepage section flow
 
-1. Hero - intro headline + CTA `POZNAJ MOJĄ OFERTĘ`
-2. Marquee - repeating logo wordmark (`logo-napis.png`)
-3. Oferta - service list linking to offer pages
-4. About / mission - `Sprawię, że poczujesz się PIĘKNIE I PEWNIE!` + body copy + `DOWIEDZ SIĘ WIĘCEJ`
-5. Testimonials carousel - `WASZE SŁOWA`
-6. Instagram CTA - `Zobacz jak pracuję!` + `OBSERWUJ MNIE NA INSTA!`
+1. Hero - intro + `POZNAJ MOJĄ OFERTĘ` (full-bleed background photo)
+2. Marquee - repeating `logo-napis.png`
+3. Oferta - linked service list
+4. About - `Sprawię, że poczujesz się PIĘKNIE I PEWNIE!` + CTA `DOWIEDZ SIĘ WIĘCEJ`
+5. Testimonials - `WASZE SŁOWA` carousel
+6. Instagram CTA - `Zobacz jak pracuję!`
 7. Footer
 
 ## Page inventory
 
-| Page | URL | Doc file |
+| Page | URL | Doc |
 |---|---|---|
 | Strona Główna - Klaudia Jaranowska Makeup | https://klaudiajaranowskamakeup.pl/ | [pages/strona-glowna.md](pages/strona-glowna.md) |
 | Makijaże - Klaudia Jaranowska Makeup | https://klaudiajaranowskamakeup.pl/makijaze/ | [pages/makijaze.md](pages/makijaze.md) |
@@ -88,8 +90,7 @@ Home (/)
 
 ## Notes
 
-- `/zamowienie/` currently resolves to the cart (`/koszyk/`).
-- `/szkolenia-online/` doubles as WooCommerce product listing for online courses.
-- `/kategoria-produktu/kursy/` is the WooCommerce product category for courses.
-- Tutor LMS course URLs live under `/szkoleniaa/` (note double `a`).
-- Per-page docs live in `docs/pages/` and list extracted visible text plus image URLs found in HTML/Elementor settings.
+- Image lists prefer canonical upload URLs (WordPress `-WxH` size variants collapsed).
+- CSS background hero/section photos may appear only after browser paint; homepage backgrounds were verified live.
+- `/szkolenia-online/` is the WooCommerce shop archive for online courses.
+- Tutor LMS course URLs use `/szkoleniaa/` (double `a`).

@@ -1,8 +1,8 @@
 # Strona Główna - Klaudia Jaranowska Makeup
 
 - URL: https://klaudiajaranowskamakeup.pl/
-- Source slug: `strona-glowna`
-- Meta description: Nazywam się Klaudia Jaranowska i jestem dyplomowaną makijażystką oraz szkoleniowcem.  POZNAJ MOJĄ OFERTĘ OFERTA Szkolenia Stacjonarne Szkolenia Online Lekcje Makijażu […]
+- Doc file: `pages/strona-glowna.md`
+- Meta description: Nazywam się Klaudia Jaranowska i jestem dyplomowaną makijażystką oraz szkoleniowcem. POZNAJ MOJĄ OFERTĘ OFERTA Szkolenia Stacjonarne Szkolenia Online Lekcje Makijażu […]
 
 ## Headings
 
@@ -15,14 +15,18 @@
 
 ## Page text
 
-```
+```text
 Nazywam się Klaudia Jaranowska
 i jestem dyplomowaną
 makijażystką oraz
 szkoleniowcem.
 POZNAJ MOJĄ OFERTĘ
 OFERTA
+Szkolenia Stacjonarne
+Szkolenia Online
 Lekcje Makijażu
+Pakiet Ślubny
+Makijaże
 Sprawię, że poczujesz się
 PIĘKNIE I PEWNIE!
 Moja pasja do makijażu to połączenie doświadczenia, wiedzy i indywidualnego podejścia do każdego klienta.
@@ -43,64 +47,29 @@ Zajrzyj na Instagram – tam czeka więcej makijażowych metamorfoz, kulisy prac
 OBSERWUJ MNIE NA INSTA!
 ```
 
-## Images
+## Images used on this page
 
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-1024x133.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-300x39.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-600x78.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-768x99.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/logo-napis.png (alt: klaudia jaranowska makeup logo)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/10/IMG_2036-scaled-e1761149605175-793x1024.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/10/IMG_2036-scaled-e1761149605175-232x300.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/10/IMG_2036-scaled-e1761149605175-768x991.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/10/IMG_2036-scaled-e1761149605175-1190x1536.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/10/IMG_2036-scaled-e1761149605175-300x387.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/10/IMG_2036-scaled-e1761149605175-600x775.jpeg
+### Content / section images
+
 - https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/10/IMG_2036-scaled-e1761149605175.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/Group-91-1.png (alt: -Ania W.)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0147-scaled-e1768179865534-750x1024.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0147-scaled-e1768179865534-220x300.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0147-scaled-e1768179865534-768x1049.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0147-scaled-e1768179865534-1125x1536.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0147-scaled-e1768179865534-1500x2048.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0147-scaled-e1768179865534-300x410.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0147-scaled-e1768179865534-600x819.jpeg
+- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/Group-91-1.png (alt: -Ania W., -Magdalena I. , -Maria D., -Wiktoria P.)
 - https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0147-scaled-e1768179865534.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/09/image2-scaled-e1758305707207-735x1024.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/09/image2-scaled-e1758305707207-215x300.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/09/image2-scaled-e1758305707207-768x1069.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/09/image2-scaled-e1758305707207-1103x1536.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/09/image2-scaled-e1758305707207-300x418.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/09/image2-scaled-e1758305707207-600x835.jpeg
 - https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/09/image2-scaled-e1758305707207.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/07/IMG_0163-scaled-e1751817831723-749x1024.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/07/IMG_0163-scaled-e1751817831723-300x410.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/07/IMG_0163-scaled-e1751817831723-600x820.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/07/IMG_0163-scaled-e1751817831723-220x300.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/07/IMG_0163-scaled-e1751817831723-768x1049.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/07/IMG_0163-scaled-e1751817831723-1124x1536.jpeg
 - https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/07/IMG_0163-scaled-e1751817831723.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0144-scaled-e1749246815865-858x1024.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0144-scaled-e1749246815865-300x358.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0144-scaled-e1749246815865-600x716.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0144-scaled-e1749246815865-251x300.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0144-scaled-e1749246815865-768x916.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0144-scaled-e1749246815865-1288x1536.jpeg
 - https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0144-scaled-e1749246815865.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0146-e1749281939293-715x1024.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0146-e1749281939293-300x430.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0146-e1749281939293-600x859.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0146-e1749281939293-209x300.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0146-e1749281939293-768x1100.jpeg
 - https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0146-e1749281939293.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8-300x478.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8-188x300.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-32x32.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-192x192.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-180x180.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-270x270.png
+- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/10/IMG_2031-scaled-e1761149728406.jpeg
+- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2026/03/IMG_7023-scaled-e1772372826108.jpeg
+- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/11/IMG_3040-scaled-e1763840610536.jpeg
+- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2026/01/IMG_7546-e1768179680339.jpeg
+- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/10/IMG_2038-scaled-e1762171603569.jpeg (CSS background)
+
+### Shared chrome assets (header / footer / favicon)
+
+- `header-logo`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820.png
+- `marquee-logo`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/logo-napis.png
+- `footer-logo`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8.png
+- `favicon`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1.png
 
 ## Notable links
 

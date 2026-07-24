@@ -1,7 +1,7 @@
 # Pakiet ślubny - Klaudia Jaranowska Makeup
 
 - URL: https://klaudiajaranowskamakeup.pl/pakiet-slubny/
-- Source slug: `pakiet-slubny`
+- Doc file: `pages/pakiet-slubny.md`
 - Meta description: PAKIET ŚLUBNY Zadbam o to, aby Twój wielki dzień był perfekcyjny! Pakiet Ślubny to kompleksowa oferta, która obejmuje nie tylko […]
 
 ## Headings
@@ -13,12 +13,37 @@
 
 ## Page text
 
-```
+```text
+Makijaże
+Pakiet Ślubny
+Lekcja Makijażu
+Szkolenia
+Szkolenia Online
+Szkolenia Stacjonarne
+Kontakt
+Makijaże
+Pakiet ślubny
+Lekcja Makijażu
+Szkolenia
+Szkolenia Online
+Szkolenia Stacjonarne
+Kontakt
+Makijaże
+Pakiet ślubny
+Lekcja Makijażu
+Szkolenia
+Szkolenia Online
+Szkolenia Stacjonarne
+Kontakt
+0,00
+zł
+0
 PAKIET ŚLUBNY
 Zadbam o to, aby Twój wielki dzień był perfekcyjny! Pakiet Ślubny to kompleksowa oferta, która obejmuje nie tylko profesjonalny makijaż ślubny, ale także pełne wsparcie dla Twoich gości weselnych. Realizuję zlecenia na terenie całej Polski, a także za granicą.
 W skład pakietu ślubnego wchodzi:
 • Makijaż ślubny
 • 4 Makijaże dla gości weselnych
+2300zł
 Dodatkowe informacje:
 • Dojazd do 30 km – w cenie pakietu. Dalsze lub zagraniczne dojazdy wyceniane są indywidualne
 • Pakiet Poprawinowy w promocyjnej cenie – jeśli zdecydujesz się na makijaż poprawinowy, otrzymasz go w specjalnej ofercie.
@@ -32,57 +57,26 @@ ZAREZERWUJ SWÓJ TERMIN!
 Zobacz jak pracuję!
 Zajrzyj na Instagram – tam czeka więcej makijażowych metamorfoz, kulisy pracy i inspiracje!
 OBSERWUJ MNIE NA INSTA!
+Klaudia Jaranowska | Sieradz |
+Makijaż tworzony z pasją – specjalistka od naturalnego glow i kobiecej elegancji.
+Klaudia Jaranowska Makeup
 ```
 
-## Images
+## Images used on this page
 
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-1024x133.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-300x39.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-600x78.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-768x99.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0147-scaled-e1768179865534-750x1024.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0147-scaled-e1768179865534-220x300.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0147-scaled-e1768179865534-768x1049.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0147-scaled-e1768179865534-1125x1536.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0147-scaled-e1768179865534-1500x2048.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0147-scaled-e1768179865534-300x410.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0147-scaled-e1768179865534-600x819.jpeg
+### Content / section images
+
 - https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0147-scaled-e1768179865534.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/09/image2-scaled-e1758305707207-735x1024.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/09/image2-scaled-e1758305707207-215x300.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/09/image2-scaled-e1758305707207-768x1069.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/09/image2-scaled-e1758305707207-1103x1536.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/09/image2-scaled-e1758305707207-300x418.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/09/image2-scaled-e1758305707207-600x835.jpeg
 - https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/09/image2-scaled-e1758305707207.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/07/IMG_0163-scaled-e1751817831723-749x1024.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/07/IMG_0163-scaled-e1751817831723-300x410.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/07/IMG_0163-scaled-e1751817831723-600x820.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/07/IMG_0163-scaled-e1751817831723-220x300.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/07/IMG_0163-scaled-e1751817831723-768x1049.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/07/IMG_0163-scaled-e1751817831723-1124x1536.jpeg
 - https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/07/IMG_0163-scaled-e1751817831723.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0144-scaled-e1749246815865-858x1024.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0144-scaled-e1749246815865-300x358.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0144-scaled-e1749246815865-600x716.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0144-scaled-e1749246815865-251x300.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0144-scaled-e1749246815865-768x916.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0144-scaled-e1749246815865-1288x1536.jpeg
 - https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0144-scaled-e1749246815865.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0146-e1749281939293-715x1024.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0146-e1749281939293-300x430.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0146-e1749281939293-600x859.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0146-e1749281939293-209x300.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0146-e1749281939293-768x1100.jpeg
 - https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/IMG_0146-e1749281939293.jpeg
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8-300x478.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8-188x300.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-32x32.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-192x192.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-180x180.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-270x270.png
+
+### Shared chrome assets (header / footer / favicon)
+
+- `header-logo`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820.png
+- `footer-logo`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8.png
+- `favicon`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1.png
 
 ## Notable links
 

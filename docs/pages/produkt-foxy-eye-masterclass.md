@@ -1,7 +1,7 @@
 # Foxy Eye Masterclass - Klaudia Jaranowska Makeup
 
 - URL: https://klaudiajaranowskamakeup.pl/szkolenia-online/foxy-eye-masterclass/
-- Source slug: `produkt-foxy-eye-masterclass`
+- Doc file: `pages/produkt-foxy-eye-masterclass.md`
 - Meta description: Foxy eye – makijaż, który stał się moim znakiem rozpoznawczym. To połączenie subtelnej elegancji z wyrazistym spojrzeniem, które pięknie modeluje […]
 
 ## Headings
@@ -12,8 +12,34 @@
 
 ## Page text
 
-```
+```text
+Makijaże
+Pakiet Ślubny
+Lekcja Makijażu
+Szkolenia
+Szkolenia Online
+Szkolenia Stacjonarne
+Kontakt
+Makijaże
+Pakiet ślubny
+Lekcja Makijażu
+Szkolenia
+Szkolenia Online
+Szkolenia Stacjonarne
+Kontakt
+Makijaże
+Pakiet ślubny
+Lekcja Makijażu
+Szkolenia
+Szkolenia Online
+Szkolenia Stacjonarne
+Kontakt
+0,00
+zł
+0
 Foxy Eye Masterclass
+550,00
+zł
 ilość Foxy Eye Masterclass
 Dodaj do koszyka
 Foxy eye
@@ -55,29 +81,22 @@ do materiału w dowolnym czasie.
 Lista produktów – dokładne nazwy kosmetyków i narzędzi wykorzystanych
 podczas pokazu, które ułatwią odtworzenie prezentowanej stylizacji.
 Certyfikat uczestnictwa w pokazie – w formie elektronicznej, gotowy do druku.
+Klaudia Jaranowska | Sieradz |
+Makijaż tworzony z pasją – specjalistka od naturalnego glow i kobiecej elegancji.
+Klaudia Jaranowska Makeup
 ```
 
-## Images
+## Images used on this page
 
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-1024x133.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-300x39.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-600x78.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-768x99.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2026/05/thumnbail-foxy-eye-600x600.png (alt: foxy-eye)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2026/05/thumnbail-foxy-eye-300x300.png (alt: foxy-eye)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2026/05/thumnbail-foxy-eye-1024x1024.png (alt: foxy-eye)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2026/05/thumnbail-foxy-eye-150x150.png (alt: foxy-eye)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2026/05/thumnbail-foxy-eye-768x768.png (alt: foxy-eye)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2026/05/thumnbail-foxy-eye-100x100.png (alt: foxy-eye)
+### Content / section images
+
 - https://klaudiajaranowskamakeup.pl/wp-content/uploads/2026/05/thumnbail-foxy-eye.png (alt: foxy-eye)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8-300x478.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8-188x300.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-32x32.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-192x192.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-180x180.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-270x270.png
+
+### Shared chrome assets (header / footer / favicon)
+
+- `header-logo`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820.png
+- `footer-logo`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8.png
+- `favicon`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1.png
 
 ## Notable links
 

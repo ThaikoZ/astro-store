@@ -1,7 +1,7 @@
 # Archiwum Kursy - Klaudia Jaranowska Makeup
 
 - URL: https://klaudiajaranowskamakeup.pl/szkoleniaa/
-- Source slug: `kursy-szkoleniaa`
+- Doc file: `pages/kursy-szkoleniaa.md`
 
 ## Headings
 
@@ -10,20 +10,52 @@
 
 ## Page text
 
-```
+```text
+Makijaże
+Pakiet Ślubny
+Lekcja Makijażu
+Szkolenia
+Szkolenia Online
+Szkolenia Stacjonarne
+Kontakt
+Makijaże
+Pakiet ślubny
+Lekcja Makijażu
+Szkolenia
+Szkolenia Online
+Szkolenia Stacjonarne
+Kontakt
+Makijaże
+Pakiet ślubny
+Lekcja Makijażu
+Szkolenia
+Szkolenia Online
+Szkolenia Stacjonarne
+Kontakt
+0,00
+zł
+0
 Data wydania (najnowsze)
 Data wydania (najpierw najstarsza)
 Tytuł kursu (a-z)
 Tytuł kursu (z-a)
 Foxy Eye Masterclass
+K
 Autor
 klaudiajaranowska-adm
+W
 Makijaż
+550,00
+zł
 Dodaj do koszyka
 Zabezpieczone: Classy Bride Make-Up
+K
 Autor
 klaudiajaranowska-adm
+W
 Makijaż
+300,00
+zł
 Dowiedz się więcej
 Hej! Witaj z powrotem!
 Nie wylogowuj mnie
@@ -31,24 +63,23 @@ Nie pamiętasz hasła?
 Zaloguj się
 Nie masz jeszcze konta?
 Zarejestruj się
+Klaudia Jaranowska | Sieradz |
+Makijaż tworzony z pasją – specjalistka od naturalnego glow i kobiecej elegancji.
+Klaudia Jaranowska Makeup
 ```
 
-## Images
+## Images used on this page
 
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-1024x133.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-300x39.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-600x78.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820-768x99.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820.png
+### Content / section images
+
 - https://klaudiajaranowskamakeup.pl/wp-content/uploads/2026/05/thumnbail-foxy-eye.png (alt: Foxy Eye Masterclass)
 - https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/08/image0-1.jpeg (alt: Zabezpieczone: Classy Bride Make-Up)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8-300x478.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8-188x300.png (alt: Logo miniaturowe)
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-32x32.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-192x192.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-180x180.png
-- https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1-270x270.png
+
+### Shared chrome assets (header / footer / favicon)
+
+- `header-logo`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/1-e1749237516820.png
+- `footer-logo`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/05/image8.png
+- `favicon`: https://klaudiajaranowskamakeup.pl/wp-content/uploads/2025/06/cropped-favicon_klaudia-1.png
 
 ## Notable links
 
