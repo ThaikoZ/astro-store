@@ -1,4 +1,5 @@
 export { createWooClient, type WooClient, type WooClientConfig } from './client';
+export { getBrowserWooClient } from './browserClient';
 export { createWooClientFromEnv } from './env';
 export {
   COOKIE_NAMES,

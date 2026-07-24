@@ -1,0 +1,93 @@
+---
+interface Props {
+	label: string;
+	name: string;
+	type?: string;
+	placeholder?: string;
+	autocomplete?: string;
+	required?: boolean;
+}
+
+const {
+	label,
+	name,
+	type = 'text',
+	placeholder,
+	autocomplete,
+	required = true,
+} = Astro.props;
+
+const isPassword = type === 'password';
+const inputClass =
+	'w-full border-0 border-b border-ink/20 bg-transparent py-2.5 font-sans text-sm text-ink outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-ink/35 focus:border-ink focus:shadow-[0_1px_0_0_#000]';
+---
+
+<label class="group block">
+	<span
+		class="mb-1 block font-sans text-[0.68rem] font-medium tracking-[0.16em] text-ink/50 uppercase transition-colors group-focus-within:text-ink"
+	>
+		{label}
+	</span>
+	{
+		isPassword ? (
+			<div class="relative">
+				<input
+					class:list={[inputClass, 'pr-11 pl-0']}
+					type="password"
+					name={name}
+					required={required}
+					autocomplete={autocomplete}
+					placeholder={placeholder}
+					data-auth-password-input
+				/>
+				<button
+					type="button"
+					class="absolute top-1/2 right-0 flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-ink/45 transition-colors hover:text-ink"
+					aria-label="Pokaż hasło"
+					aria-pressed="false"
+					data-auth-password-toggle
+				>
+					<svg
+						class="size-[1.15rem]"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.5"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						aria-hidden="true"
+						data-auth-password-icon="show"
+					>
+						<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
+						<circle cx="12" cy="12" r="3" />
+					</svg>
+					<svg
+						class="hidden size-[1.15rem]"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.5"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						aria-hidden="true"
+						data-auth-password-icon="hide"
+					>
+						<path d="M3 3l18 18" />
+						<path d="M10.6 10.6a2.5 2.5 0 0 0 3.5 3.5" />
+						<path d="M9.9 5.1A10.4 10.4 0 0 1 12 5c6.5 0 10 7 10 7a18.2 18.2 0 0 1-2.2 3.2" />
+						<path d="M6.1 6.1A18.5 18.5 0 0 0 2 12s3.5 7 10 7a10.4 10.4 0 0 0 4.1-.8" />
+					</svg>
+				</button>
+			</div>
+		) : (
+			<input
+				class:list={[inputClass, 'px-0']}
+				type={type}
+				name={name}
+				required={required}
+				autocomplete={autocomplete}
+				placeholder={placeholder}
+			/>
+		)
+	}
+</label>

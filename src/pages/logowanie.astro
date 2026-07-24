@@ -1,0 +1,67 @@
+---
+import AuthCard from '../components/site/AuthCard.astro';
+import AuthField from '../components/site/AuthField.astro';
+import Button from '../components/ui/Button.astro';
+import AuthPage from '../layouts/AuthPage.astro';
+---
+
+<AuthPage title="Logowanie - Klaudia Jaranowska Makeup">
+	<AuthCard title="Hej! Witaj z powrotem!" subtitle="Zaloguj się, aby kontynuować zakupy i zarządzać kontem.">
+		<form class="space-y-5" data-auth-form="login" novalidate>
+			<AuthField
+				label="E-mail lub nazwa użytkownika"
+				name="username"
+				autocomplete="username"
+				placeholder="np. anna@example.com"
+			/>
+			<AuthField
+				label="Hasło"
+				name="password"
+				type="password"
+				autocomplete="current-password"
+				placeholder="Twoje hasło"
+			/>
+
+			<div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+				<label class="inline-flex cursor-pointer items-center gap-2.5 font-sans text-sm text-ink/65 select-none">
+					<input
+						type="checkbox"
+						name="remember"
+						class="size-3.5 border border-ink/30 accent-ink"
+					/>
+					Nie wylogowuj mnie
+				</label>
+				<a
+					href="/nie-pamietam-hasla/"
+					class="font-sans text-sm text-ink/50 no-underline underline-offset-4 transition-opacity hover:text-ink hover:underline"
+				>
+					Nie pamiętasz hasła?
+				</a>
+			</div>
+
+			<p
+				class="m-0 hidden px-0 py-1 font-sans text-sm leading-relaxed"
+				data-auth-status
+				hidden
+			></p>
+
+			<Button type="submit" variant="solid" tone="ink" class="mt-2 w-full">
+				Zaloguj się
+			</Button>
+		</form>
+
+		<p class="mt-7 m-0 text-center font-sans text-sm text-ink/55">
+			Nie masz jeszcze konta?
+			<a
+				href="/rejestracja/"
+				class="ml-1 font-medium text-ink no-underline underline-offset-4 transition-opacity hover:opacity-70 hover:underline"
+			>
+				Zarejestruj się
+			</a>
+		</p>
+	</AuthCard>
+</AuthPage>
+
+<script>
+	import '../scripts/auth-ui';
+</script>

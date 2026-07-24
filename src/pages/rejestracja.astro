@@ -1,0 +1,94 @@
+---
+import AuthCard from '../components/site/AuthCard.astro';
+import AuthField from '../components/site/AuthField.astro';
+import Button from '../components/ui/Button.astro';
+import AuthPage from '../layouts/AuthPage.astro';
+---
+
+<AuthPage title="Rejestracja - Klaudia Jaranowska Makeup">
+	<AuthCard title="Załóż konto" subtitle="Utwórz konto, aby szybciej składać zamówienia.">
+		<form class="space-y-5" data-auth-form="register" novalidate>
+			<AuthField
+				label="Adres e-mail"
+				name="email"
+				type="email"
+				autocomplete="email"
+				placeholder="np. anna@example.com"
+			/>
+			<AuthField
+				label="Nazwa użytkownika"
+				name="username"
+				autocomplete="username"
+				placeholder="Twoja nazwa"
+			/>
+			<AuthField
+				label="Hasło"
+				name="password"
+				type="password"
+				autocomplete="new-password"
+				placeholder="Minimum 8 znaków"
+			/>
+			<AuthField
+				label="Powtórz hasło"
+				name="passwordConfirm"
+				type="password"
+				autocomplete="new-password"
+				placeholder="Powtórz hasło"
+			/>
+
+			<label class="flex cursor-pointer items-start gap-2.5 font-sans text-sm leading-relaxed text-ink/65 select-none">
+				<input
+					type="checkbox"
+					name="terms"
+					required
+					class="mt-0.5 size-3.5 shrink-0 border border-ink/30 accent-ink"
+				/>
+				<span>
+					Akceptuję{' '}
+					<a
+						href="/regulamin/"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="font-medium text-ink underline-offset-4 hover:underline"
+					>
+						regulamin
+					</a>
+					{' '}oraz{' '}
+					<a
+						href="/polityka-prywatnosci/"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="font-medium text-ink underline-offset-4 hover:underline"
+					>
+						politykę prywatności
+					</a>
+					.
+				</span>
+			</label>
+
+			<p
+				class="m-0 hidden px-0 py-1 font-sans text-sm leading-relaxed"
+				data-auth-status
+				hidden
+			></p>
+
+			<Button type="submit" variant="solid" tone="ink" class="mt-2 w-full">
+				Zarejestruj się
+			</Button>
+		</form>
+
+		<p class="mt-7 m-0 text-center font-sans text-sm text-ink/55">
+			Masz już konto?
+			<a
+				href="/logowanie/"
+				class="ml-1 font-medium text-ink no-underline underline-offset-4 transition-opacity hover:opacity-70 hover:underline"
+			>
+				Zaloguj się
+			</a>
+		</p>
+	</AuthCard>
+</AuthPage>
+
+<script>
+	import '../scripts/auth-ui';
+</script>

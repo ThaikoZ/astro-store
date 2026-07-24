@@ -41,7 +41,7 @@ function isNavItemActive(item: NavItem) {
 			<img
 				src={IMAGES.headerLogo}
 				alt="Klaudia Jaranowska Make Up Artist"
-				class="h-10 w-auto md:h-12 lg:h-9"
+				class="h-7 w-auto md:h-12 lg:h-9"
 				width="220"
 				height="48"
 				fetchpriority="high"
@@ -119,30 +119,51 @@ function isNavItemActive(item: NavItem) {
 			</ul>
 		</nav>
 
-		<button
-			type="button"
-			class="site-menu-toggle relative z-50 flex h-8 w-8 cursor-pointer items-center justify-center border-0 bg-transparent p-0 lg:hidden"
-			aria-expanded="false"
-			aria-controls="site-mobile-nav"
-			aria-label="Otwórz menu"
-			data-site-menu-toggle
-		>
-			<span class="sr-only">Menu</span>
-			<span class="relative block h-3.5 w-7" aria-hidden="true">
-				<span
-					class="site-menu-bar absolute left-0 top-0 block h-px w-7 origin-center bg-foam transition-transform duration-300 ease-out"
-					data-menu-bar="top"
-				></span>
-				<span
-					class="site-menu-bar absolute left-0 top-1/2 block h-px w-7 -translate-y-1/2 bg-foam transition-opacity duration-200 ease-out"
-					data-menu-bar="mid"
-				></span>
-				<span
-					class="site-menu-bar absolute bottom-0 left-0 block h-px w-7 origin-center bg-foam transition-transform duration-300 ease-out"
-					data-menu-bar="bottom"
-				></span>
-			</span>
-		</button>
+		<div class="flex items-center gap-3 md:gap-4">
+			<a
+				href="/logowanie/"
+				class="flex size-9 items-center justify-center text-foam no-underline transition-opacity hover:opacity-70"
+				aria-label="Zaloguj się"
+				data-auth-account-link
+			>
+				<svg
+					class="size-5"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.5"
+					aria-hidden="true"
+				>
+					<circle cx="12" cy="8" r="3.5"></circle>
+					<path d="M5.5 19.5c1.6-3.2 4-4.8 6.5-4.8s4.9 1.6 6.5 4.8" stroke-linecap="round"></path>
+				</svg>
+			</a>
+
+			<button
+				type="button"
+				class="site-menu-toggle relative z-50 flex h-8 w-8 cursor-pointer items-center justify-center border-0 bg-transparent p-0 lg:hidden"
+				aria-expanded="false"
+				aria-controls="site-mobile-nav"
+				aria-label="Otwórz menu"
+				data-site-menu-toggle
+			>
+				<span class="sr-only">Menu</span>
+				<span class="relative block h-3.5 w-7" aria-hidden="true">
+					<span
+						class="site-menu-bar absolute left-0 top-0 block h-px w-7 origin-center bg-foam transition-transform duration-300 ease-out"
+						data-menu-bar="top"
+					></span>
+					<span
+						class="site-menu-bar absolute left-0 top-1/2 block h-px w-7 -translate-y-1/2 bg-foam transition-opacity duration-200 ease-out"
+						data-menu-bar="mid"
+					></span>
+					<span
+						class="site-menu-bar absolute bottom-0 left-0 block h-px w-7 origin-center bg-foam transition-transform duration-300 ease-out"
+						data-menu-bar="bottom"
+					></span>
+				</span>
+			</button>
+		</div>
 	</Container>
 
 	<div
@@ -225,6 +246,28 @@ function isNavItemActive(item: NavItem) {
 							);
 						})
 					}
+					<li class="pt-2">
+						<a
+							href="/logowanie/"
+							class="nav-link inline-flex items-center gap-2 whitespace-nowrap font-display text-lg tracking-[0.14em] text-foam no-underline uppercase"
+							data-site-menu-link
+							data-auth-account-link
+							aria-label="Zaloguj się"
+						>
+							<svg
+								class="size-5"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.5"
+								aria-hidden="true"
+							>
+								<circle cx="12" cy="8" r="3.5"></circle>
+								<path d="M5.5 19.5c1.6-3.2 4-4.8 6.5-4.8s4.9 1.6 6.5 4.8" stroke-linecap="round"></path>
+							</svg>
+							Konto
+						</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
@@ -316,6 +359,23 @@ function isNavItemActive(item: NavItem) {
 </style>
 
 <script>
+	function hasAuthCookie() {
+		const cookie = document.cookie;
+		return cookie.includes('auth-token=') || cookie.includes('auth-refresh-token=');
+	}
+
+	function syncAuthAccountLinks() {
+		const loggedIn = hasAuthCookie();
+		const href = loggedIn ? '/moje-konto/' : '/logowanie/';
+		const label = loggedIn ? 'Moje konto' : 'Zaloguj się';
+
+		document.querySelectorAll('[data-auth-account-link]').forEach((link) => {
+			if (!(link instanceof HTMLAnchorElement)) return;
+			link.href = href;
+			link.setAttribute('aria-label', label);
+		});
+	}
+
 	function initSiteHeader() {
 		const header = document.querySelector('[data-site-header]');
 		const toggle = document.querySelector('[data-site-menu-toggle]');
@@ -323,6 +383,9 @@ function isNavItemActive(item: NavItem) {
 		if (!(header instanceof HTMLElement) || !(toggle instanceof HTMLElement) || !(panel instanceof HTMLElement)) {
 			return;
 		}
+
+		syncAuthAccountLinks();
+
 		if (header.dataset.headerBound === 'true') return;
 		header.dataset.headerBound = 'true';
 

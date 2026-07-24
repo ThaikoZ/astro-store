@@ -4,6 +4,7 @@ import type { CookieAdapter } from './cookies';
 
 type AstroEnv = {
   WORDPRESS_GRAPHQL_URL?: string;
+  PUBLIC_WORDPRESS_GRAPHQL_URL?: string;
   PUBLIC_APP_ORIGIN?: string;
   PUBLIC_STRIPE_PUBLISHABLE_KEY?: string;
 };
@@ -14,18 +15,22 @@ type AstroEnv = {
  *
  * Read `import.meta.env.WORDPRESS_*` with static property access so Vite/Astro
  * can inject values (dynamic `env[key]` access is not replaced).
+ *
+ * Prefer `PUBLIC_WORDPRESS_GRAPHQL_URL` in the browser; fall back to
+ * `WORDPRESS_GRAPHQL_URL` on the server.
  */
 export function createWooClientFromEnv(
   env: AstroEnv = {
     WORDPRESS_GRAPHQL_URL: import.meta.env.WORDPRESS_GRAPHQL_URL,
+    PUBLIC_WORDPRESS_GRAPHQL_URL: import.meta.env.PUBLIC_WORDPRESS_GRAPHQL_URL,
     PUBLIC_APP_ORIGIN: import.meta.env.PUBLIC_APP_ORIGIN,
     PUBLIC_STRIPE_PUBLISHABLE_KEY: import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY,
   },
   options: { cookies?: CookieAdapter; fetch?: typeof fetch } = {},
 ) {
-  const endpoint = env.WORDPRESS_GRAPHQL_URL;
+  const endpoint = env.PUBLIC_WORDPRESS_GRAPHQL_URL || env.WORDPRESS_GRAPHQL_URL;
   if (!endpoint) {
-    throw new Error('WORDPRESS_GRAPHQL_URL is not set.');
+    throw new Error('PUBLIC_WORDPRESS_GRAPHQL_URL or WORDPRESS_GRAPHQL_URL is not set.');
   }
 
   const config: WooClientConfig = {

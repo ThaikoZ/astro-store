@@ -1,0 +1,45 @@
+---
+import AuthCard from '../components/site/AuthCard.astro';
+import AuthField from '../components/site/AuthField.astro';
+import Button from '../components/ui/Button.astro';
+import AuthPage from '../layouts/AuthPage.astro';
+---
+
+<AuthPage title="Nie pamiętam hasła - Klaudia Jaranowska Makeup">
+	<AuthCard
+		title="Zresetuj hasło"
+		subtitle="Podaj e-mail lub nazwę użytkownika. Wyślemy instrukcję resetu."
+	>
+		<form class="space-y-5" data-auth-form="forgot" novalidate>
+			<AuthField
+				label="E-mail lub nazwa użytkownika"
+				name="username"
+				autocomplete="username"
+				placeholder="np. anna@example.com"
+			/>
+
+			<p
+				class="m-0 hidden px-0 py-1 font-sans text-sm leading-relaxed"
+				data-auth-status
+				hidden
+			></p>
+
+			<Button type="submit" variant="solid" tone="ink" class="mt-2 w-full">
+				Wyślij link
+			</Button>
+		</form>
+
+		<p class="mt-7 m-0 text-center font-sans text-sm text-ink/55">
+			<a
+				href="/logowanie/"
+				class="font-medium text-ink no-underline underline-offset-4 transition-opacity hover:opacity-70 hover:underline"
+			>
+				Wróć do logowania
+			</a>
+		</p>
+	</AuthCard>
+</AuthPage>
+
+<script>
+	import '../scripts/auth-ui';
+</script>

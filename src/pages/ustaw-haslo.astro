@@ -1,0 +1,53 @@
+---
+import AuthCard from '../components/site/AuthCard.astro';
+import AuthField from '../components/site/AuthField.astro';
+import Button from '../components/ui/Button.astro';
+import AuthPage from '../layouts/AuthPage.astro';
+---
+
+<AuthPage title="Ustaw nowe hasło - Klaudia Jaranowska Makeup">
+	<AuthCard
+		title="Ustaw nowe hasło"
+		subtitle="Użyj odnośnika z wiadomości e-mail, a następnie wpisz nowe hasło."
+	>
+		<form class="space-y-5" data-auth-form="reset" novalidate>
+			<AuthField
+				label="Nowe hasło"
+				name="password"
+				type="password"
+				autocomplete="new-password"
+				placeholder="Nowe hasło"
+			/>
+			<AuthField
+				label="Powtórz nowe hasło"
+				name="passwordConfirm"
+				type="password"
+				autocomplete="new-password"
+				placeholder="Powtórz nowe hasło"
+			/>
+
+			<p
+				class="m-0 hidden px-0 py-1 font-sans text-sm leading-relaxed"
+				data-auth-status
+				hidden
+			></p>
+
+			<Button type="submit" variant="solid" tone="ink" class="mt-2 w-full">
+				Zapisz hasło
+			</Button>
+		</form>
+
+		<p class="mt-7 m-0 text-center font-sans text-sm text-ink/55">
+			<a
+				href="/logowanie/"
+				class="font-medium text-ink no-underline underline-offset-4 transition-opacity hover:opacity-70 hover:underline"
+			>
+				Wróć do logowania
+			</a>
+		</p>
+	</AuthCard>
+</AuthPage>
+
+<script>
+	import '../scripts/auth-ui';
+</script>

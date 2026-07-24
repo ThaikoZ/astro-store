@@ -21,9 +21,12 @@ Without JWT Authentication, catalog/cart queries may still work for guests, but 
 
 ```bash
 WORDPRESS_GRAPHQL_URL=https://your-site.example/graphql
+PUBLIC_WORDPRESS_GRAPHQL_URL=/api/graphql
 PUBLIC_APP_ORIGIN=http://localhost:4321
 PUBLIC_STRIPE_PUBLISHABLE_KEY=
 ```
+
+Browser auth calls same-origin `/api/graphql`, which Vite proxies to `WORDPRESS_GRAPHQL_URL` (see `astro.config.mjs`). That avoids CORS `Failed to fetch` in local/dev. Restart `astro dev` after changing the proxy target.
 
 2. Regenerate types after schema or query changes:
 
@@ -70,6 +73,15 @@ const prepared = await woo.payments.process('cod', {
 const result = await woo.checkout.checkout(prepared.checkoutInput);
 ```
 
+### Browser client (auth / cart islands)
+
+```ts
+import { getBrowserWooClient } from '../woocommerce';
+
+const woo = getBrowserWooClient();
+await woo.auth.login('user@example.com', 'password');
+```
+
 ### Astro cookies (SSR later)
 
 ```ts
@@ -111,6 +123,22 @@ This WordPress instance uses WooGraphQL JWT:
 - `login(input: { username, password })`
 - `refreshJwtAuthToken(input: { jwtRefreshToken })`
 - No GraphQL `logout` mutation - `woo.auth.logout()` clears local cookies only
+
+Browser auth UI routes:
+
+| Page | Path |
+| --- | --- |
+| Login | `/logowanie/` |
+| Register | `/rejestracja/` |
+| Forgot password | `/nie-pamietam-hasla/` |
+| Reset password | `/ustaw-haslo/?key=…&login=…` |
+| Account | `/moje-konto/` |
+
+Password-reset emails from `sendPasswordResetEmail` must deep-link to:
+
+`{PUBLIC_APP_ORIGIN}/ustaw-haslo/?key={key}&login={login}`
+
+Configure the WordPress lost-password email / redirect so those query params reach the Astro page.
 
 ## Stripe notes
 
