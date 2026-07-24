@@ -46,13 +46,20 @@ export function resetStripeMeta(metaData: MetaDataInput[] = []): MetaDataInput[]
 export type StripeConfirmResult = {
   paymentIntentId: string;
   paymentMethodId?: string;
+  status: string;
   checkoutInput: CheckoutOrderInput;
 };
+
+/** WooNuxt-compatible paid statuses for marking checkout `isPaid`. */
+export function isStripePaymentPaid(status?: string | null): boolean {
+  return status === 'succeeded' || status === 'processing';
+}
 
 /**
  * Confirm a Stripe PaymentIntent client-side.
  * Your WordPress schema does not expose `stripePaymentIntent`; obtain `clientSecret`
  * from your Stripe/WooCommerce backend, then call this before `checkout`.
+ * Only returns `isPaid: true` when status is `succeeded` or `processing`.
  */
 export async function confirmStripePayment(options: {
   publishableKey: string;
@@ -68,6 +75,7 @@ export async function confirmStripePayment(options: {
 
   let paymentIntentId = '';
   let paymentMethodId = options.paymentMethodId;
+  let status = '';
 
   if (options.elements) {
     const { error, paymentIntent } = await stripe.confirmPayment({
@@ -77,6 +85,7 @@ export async function confirmStripePayment(options: {
     });
     if (error) throw new WooGraphQLError(error.message ?? 'Stripe confirmation failed');
     paymentIntentId = paymentIntent?.id ?? '';
+    status = paymentIntent?.status ?? '';
     paymentMethodId = typeof paymentIntent?.payment_method === 'string' ? paymentIntent.payment_method : paymentMethodId;
   } else if (options.paymentMethodId) {
     const { error, paymentIntent } = await stripe.confirmCardPayment(options.clientSecret, {
@@ -84,12 +93,19 @@ export async function confirmStripePayment(options: {
     });
     if (error) throw new WooGraphQLError(error.message ?? 'Stripe confirmation failed');
     paymentIntentId = paymentIntent?.id ?? '';
+    status = paymentIntent?.status ?? '';
   } else {
     throw new WooGraphQLError('Stripe confirmation requires Elements or a paymentMethodId.');
   }
 
   if (!paymentIntentId) {
     throw new WooGraphQLError('Stripe confirmation did not return a PaymentIntent id.');
+  }
+
+  if (!isStripePaymentPaid(status)) {
+    throw new WooGraphQLError(
+      `Stripe PaymentIntent is not paid (status: ${status || 'unknown'}). Expected succeeded or processing.`,
+    );
   }
 
   let metaData = resetStripeMeta(options.checkoutInput.metaData ?? []);
@@ -102,6 +118,7 @@ export async function confirmStripePayment(options: {
   return {
     paymentIntentId,
     paymentMethodId,
+    status,
     checkoutInput: {
       ...options.checkoutInput,
       paymentMethod: 'stripe',

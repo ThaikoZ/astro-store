@@ -38,6 +38,8 @@ const config: CodegenConfig = {
       config: {
         rawRequest: false,
         useTypeImports: true,
+        enumsAsTypes: true,
+        onlyOperationTypes: true,
       },
     },
   },

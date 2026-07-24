@@ -6,6 +6,7 @@ import {
   isTokenLive,
   isTokenReusable,
   parseJwtExpiry,
+  parseWooSessionHeader,
 } from './session';
 
 function makeJwt(expOffsetSeconds: number): string {
@@ -53,6 +54,7 @@ describe('session store headers', () => {
 
     expect(session.buildHeaders('http://localhost:4321')).toEqual({
       Origin: 'http://localhost:4321',
+      'Cart-Token': 'abc123',
       'woocommerce-session': 'Session abc123',
       Authorization: `Bearer ${auth}`,
     });
@@ -78,5 +80,15 @@ describe('extractCartToken', () => {
     expect(extractCartToken({ customer: { cartToken: 'b' } })).toBe('b');
     expect(extractCartToken({ viewer: { cartToken: 'c' } })).toBe('c');
     expect(extractCartToken({ login: { cartToken: 'd' } })).toBe('d');
+  });
+});
+
+describe('parseWooSessionHeader', () => {
+  it('strips Session prefix and ignores false/empty', () => {
+    expect(parseWooSessionHeader('Session abc123')).toBe('abc123');
+    expect(parseWooSessionHeader('abc123')).toBe('abc123');
+    expect(parseWooSessionHeader('false')).toBeNull();
+    expect(parseWooSessionHeader('')).toBeNull();
+    expect(parseWooSessionHeader(null)).toBeNull();
   });
 });

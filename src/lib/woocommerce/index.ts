@@ -10,11 +10,13 @@ export {
 export { createAstroCookieAdapter } from './astroCookies';
 export { WooGraphQLError, toWooGraphQLError, isAuthRelated } from './errors';
 export {
+  applySessionFromResponseHeaders,
   createSessionStore,
   extractCartToken,
   isTokenLive,
   isTokenReusable,
   parseJwtExpiry,
+  parseWooSessionHeader,
   REFRESH_BUFFER_SECONDS,
   type SessionStore,
 } from './session';
@@ -23,6 +25,7 @@ export type { AuthResult } from './auth';
 export {
   buildPayPalRedirectUrl,
   confirmStripePayment,
+  isStripePaymentPaid,
   processChequePayment,
   processCodPayment,
   resolveStripeAmount,

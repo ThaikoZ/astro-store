@@ -6,6 +6,7 @@ import { buildPayPalRedirectUrl, isPayPalGateway } from './paypal';
 import {
   confirmStripePayment,
   createPaymentIntentUnavailableError,
+  isStripePaymentPaid,
   loadStripeClient,
   resolveStripeAmount,
 } from './stripe';
@@ -78,4 +79,11 @@ export function createPaymentsApi(internals: WooClientInternals) {
   };
 }
 
-export { processCodPayment, processChequePayment, buildPayPalRedirectUrl, confirmStripePayment, resolveStripeAmount };
+export {
+  processCodPayment,
+  processChequePayment,
+  buildPayPalRedirectUrl,
+  confirmStripePayment,
+  isStripePaymentPaid,
+  resolveStripeAmount,
+};

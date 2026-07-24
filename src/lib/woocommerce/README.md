@@ -71,13 +71,26 @@ const woo = createWooClientFromEnv(import.meta.env, {
 
 ## Session contract
 
-| Cookie | Header |
+| Cookie | Outgoing request headers |
 | --- | --- |
-| `woocommerce-session` | `woocommerce-session: Session ${cartToken}` |
+| `woocommerce-session` | `Cart-Token: ${token}` and `woocommerce-session: Session ${token}` |
 | `auth-token` | `Authorization: Bearer ${jwt}` |
 | `auth-refresh-token` | used by `refreshJwtAuthToken` |
 
-Cart responses sync `customer.cartToken` / `viewer.cartToken` into the session cookie.
+The client syncs the guest session from:
+
+1. Response headers after cart/auth requests (required for guest `addToCart` on this schema; mutation payloads do not return `customer.cartToken`):
+   - Prefer modern WooGraphQL `cart-token`
+   - Fall back to legacy `woocommerce-session`
+2. GraphQL body fields when present: `customer.cartToken` / `viewer.cartToken` / login `cartToken`
+
+For browser islands, WordPress CORS must expose the session header(s):
+
+```http
+Access-Control-Expose-Headers: cart-token, woocommerce-session
+```
+
+Without that, JS cannot read the header and guest carts will not persist across requests.
 
 ## Auth notes
 
@@ -100,6 +113,9 @@ const prepared = await woo.payments.process('stripe', {
 });
 await woo.checkout.checkout(prepared.checkoutInput);
 ```
+
+`confirmStripePayment` only sets `isPaid: true` when PaymentIntent status is `succeeded` or `processing`.
+Other statuses throw and must not proceed to checkout as paid.
 
 ## Modules
 

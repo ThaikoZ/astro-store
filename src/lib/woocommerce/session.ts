@@ -80,7 +80,11 @@ export function createSessionStore(cookies: CookieAdapter): SessionStore {
       const headers: Record<string, string> = {};
       if (origin) headers.Origin = origin;
       const session = get(COOKIE_NAMES.session);
-      if (session) headers['woocommerce-session'] = `Session ${session}`;
+      if (session) {
+        // Current WooGraphQL uses Cart-Token; keep woocommerce-session for older setups.
+        headers['Cart-Token'] = session;
+        headers['woocommerce-session'] = `Session ${session}`;
+      }
       const auth = get(COOKIE_NAMES.authToken);
       if (auth && isTokenLive(auth)) headers.Authorization = `Bearer ${auth}`;
       return headers;
@@ -105,4 +109,31 @@ export function extractCartToken(payload: {
     payload.login?.customer?.cartToken ||
     null
   );
+}
+
+/**
+ * Normalize a WooCommerce session header value into a cookie token.
+ * Ignores empty / `false`; strips a leading `Session ` prefix when present.
+ */
+export function parseWooSessionHeader(value?: string | null): string | null {
+  if (!value) return null;
+  const trimmed = value.trim();
+  if (!trimmed || trimmed.toLowerCase() === 'false') return null;
+  const withoutPrefix = trimmed.replace(/^Session\s+/i, '').trim();
+  return withoutPrefix || null;
+}
+
+/** Persist session token from a GraphQL HTTP response `Headers` object. */
+export function applySessionFromResponseHeaders(
+  session: SessionStore,
+  headers?: Headers | { get: (name: string) => string | null },
+): string | null {
+  if (!headers || typeof headers.get !== 'function') return null;
+  // Prefer modern WooGraphQL `cart-token`; fall back to legacy `woocommerce-session`.
+  const token =
+    parseWooSessionHeader(headers.get('cart-token')) ||
+    parseWooSessionHeader(headers.get('Cart-Token')) ||
+    parseWooSessionHeader(headers.get('woocommerce-session'));
+  if (token) session.syncCartToken(token);
+  return token;
 }

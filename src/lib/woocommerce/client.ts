@@ -2,7 +2,13 @@ import { GraphQLClient } from 'graphql-request';
 import { getSdk, type Sdk } from './generated/sdk';
 import { createBrowserCookieAdapter, createMemoryCookieAdapter, type CookieAdapter } from './cookies';
 import { toWooGraphQLError } from './errors';
-import { createSessionStore, extractCartToken, isTokenReusable, type SessionStore } from './session';
+import {
+  applySessionFromResponseHeaders,
+  createSessionStore,
+  extractCartToken,
+  isTokenReusable,
+  type SessionStore,
+} from './session';
 import type { WooClientInternals, WooRequest } from './types';
 import { createCatalogApi, type CatalogApi } from './catalog';
 import { createAuthApi, type AuthApi } from './auth';
@@ -63,6 +69,10 @@ export function createWooClient(config: WooClientConfig): WooClient {
         headers.set(key, value);
       }
       return { ...request, headers };
+    },
+    responseMiddleware: (response) => {
+      if (!response || typeof response !== 'object' || !('headers' in response)) return;
+      applySessionFromResponseHeaders(session, (response as { headers?: Headers }).headers);
     },
   });
 
