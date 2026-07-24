@@ -11,7 +11,7 @@ const { days, types, price, duration, image } = Astro.props;
 const headingId = `pakiet-${days.toLowerCase().replace(/\s+/g, '-')}`;
 ---
 
-<article class="relative" aria-labelledby={headingId}>
+<article class="relative pb-14 md:pb-16" aria-labelledby={headingId}>
 	<div class="aspect-3/4 overflow-hidden rounded-[2rem] md:rounded-[2.5rem]">
 		<img
 			src={image}
@@ -23,9 +23,9 @@ const headingId = `pakiet-${days.toLowerCase().replace(/\s+/g, '-')}`;
 	</div>
 
 	<div
-		class="absolute inset-x-4 bottom-4 z-10 flex items-stretch gap-3 rounded-2xl bg-foam px-4 py-4 shadow-sm sm:inset-x-5 sm:bottom-5 sm:gap-4 sm:px-5 md:inset-x-6"
+		class="absolute bottom-0 left-1/2 z-10 flex w-[min(calc(100%-2rem),17.5rem)] -translate-x-1/2 items-stretch gap-3 rounded-2xl bg-foam px-5 py-4 shadow-[0_8px_24px_rgb(0_0_0/0.12)] sm:w-[min(calc(100%-2.5rem),18.5rem)] sm:gap-4 sm:px-6 sm:py-5"
 	>
-		<div class="min-w-0 flex-1">
+		<div class="min-w-0 flex-1 text-left">
 			<h2
 				id={headingId}
 				class="m-0 font-display text-[clamp(0.95rem,1.8vw,1.1rem)] font-normal tracking-[0.1em] text-ink uppercase"
@@ -35,7 +35,7 @@ const headingId = `pakiet-${days.toLowerCase().replace(/\s+/g, '-')}`;
 			<p class="mt-1 m-0 font-sans text-xs tracking-wide text-ink/70 sm:text-sm">
 				{types}
 			</p>
-			<p class="mt-2 m-0 font-display text-[clamp(1.35rem,2.5vw,1.7rem)] font-normal tracking-[0.04em] text-ink">
+			<p class="mt-2 m-0 font-display text-[clamp(1.35rem,2.5vw,1.7rem)] font-medium tracking-[0.04em] text-ink">
 				{price}
 			</p>
 		</div>
