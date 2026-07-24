@@ -1,11 +1,48 @@
 ---
-import Welcome from '../components/Welcome.astro';
+import Welcome, { type LandingProduct } from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import { createWooClientFromEnv } from '../lib/woocommerce';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+let products: LandingProduct[] = [];
+let errorMessage: string | null = null;
+
+try {
+	const woo = createWooClientFromEnv({
+		WORDPRESS_GRAPHQL_URL: import.meta.env.WORDPRESS_GRAPHQL_URL,
+		PUBLIC_APP_ORIGIN: import.meta.env.PUBLIC_APP_ORIGIN,
+		PUBLIC_STRIPE_PUBLISHABLE_KEY: import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY,
+	});
+	const result = await woo.catalog.getProducts({ first: 24 });
+	const nodes = result.products?.nodes ?? [];
+
+	products = nodes.flatMap((node) => {
+		if (!node.name || !node.id) return [];
+
+		const price = 'price' in node && typeof node.price === 'string' ? node.price : null;
+		const image =
+			'image' in node && node.image
+				? {
+						url: node.image.productCardSourceUrl || node.image.sourceUrl,
+						alt: node.image.altText || node.name,
+					}
+				: null;
+
+		return [
+			{
+				id: node.id,
+				name: node.name,
+				price,
+				imageUrl: image?.url ?? null,
+				imageAlt: image?.alt ?? null,
+			},
+		];
+	});
+} catch (error) {
+	console.error('[landing] Failed to load products:', error);
+	errorMessage = 'Nie udało się wczytać produktów. Spróbuj ponownie później.';
+}
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Klaudia Jaranowska Makeup">
+	<Welcome products={products} errorMessage={errorMessage} />
 </Layout>

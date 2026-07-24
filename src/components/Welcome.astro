@@ -1,210 +1,326 @@
 ---
-import astroLogo from '../assets/astro.svg';
-import background from '../assets/background.svg';
+export type LandingProduct = {
+	id: string;
+	name: string;
+	price: string | null;
+	imageUrl: string | null;
+	imageAlt: string | null;
+};
+
+interface Props {
+	products: LandingProduct[];
+	errorMessage?: string | null;
+}
+
+const { products, errorMessage = null } = Astro.props;
+
+const SITE = 'https://klaudiajaranowskamakeup.pl';
+
+const heroImage = `${SITE}/wp-content/uploads/2025/10/IMG_2036-scaled-e1761149605175.jpeg`;
+const aboutImage = `${SITE}/wp-content/uploads/2025/06/IMG_0147-scaled-e1768179865534-750x1024.jpeg`;
+const footerLogo = `${SITE}/wp-content/uploads/2025/06/logo-napis.png`;
+
+const marqueeItems = Array.from({ length: 8 }, () => 'KLAUDIA JARANOWSKA');
+
+const testimonials = [
+	{
+		quote:
+			'Makijaż wytrzymał cały wieczór, zdecydowanie będę polecać, nigdy nie czułam się tak pięknie!',
+		author: 'Ania W.',
+	},
+	{
+		quote: 'Świetnie przeprowadzone szkolenie! Pełen profesjonalizm i zaangażowanie',
+		author: 'Maria D.',
+	},
+	{
+		quote: 'Dziękuję za piękny makeup. Bardzo serdecznie polecam',
+		author: 'Magdalena I.',
+	},
+];
+
+const year = new Date().getFullYear();
 ---
 
-<div id="container">
-	<img id="background" src={background.src} alt="" fetchpriority="high" />
-	<main>
-		<section id="hero">
-			<a href="https://astro.build"
-				><img src={astroLogo.src} width="115" height="48" alt="Astro Homepage" /></a
+<div class="min-h-full bg-paper text-ink">
+	<header class="absolute inset-x-0 top-0 z-20 flex items-start justify-between px-6 py-6 md:px-10 md:py-8">
+		<a href="/" class="group text-foam no-underline">
+			<span
+				class="block font-display text-[clamp(0.95rem,2.2vw,1.15rem)] font-normal tracking-[0.18em] uppercase"
 			>
-			<h1>
-				To get started, open the <code><pre>src/pages</pre></code> directory in your project.
-			</h1>
-			<section id="links">
-				<a class="button" href="https://docs.astro.build">Read our docs</a>
-				<a href="https://astro.build/chat"
-					>Join our Discord <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36"
-						><path
-							fill="currentColor"
-							d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69Zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69Z"
-						></path></svg
-					>
-				</a>
-			</section>
-		</section>
-	</main>
+				Klaudia Jaranowska
+			</span>
+			<span
+				class="mt-1 block text-center font-sans text-[0.55rem] font-medium tracking-[0.35em] uppercase opacity-90"
+			>
+				Make up artist
+			</span>
+		</a>
+		<span class="sr-only">Menu</span>
+		<div class="flex flex-col gap-1.5 pt-1" aria-hidden="true">
+			<span class="block h-px w-6 bg-foam"></span>
+			<span class="block h-px w-6 bg-foam"></span>
+			<span class="block h-px w-6 bg-foam"></span>
+		</div>
+	</header>
 
-	<a href="https://astro.build/blog/astro-6-beta/" id="news" class="box">
-		<svg width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg"
-			><path
-				d="M24.667 12c1.333 1.414 2 3.192 2 5.334 0 4.62-4.934 5.7-7.334 12C18.444 28.567 18 27.456 18 26c0-4.642 6.667-7.053 6.667-14Zm-5.334-5.333c1.6 1.65 2.4 3.43 2.4 5.333 0 6.602-8.06 7.59-6.4 17.334C13.111 27.787 12 25.564 12 22.666c0-4.434 7.333-8 7.333-16Zm-6-5.333C15.111 3.555 16 5.556 16 7.333c0 8.333-11.333 10.962-5.333 22-3.488-.774-6-4-6-8 0-8.667 8.666-10 8.666-20Z"
-				fill="#111827"></path></svg
+	<section
+		class="relative isolate flex min-h-svh flex-col overflow-hidden text-foam"
+		aria-label="Klaudia Jaranowska"
+	>
+		<img
+			class="absolute inset-0 -z-20 size-full object-cover object-center"
+			src={heroImage}
+			alt=""
+			fetchpriority="high"
+		/>
+		<div
+			class="absolute inset-0 -z-10 bg-linear-to-b from-black/25 via-black/35 to-black/80"
+			aria-hidden="true"
 		>
-		<h2>What's New in Astro 6.0?</h2>
-		<p>
-			Redesigned dev server, fonts, live collections, built-in CSP support, and more! Click to
-			explore Astro 6.0's new features.
-		</p>
-	</a>
+		</div>
+
+		<div
+			class="flex flex-1 flex-col items-center justify-center gap-6 px-6 pb-28 text-center md:px-10"
+		>
+			<h1
+				class="m-0 max-w-[22ch] font-display text-[clamp(1.35rem,3.4vw,2rem)] font-normal leading-snug text-foam/90 animate-rise motion-reduce:animate-none"
+			>
+				Nazywam się Klaudia Jaranowska i jestem dyplomowaną makijażystką oraz
+				szkoleniowcem.
+			</h1>
+			<a
+				class="font-display text-[clamp(0.95rem,2vw,1.05rem)] font-normal tracking-wide text-foam no-underline uppercase transition-opacity duration-200 hover:opacity-70 animate-rise motion-reduce:animate-none [animation-delay:140ms]"
+				href="#o-mnie"
+			>
+				Poznaj moją ofertę
+			</a>
+			<a
+				href="#o-mnie"
+				class="mt-4 text-foam/80 transition-opacity hover:opacity-100 animate-rise motion-reduce:animate-none [animation-delay:240ms]"
+				aria-label="Przejdź dalej"
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.25"
+					class="size-6"
+					aria-hidden="true"
+				>
+					<path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"></path>
+				</svg>
+			</a>
+		</div>
+
+		<div class="absolute inset-x-0 bottom-0 z-10 overflow-hidden bg-ink py-3">
+			<div
+				class="flex w-max whitespace-nowrap font-display text-sm tracking-[0.2em] text-foam uppercase animate-marquee motion-reduce:animate-none"
+				aria-hidden="true"
+			>
+				{
+					[...marqueeItems, ...marqueeItems].map((label) => (
+						<span class="px-8">{label}</span>
+					))
+				}
+			</div>
+			<p class="sr-only">Klaudia Jaranowska</p>
+		</div>
+	</section>
+
+	<section
+		id="o-mnie"
+		class="bg-paper px-6 py-16 md:px-10 md:py-24"
+		aria-labelledby="about-heading"
+	>
+		<div class="mx-auto grid max-w-5xl items-center gap-12 md:grid-cols-2 md:gap-16">
+			<img
+				class="mx-auto aspect-4/5 w-full max-w-md object-cover object-top"
+				src={aboutImage}
+				alt="Klaudia Jaranowska przy pracy"
+				loading="lazy"
+				width="750"
+				height="1024"
+			/>
+			<div class="text-center md:text-left">
+				<p class="m-0 font-sans text-xs tracking-[0.25em] text-muted uppercase">O mnie</p>
+				<h2
+					id="about-heading"
+					class="mt-3 m-0 font-display text-[clamp(1.5rem,3vw,2.1rem)] font-normal leading-tight text-ink"
+				>
+					Sprawię, że poczujesz się
+					<span class="mt-1 block tracking-[0.08em] uppercase">pięknie i pewnie!</span>
+				</h2>
+				<p class="mt-6 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-base">
+					Moja pasja do makijażu to połączenie doświadczenia, wiedzy i indywidualnego
+					podejścia do każdego klienta.
+				</p>
+				<p class="mt-4 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-base">
+					Moim celem nie jest tylko wykonanie pięknego makijażu - chcę, aby każda kobieta,
+					która siada na moim fotelu, poczuła się wyjątkowo i komfortowo. Niezależnie od
+					tego, czy przygotowujesz się do ślubu, ważnego wydarzenia, sesji zdjęciowej, czy
+					po prostu chcesz poczuć się pięknie - jestem tu, aby sprawić, byś poczuła się
+					pięknie i pewnie!
+				</p>
+				<a
+					href="#produkty"
+					class="mt-8 inline-block border border-border-soft px-8 py-3 font-display text-sm tracking-[0.12em] text-ink no-underline uppercase transition-opacity hover:opacity-70"
+				>
+					Dowiedz się więcej
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<section
+		id="opinie"
+		class="bg-paper px-6 pb-16 md:px-10 md:pb-24"
+		aria-labelledby="testimonials-heading"
+	>
+		<header class="mx-auto mb-12 max-w-2xl text-center md:mb-16">
+			<h2
+				id="testimonials-heading"
+				class="m-0 font-display text-[clamp(1.5rem,3vw,2rem)] font-normal tracking-[0.12em] text-ink uppercase"
+			>
+				Wasze słowa
+			</h2>
+			<p class="mt-4 m-0 font-sans text-sm leading-relaxed text-ink/80 md:text-base">
+				Nie ma dla mnie większego komplementu niż uśmiech na twarzy klientki po zakończonym
+				makijażu.
+			</p>
+		</header>
+
+		<ul class="mx-auto m-0 grid max-w-5xl list-none grid-cols-1 gap-10 p-0 md:grid-cols-3 md:gap-8">
+			{
+				testimonials.map((item) => (
+					<li class="text-center">
+						<blockquote class="m-0">
+							<p class="m-0 font-display text-base leading-relaxed text-ink/90 italic md:text-lg">
+								“{item.quote}”
+							</p>
+							<footer class="mt-4 font-sans text-xs tracking-[0.18em] text-muted uppercase">
+								{item.author}
+							</footer>
+						</blockquote>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<section
+		id="produkty"
+		class="bg-paper px-6 pb-16 md:px-10 md:pb-24"
+		aria-labelledby="products-heading"
+	>
+		<header class="mx-auto mb-12 max-w-2xl text-center md:mb-16">
+			<h2
+				id="products-heading"
+				class="m-0 font-display text-[clamp(1.5rem,3vw,2rem)] font-normal tracking-[0.12em] text-ink uppercase"
+			>
+				Produkty
+			</h2>
+			<p class="mt-4 m-0 font-display text-base leading-relaxed text-ink/80">
+				Wybierz coś dla siebie.
+			</p>
+		</header>
+
+		{
+			errorMessage ? (
+				<p class="m-0 text-center font-sans text-sm text-muted" role="status">
+					{errorMessage}
+				</p>
+			) : products.length === 0 ? (
+				<p class="m-0 text-center font-sans text-sm text-muted" role="status">
+					Brak produktów.
+				</p>
+			) : (
+				<ul class="mx-auto m-0 grid max-w-5xl list-none grid-cols-1 gap-12 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-10 lg:gap-y-16">
+					{products.map((product, index) => (
+						<li
+							class="grid content-start gap-4 text-center animate-rise-fast motion-reduce:animate-none"
+							style={`animation-delay: ${Math.min(index, 8) * 60}ms`}
+						>
+							{product.imageUrl ? (
+								<img
+									class="mx-auto block aspect-4/5 w-full max-w-sm object-cover"
+									src={product.imageUrl}
+									alt={product.imageAlt || product.name}
+									loading="lazy"
+									width="480"
+									height="600"
+								/>
+							) : (
+								<div
+									class="mx-auto aspect-4/5 w-full max-w-sm bg-linear-to-br from-[#e8e6e2] to-[#cfcbc4]"
+									aria-hidden="true"
+								/>
+							)}
+							<h3 class="m-0 font-display text-lg font-normal tracking-[0.08em] text-ink uppercase">
+								{product.name}
+							</h3>
+							{product.price && (
+								<p class="m-0 font-sans text-sm tracking-wide text-muted">{product.price}</p>
+							)}
+						</li>
+					))}
+				</ul>
+			)
+		}
+	</section>
+
+	<footer class="bg-near-black px-6 py-14 text-foam md:px-10 md:py-16">
+		<div class="mx-auto flex max-w-5xl flex-col items-center gap-8 text-center">
+			<img
+				class="h-10 w-auto opacity-90 md:h-12"
+				src={footerLogo}
+				alt="Klaudia Jaranowska Makeup"
+				loading="lazy"
+				width="240"
+				height="48"
+			/>
+			<p class="m-0 max-w-md font-sans text-sm leading-relaxed text-foam/75">
+				Makijaż tworzony z pasją - specjalistka od naturalnego glow i kobiecej elegancji.
+			</p>
+			<p class="m-0 font-sans text-xs tracking-[0.2em] text-foam/55 uppercase">
+				Klaudia Jaranowska | Sieradz
+			</p>
+			<nav aria-label="Stopka">
+				<ul
+					class="m-0 flex list-none flex-wrap items-center justify-center gap-x-6 gap-y-3 p-0 font-display text-sm tracking-[0.12em] uppercase"
+				>
+					<li>
+						<a
+							class="text-foam no-underline transition-opacity hover:opacity-70"
+							href={`${SITE}/blog/`}
+							rel="noopener noreferrer"
+						>
+							Blog
+						</a>
+					</li>
+					<li>
+						<a
+							class="text-foam no-underline transition-opacity hover:opacity-70"
+							href={`${SITE}/regulamin/`}
+							rel="noopener noreferrer"
+						>
+							Regulamin
+						</a>
+					</li>
+					<li>
+						<a
+							class="text-foam no-underline transition-opacity hover:opacity-70"
+							href={`${SITE}/polityka-prywatnosci/`}
+							rel="noopener noreferrer"
+						>
+							Polityka prywatności
+						</a>
+					</li>
+				</ul>
+			</nav>
+			<p class="m-0 font-sans text-xs tracking-wide text-foam/40">
+				© {year} Klaudia Jaranowska Make Up
+			</p>
+		</div>
+	</footer>
 </div>
-
-<style>
-	#background {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
-		filter: blur(100px);
-	}
-
-	#container {
-		font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
-		height: 100%;
-	}
-
-	main {
-		height: 100%;
-		display: flex;
-		justify-content: center;
-	}
-
-	#hero {
-		display: flex;
-		align-items: start;
-		flex-direction: column;
-		justify-content: center;
-		padding: 16px;
-	}
-
-	h1 {
-		font-size: 22px;
-		margin-top: 0.25em;
-	}
-
-	#links {
-		display: flex;
-		gap: 16px;
-	}
-
-	#links a {
-		display: flex;
-		align-items: center;
-		padding: 10px 12px;
-		color: #111827;
-		text-decoration: none;
-		transition: color 0.2s;
-	}
-
-	#links a:hover {
-		color: rgb(78, 80, 86);
-	}
-
-	#links a svg {
-		height: 1em;
-		margin-left: 8px;
-	}
-
-	#links a.button {
-		color: white;
-		background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
-		box-shadow:
-			inset 0 0 0 1px rgba(255, 255, 255, 0.12),
-			inset 0 -2px 0 rgba(0, 0, 0, 0.24);
-		border-radius: 10px;
-	}
-
-	#links a.button:hover {
-		color: rgb(230, 230, 230);
-		box-shadow: none;
-	}
-
-	pre {
-		font-family:
-			ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono',
-			monospace;
-		font-weight: normal;
-		background: linear-gradient(14deg, #d83333 0%, #f041ff 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		margin: 0;
-	}
-
-	h2 {
-		margin: 0 0 1em;
-		font-weight: normal;
-		color: #111827;
-		font-size: 20px;
-	}
-
-	p {
-		color: #4b5563;
-		font-size: 16px;
-		line-height: 24px;
-		letter-spacing: -0.006em;
-		margin: 0;
-	}
-
-	code {
-		display: inline-block;
-		background:
-			linear-gradient(66.77deg, #f3cddd 0%, #f5cee7 100%) padding-box,
-			linear-gradient(155deg, #d83333 0%, #f041ff 18%, #f5cee7 45%) border-box;
-		border-radius: 8px;
-		border: 1px solid transparent;
-		padding: 6px 8px;
-	}
-
-	.box {
-		padding: 16px;
-		background: rgba(255, 255, 255, 1);
-		border-radius: 16px;
-		border: 1px solid white;
-	}
-
-	#news {
-		position: absolute;
-		bottom: 16px;
-		right: 16px;
-		max-width: 300px;
-		text-decoration: none;
-		transition: background 0.2s;
-		backdrop-filter: blur(50px);
-	}
-
-	#news:hover {
-		background: rgba(255, 255, 255, 0.55);
-	}
-
-	@media screen and (max-height: 368px) {
-		#news {
-			display: none;
-		}
-	}
-
-	@media screen and (max-width: 768px) {
-		#container {
-			display: flex;
-			flex-direction: column;
-		}
-
-		#hero {
-			display: block;
-			padding-top: 10%;
-		}
-
-		#links {
-			flex-wrap: wrap;
-		}
-
-		#links a.button {
-			padding: 14px 18px;
-		}
-
-		#news {
-			right: 16px;
-			left: 16px;
-			bottom: 2.5rem;
-			max-width: 100%;
-		}
-
-		h1 {
-			line-height: 1.5;
-		}
-	}
-</style>
