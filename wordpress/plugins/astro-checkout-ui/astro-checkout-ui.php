@@ -3,12 +3,13 @@
  * Plugin Name: Astro Checkout UI
  * Description: Brand card WooCommerce checkout (form + sticky cart) matching the Astro storefront.
  * Author: Astro Store
- * Version: 3.0.0
+ * Version: 3.1.2
  * Requires Plugins: woocommerce
  *
  * Install: upload this folder to wp-content/plugins/ and Activate.
  * Requires classic checkout shortcode [woocommerce_checkout] (not Checkout block).
  * Works alongside Astro Headless Checkout (session handoff + Astro return URL).
+ * Settings: WooCommerce → Checkout UI
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -17,6 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'ASTRO_CHECKOUT_UI_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ASTRO_CHECKOUT_UI_URL', plugin_dir_url( __FILE__ ) );
+
+require_once ASTRO_CHECKOUT_UI_DIR . 'includes/settings.php';
 
 /**
  * Whether the blank checkout UI should replace the theme template.
@@ -93,8 +96,8 @@ add_action(
 
 		$css_path = ASTRO_CHECKOUT_UI_DIR . 'checkout.css';
 		$js_path  = ASTRO_CHECKOUT_UI_DIR . 'checkout.js';
-		$css_ver  = file_exists( $css_path ) ? (string) filemtime( $css_path ) : '3.0.0';
-		$js_ver   = file_exists( $js_path ) ? (string) filemtime( $js_path ) : '3.0.0';
+		$css_ver  = file_exists( $css_path ) ? (string) filemtime( $css_path ) : '3.1.0';
+		$js_ver   = file_exists( $js_path ) ? (string) filemtime( $js_path ) : '3.1.0';
 
 		wp_enqueue_style(
 			'astro-checkout-ui',
@@ -102,6 +105,11 @@ add_action(
 			array( 'astro-checkout-ui-fonts' ),
 			$css_ver
 		);
+
+		$custom_css = astro_checkout_ui_get_settings()['custom_css'];
+		if ( $custom_css !== '' ) {
+			wp_add_inline_style( 'astro-checkout-ui', $custom_css );
+		}
 
 		wp_enqueue_script(
 			'astro-checkout-ui',
@@ -232,62 +240,70 @@ add_filter(
 			$fields['billing']['billing_last_name']['class']    = array( 'form-row-last' );
 		}
 
-		$fields['billing']['billing_buy_as_company'] = array(
-			'type'     => 'checkbox',
-			'label'    => 'Kupuję jako firma',
-			'required' => false,
-			'class'    => array( 'form-row-wide', 'astro-pay-buy-as-company' ),
-			'priority' => 35,
-			'clear'    => true,
-		);
+		if ( astro_checkout_ui_company_fields_enabled() ) {
+			$fields['billing']['billing_buy_as_company'] = array(
+				'type'     => 'checkbox',
+				'label'    => 'Kupuję jako firma',
+				'required' => false,
+				'class'    => array( 'form-row-wide', 'astro-pay-buy-as-company' ),
+				'priority' => 35,
+				'clear'    => true,
+			);
 
-		$fields['billing']['billing_company'] = array(
-			'type'         => 'text',
-			'label'        => 'Firma',
-			'placeholder'  => 'Nazwa firmy',
-			'required'     => false,
-			'class'        => array( 'form-row-wide', 'astro-pay-company-field' ),
-			'priority'     => 40,
-			'autocomplete' => 'organization',
-			'clear'        => true,
-		);
+			$fields['billing']['billing_company'] = array(
+				'type'         => 'text',
+				'label'        => 'Firma',
+				'placeholder'  => 'Nazwa firmy',
+				'required'     => false,
+				'class'        => array( 'form-row-wide', 'astro-pay-company-field' ),
+				'priority'     => 40,
+				'autocomplete' => 'organization',
+				'clear'        => true,
+			);
 
-		$fields['billing']['billing_nip'] = array(
-			'type'         => 'text',
-			'label'        => 'NIP',
-			'placeholder'  => 'Numer NIP',
-			'required'     => false,
-			'class'        => array( 'form-row-wide', 'astro-pay-company-field' ),
-			'priority'     => 41,
-			'autocomplete' => 'off',
-			'clear'        => true,
-		);
-
-		if ( isset( $fields['billing']['billing_country'] ) ) {
-			$fields['billing']['billing_country']['priority'] = 50;
-			$fields['billing']['billing_country']['label']    = 'Kraj';
+			$fields['billing']['billing_nip'] = array(
+				'type'         => 'text',
+				'label'        => 'NIP',
+				'placeholder'  => 'Numer NIP',
+				'required'     => false,
+				'class'        => array( 'form-row-wide', 'astro-pay-company-field' ),
+				'priority'     => 41,
+				'autocomplete' => 'off',
+				'clear'        => true,
+			);
+		} else {
+			unset(
+				$fields['billing']['billing_buy_as_company'],
+				$fields['billing']['billing_company'],
+				$fields['billing']['billing_nip']
+			);
 		}
 
 		if ( isset( $fields['billing']['billing_address_1'] ) ) {
-			$fields['billing']['billing_address_1']['priority']    = 60;
+			$fields['billing']['billing_address_1']['priority']    = 50;
 			$fields['billing']['billing_address_1']['label']       = 'Adres';
 			$fields['billing']['billing_address_1']['placeholder'] = 'Ulica i numer';
 		}
 
 		if ( isset( $fields['billing']['billing_address_2'] ) ) {
-			$fields['billing']['billing_address_2']['priority']    = 70;
+			$fields['billing']['billing_address_2']['priority']    = 60;
 			$fields['billing']['billing_address_2']['label']       = 'Mieszkanie, lokal';
 			$fields['billing']['billing_address_2']['placeholder'] = 'Opcjonalnie';
 		}
 
 		if ( isset( $fields['billing']['billing_postcode'] ) ) {
-			$fields['billing']['billing_postcode']['priority'] = 80;
+			$fields['billing']['billing_postcode']['priority'] = 70;
 			$fields['billing']['billing_postcode']['label']    = 'Kod pocztowy';
 		}
 
 		if ( isset( $fields['billing']['billing_city'] ) ) {
-			$fields['billing']['billing_city']['priority'] = 90;
+			$fields['billing']['billing_city']['priority'] = 80;
 			$fields['billing']['billing_city']['label']    = 'Miasto';
+		}
+
+		if ( isset( $fields['billing']['billing_country'] ) ) {
+			$fields['billing']['billing_country']['priority'] = 90;
+			$fields['billing']['billing_country']['label']    = 'Kraj';
 		}
 
 		if ( isset( $fields['billing']['billing_state'] ) ) {
@@ -314,25 +330,31 @@ add_filter(
 			$fields['shipping']['shipping_company']['placeholder'] = 'Opcjonalnie';
 			$fields['shipping']['shipping_company']['required']    = false;
 		}
-		if ( isset( $fields['shipping']['shipping_country'] ) ) {
-			$fields['shipping']['shipping_country']['label'] = 'Kraj';
-		}
 		if ( isset( $fields['shipping']['shipping_address_1'] ) ) {
+			$fields['shipping']['shipping_address_1']['priority']    = 50;
 			$fields['shipping']['shipping_address_1']['label']       = 'Adres';
 			$fields['shipping']['shipping_address_1']['placeholder'] = 'Ulica i numer';
 		}
 		if ( isset( $fields['shipping']['shipping_address_2'] ) ) {
+			$fields['shipping']['shipping_address_2']['priority']    = 60;
 			$fields['shipping']['shipping_address_2']['label']       = 'Mieszkanie, lokal';
 			$fields['shipping']['shipping_address_2']['placeholder'] = 'Opcjonalnie';
 		}
 		if ( isset( $fields['shipping']['shipping_postcode'] ) ) {
-			$fields['shipping']['shipping_postcode']['label'] = 'Kod pocztowy';
+			$fields['shipping']['shipping_postcode']['priority'] = 70;
+			$fields['shipping']['shipping_postcode']['label']    = 'Kod pocztowy';
 		}
 		if ( isset( $fields['shipping']['shipping_city'] ) ) {
-			$fields['shipping']['shipping_city']['label'] = 'Miasto';
+			$fields['shipping']['shipping_city']['priority'] = 80;
+			$fields['shipping']['shipping_city']['label']    = 'Miasto';
+		}
+		if ( isset( $fields['shipping']['shipping_country'] ) ) {
+			$fields['shipping']['shipping_country']['priority'] = 90;
+			$fields['shipping']['shipping_country']['label']    = 'Kraj';
 		}
 		if ( isset( $fields['shipping']['shipping_state'] ) ) {
-			$fields['shipping']['shipping_state']['label'] = 'Województwo';
+			$fields['shipping']['shipping_state']['priority'] = 100;
+			$fields['shipping']['shipping_state']['label']    = 'Województwo';
 		}
 
 		return $fields;
@@ -363,7 +385,7 @@ function astro_checkout_ui_is_valid_nip( string $nip ): bool {
 add_action(
 	'woocommerce_checkout_process',
 	static function (): void {
-		if ( ! astro_checkout_ui_should_load() ) {
+		if ( ! astro_checkout_ui_should_load() || ! astro_checkout_ui_company_fields_enabled() ) {
 			return;
 		}
 
@@ -393,7 +415,7 @@ add_action(
 add_action(
 	'woocommerce_checkout_create_order',
 	static function ( $order ): void {
-		if ( ! $order instanceof WC_Order ) {
+		if ( ! $order instanceof WC_Order || ! astro_checkout_ui_company_fields_enabled() ) {
 			return;
 		}
 

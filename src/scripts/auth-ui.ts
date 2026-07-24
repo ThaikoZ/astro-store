@@ -1,4 +1,64 @@
-import { COOKIE_NAMES, getBrowserWooClient } from '../lib/woocommerce';
+import {
+	authHref,
+	getAuthRedirectParam,
+	isCheckoutAuthRedirect,
+} from '../lib/shop/authLinks';
+import { getHostedCheckoutRedirectUrl } from '../lib/shop/hostedCheckout';
+import {
+	COOKIE_NAMES,
+	extractGraphQLErrorMessage,
+	getBrowserWooClient,
+	toWooGraphQLError,
+} from '../lib/woocommerce';
+
+function currentAuthRedirect() {
+	return getAuthRedirectParam(window.location.search);
+}
+
+function redirectAfterAuth() {
+	if (isCheckoutAuthRedirect(currentAuthRedirect())) {
+		const result = getHostedCheckoutRedirectUrl(import.meta.env.PUBLIC_WORDPRESS_URL);
+		if (result.ok) {
+			window.location.href = result.url;
+			return;
+		}
+		window.location.href = '/moje-konto/';
+		return;
+	}
+	window.location.href = '/moje-konto/';
+}
+
+/** Show checkout gate copy + keep redirect on cross-links (works with static HTML too). */
+function initCheckoutAuthNotice() {
+	const redirect = currentAuthRedirect();
+	if (!redirect) return;
+
+	if (isCheckoutAuthRedirect(redirect)) {
+		for (const notice of document.querySelectorAll<HTMLElement>('[data-auth-checkout-notice]')) {
+			notice.hidden = false;
+			notice.classList.remove('hidden');
+		}
+
+		const subtitle = document.querySelector<HTMLElement>('#auth-heading + p');
+		if (subtitle) {
+			if (document.querySelector('[data-auth-form="login"]')) {
+				subtitle.textContent = 'Aby przejść do kasy, zaloguj się lub załóż konto.';
+			} else if (document.querySelector('[data-auth-form="register"]')) {
+				subtitle.textContent = 'Załóż konto, aby przejść do kasy i sfinalizować zamówienie.';
+			}
+		}
+	}
+
+	for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-auth-checkout-register]')) {
+		link.href = authHref('/rejestracja/', redirect);
+	}
+	for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-auth-checkout-login]')) {
+		link.href = authHref('/logowanie/', redirect);
+	}
+	for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-auth-checkout-forgot]')) {
+		link.href = authHref('/nie-pamietam-hasla/', redirect);
+	}
+}
 
 const REMEMBER_MAX_AGE = 60 * 60 * 24 * 30;
 
@@ -43,8 +103,16 @@ function stripHtml(value: string): string {
 		.trim();
 }
 
-function polishAuthError(message: string): string {
-	const cleaned = stripHtml(message);
+function authErrorMessage(error: unknown): string {
+	if (typeof error === 'string') return error;
+	const fromGraphql = extractGraphQLErrorMessage(error);
+	if (fromGraphql) return fromGraphql;
+	if (error instanceof Error && error.message) return toWooGraphQLError(error).message;
+	return '';
+}
+
+function polishAuthError(error: unknown): string {
+	const cleaned = stripHtml(authErrorMessage(error));
 	const lower = cleaned.toLowerCase();
 	if (
 		lower.includes('failed to fetch') ||
@@ -65,11 +133,24 @@ function polishAuthError(message: string): string {
 	) {
 		return 'Nieprawidłowa nazwa użytkownika lub e-mail.';
 	}
-	if (lower.includes('existing_user') || lower.includes('already registered')) {
+	if (
+		lower.includes('existing_user') ||
+		lower.includes('already registered') ||
+		lower.includes('już zarejestrowane') ||
+		lower.includes('juz zarejestrowane')
+	) {
+		// Prefer the clean GraphQL message when it is already human-readable Polish.
+		if (cleaned && !cleaned.includes('{') && cleaned.length < 220) return cleaned;
 		return 'Konto z tym e-mailem lub nazwą użytkownika już istnieje.';
 	}
 	if (lower.includes('empty_password') || lower.includes('empty password')) {
 		return 'Podaj hasło.';
+	}
+	// Drop accidental JSON dumps if extraction missed them.
+	if (cleaned.includes('"response"') || cleaned.includes('"registerCustomer"')) {
+		const beforeJson = cleaned.split(': {')[0]?.trim();
+		if (beforeJson) return beforeJson;
+		return 'Coś poszło nie tak. Spróbuj ponownie.';
 	}
 	return cleaned || 'Coś poszło nie tak. Spróbuj ponownie.';
 }
@@ -111,9 +192,9 @@ function initLoginForm() {
 				return;
 			}
 			persistRememberMe(remember);
-			window.location.href = '/moje-konto/';
+			redirectAfterAuth();
 		} catch (error) {
-			setStatus(status, polishAuthError(error instanceof Error ? error.message : ''));
+			setStatus(status, polishAuthError(error));
 		} finally {
 			setLoading(submit, false);
 		}
@@ -166,13 +247,13 @@ function initRegisterForm() {
 					'info',
 				);
 				window.setTimeout(() => {
-					window.location.href = '/logowanie/';
+					window.location.href = authHref('/logowanie/', currentAuthRedirect());
 				}, 1600);
 				return;
 			}
-			window.location.href = '/moje-konto/';
+			redirectAfterAuth();
 		} catch (error) {
-			setStatus(status, polishAuthError(error instanceof Error ? error.message : ''));
+			setStatus(status, polishAuthError(error));
 		} finally {
 			setLoading(submit, false);
 		}
@@ -209,7 +290,7 @@ function initForgotForm() {
 			);
 			form.reset();
 		} catch (error) {
-			setStatus(status, polishAuthError(error instanceof Error ? error.message : ''));
+			setStatus(status, polishAuthError(error));
 		} finally {
 			setLoading(submit, false);
 		}
@@ -259,10 +340,10 @@ function initResetForm() {
 			await woo.auth.resetPasswordWithKey({ key, login, password });
 			setStatus(status, 'Hasło zostało zmienione. Przekierowujemy do logowania…', 'success');
 			window.setTimeout(() => {
-				window.location.href = '/logowanie/';
+				window.location.href = authHref('/logowanie/', currentAuthRedirect());
 			}, 1200);
 		} catch (error) {
-			setStatus(status, polishAuthError(error instanceof Error ? error.message : ''));
+			setStatus(status, polishAuthError(error));
 		} finally {
 			setLoading(submit, false);
 		}
@@ -294,6 +375,7 @@ function initPasswordToggles() {
 }
 
 export function initAuthUi() {
+	initCheckoutAuthNotice();
 	initPasswordToggles();
 	initLoginForm();
 	initRegisterForm();

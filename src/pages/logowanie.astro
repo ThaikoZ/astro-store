@@ -3,10 +3,35 @@ import AuthCard from '../components/site/AuthCard.astro';
 import AuthField from '../components/site/AuthField.astro';
 import Button from '../components/ui/Button.astro';
 import AuthPage from '../layouts/AuthPage.astro';
+import { authHref, getAuthRedirectParam } from '../lib/shop/authLinks';
+
+const redirect = getAuthRedirectParam(Astro.url.searchParams);
+const registerHref = authHref('/rejestracja/', redirect);
+const forgotHref = authHref('/nie-pamietam-hasla/', redirect);
 ---
 
 <AuthPage title="Logowanie - Klaudia Jaranowska Makeup">
-	<AuthCard title="Hej! Witaj z powrotem!" subtitle="Zaloguj się, aby kontynuować zakupy i zarządzać kontem.">
+	<AuthCard
+		title="Hej! Witaj z powrotem!"
+		subtitle="Zaloguj się, aby kontynuować zakupy i zarządzać kontem."
+	>
+		<p
+			class="mb-5 m-0 hidden border border-border-soft bg-paper px-4 py-3 font-sans text-sm leading-relaxed text-ink/80"
+			data-auth-checkout-notice
+			role="status"
+			hidden
+		>
+			Aby kontynuować do kasy, musisz się zalogować albo założyć konto.
+			Zaloguj się poniżej albo{' '}
+			<a
+				href={registerHref}
+				data-auth-checkout-register
+				class="font-medium text-ink underline-offset-4 hover:underline"
+			>
+				załóż nowe konto
+			</a>
+			{' '}– potem wrócimy do zamówienia.
+		</p>
 		<form class="space-y-5" data-auth-form="login" novalidate>
 			<AuthField
 				label="E-mail lub nazwa użytkownika"
@@ -32,7 +57,8 @@ import AuthPage from '../layouts/AuthPage.astro';
 					Nie wylogowuj mnie
 				</label>
 				<a
-					href="/nie-pamietam-hasla/"
+					href={forgotHref}
+					data-auth-checkout-forgot
 					class="font-sans text-sm text-ink/50 no-underline underline-offset-4 transition-opacity hover:text-ink hover:underline"
 				>
 					Nie pamiętasz hasła?
@@ -53,7 +79,8 @@ import AuthPage from '../layouts/AuthPage.astro';
 		<p class="mt-7 m-0 text-center font-sans text-sm text-ink/55">
 			Nie masz jeszcze konta?
 			<a
-				href="/rejestracja/"
+				href={registerHref}
+				data-auth-checkout-register
 				class="ml-1 font-medium text-ink no-underline underline-offset-4 transition-opacity hover:opacity-70 hover:underline"
 			>
 				Zarejestruj się

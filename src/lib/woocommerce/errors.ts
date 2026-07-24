@@ -32,6 +32,35 @@ export function isAuthRelated(message: string, errors: GraphQLErrorLike[] = []):
   );
 }
 
+/** Prefer GraphQL `errors[].message` over graphql-request's verbose ClientError string. */
+export function extractGraphQLErrorMessage(error: unknown): string | null {
+  if (!error || typeof error !== 'object') return null;
+
+  const maybe = error as {
+    message?: string;
+    response?: { errors?: GraphQLErrorLike[] };
+    errors?: GraphQLErrorLike[];
+  };
+
+  const fromList = (maybe.response?.errors ?? maybe.errors ?? [])
+    .map((item) => (typeof item.message === 'string' ? item.message.trim() : ''))
+    .filter(Boolean);
+  if (fromList.length > 0) return fromList.join('; ');
+
+  if (typeof maybe.message === 'string' && maybe.message.trim()) {
+    const raw = maybe.message.trim();
+    // ClientError often looks like: "Human message: {"response":...}"
+    const colonIdx = raw.indexOf(': {');
+    if (colonIdx > 0) {
+      const head = raw.slice(0, colonIdx).trim();
+      if (head && !head.startsWith('{')) return head;
+    }
+    if (!raw.startsWith('{') && !raw.includes('"registerCustomer"')) return raw;
+  }
+
+  return null;
+}
+
 export function toWooGraphQLError(error: unknown): WooGraphQLError {
   if (error instanceof WooGraphQLError) return error;
 
@@ -42,7 +71,11 @@ export function toWooGraphQLError(error: unknown): WooGraphQLError {
       errors?: GraphQLErrorLike[];
     };
     const errors = maybe.response?.errors ?? maybe.errors ?? [];
-    const message = maybe.message || errors.map((item) => item.message).filter(Boolean).join('; ') || 'GraphQL request failed';
+    const message =
+      extractGraphQLErrorMessage(error) ||
+      errors.map((item) => item.message).filter(Boolean).join('; ') ||
+      maybe.message ||
+      'GraphQL request failed';
     return new WooGraphQLError(message, {
       errors,
       statusCode: maybe.response?.status,

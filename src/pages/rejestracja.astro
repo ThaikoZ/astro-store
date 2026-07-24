@@ -3,10 +3,32 @@ import AuthCard from '../components/site/AuthCard.astro';
 import AuthField from '../components/site/AuthField.astro';
 import Button from '../components/ui/Button.astro';
 import AuthPage from '../layouts/AuthPage.astro';
+import { authHref, getAuthRedirectParam } from '../lib/shop/authLinks';
+
+const redirect = getAuthRedirectParam(Astro.url.searchParams);
+const loginHref = authHref('/logowanie/', redirect);
 ---
 
 <AuthPage title="Rejestracja - Klaudia Jaranowska Makeup">
 	<AuthCard title="Załóż konto" subtitle="Utwórz konto, aby szybciej składać zamówienia.">
+		<p
+			class="mb-5 m-0 hidden border border-border-soft bg-paper px-4 py-3 font-sans text-sm leading-relaxed text-ink/80"
+			data-auth-checkout-notice
+			role="status"
+			hidden
+		>
+			Aby kontynuować do kasy, musisz założyć konto albo się zalogować.
+			Po rejestracji wrócimy do zamówienia.
+			Masz już konto?{' '}
+			<a
+				href={loginHref}
+				data-auth-checkout-login
+				class="font-medium text-ink underline-offset-4 hover:underline"
+			>
+				Zaloguj się
+			</a>
+			.
+		</p>
 		<form class="space-y-5" data-auth-form="register" novalidate>
 			<AuthField
 				label="Adres e-mail"
@@ -80,7 +102,8 @@ import AuthPage from '../layouts/AuthPage.astro';
 		<p class="mt-7 m-0 text-center font-sans text-sm text-ink/55">
 			Masz już konto?
 			<a
-				href="/logowanie/"
+				href={loginHref}
+				data-auth-checkout-login
 				class="ml-1 font-medium text-ink no-underline underline-offset-4 transition-opacity hover:opacity-70 hover:underline"
 			>
 				Zaloguj się

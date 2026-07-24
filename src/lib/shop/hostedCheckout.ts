@@ -4,6 +4,14 @@ export type HostedCheckoutBuildResult =
 	| { ok: true; url: string; sessionId: string }
 	| { ok: false; error: string };
 
+export type HostedCheckoutSettings = {
+	authRequired: boolean;
+	companyFieldsEnabled: boolean;
+};
+
+let settingsCache: { at: number; value: HostedCheckoutSettings } | null = null;
+const SETTINGS_TTL_MS = 30_000;
+
 /** Decode a JWT payload without verifying the signature (browser handoff only). */
 export function decodeJwtPayload(token: string): Record<string, unknown> | null {
 	const parts = token.split('.');
@@ -23,9 +31,16 @@ export function decodeJwtPayload(token: string): Record<string, unknown> | null 
 	}
 }
 
+/** Normalize a JWT claim that may be a string or finite number session key. */
+function asSessionKey(value: unknown): string | null {
+	if (typeof value === 'string' && value.trim()) return value.trim();
+	if (typeof value === 'number' && Number.isFinite(value)) return String(value);
+	return null;
+}
+
 /**
  * Resolve the WooCommerce session key to pass as `?session_id=`.
- * WooGraphQL JWT sessions expose `data.customer_id`; otherwise use the raw token.
+ * Supports legacy WooGraphQL JWTs (`data.customer_id`) and Store API Cart-Tokens (`user_id`).
  */
 export function resolveCheckoutSessionId(sessionToken: string | null | undefined): string | null {
 	if (!sessionToken) return null;
@@ -36,12 +51,12 @@ export function resolveCheckoutSessionId(sessionToken: string | null | undefined
 	if (payload) {
 		const data = payload.data;
 		if (data && typeof data === 'object') {
-			const customerId = (data as Record<string, unknown>).customer_id;
-			if (typeof customerId === 'string' && customerId.trim()) return customerId.trim();
-			if (typeof customerId === 'number' && Number.isFinite(customerId)) {
-				return String(customerId);
-			}
+			const fromLegacy = asSessionKey((data as Record<string, unknown>).customer_id);
+			if (fromLegacy) return fromLegacy;
 		}
+
+		const fromCartToken = asSessionKey(payload.user_id);
+		if (fromCartToken) return fromCartToken;
 	}
 
 	return token;
@@ -50,6 +65,7 @@ export function resolveCheckoutSessionId(sessionToken: string | null | undefined
 export function buildHostedCheckoutUrl(
 	wordpressUrl: string | null | undefined,
 	sessionToken: string | null | undefined,
+	authToken?: string | null,
 ): HostedCheckoutBuildResult {
 	const origin = (wordpressUrl ?? '').trim().replace(/\/+$/, '');
 	if (!origin) {
@@ -70,16 +86,60 @@ export function buildHostedCheckoutUrl(
 	const url = new URL(`${origin}/checkout/`);
 	url.searchParams.set('session_id', sessionId);
 
+	const auth = (authToken ?? '').trim();
+	if (auth) {
+		url.searchParams.set('auth_token', auth);
+	}
+
 	return { ok: true, url: url.toString(), sessionId };
 }
 
-/** Read the browser cart session cookie and build the WP checkout URL. */
+/** Fetch public checkout settings from the WordPress REST API (short TTL cache). */
+export async function fetchHostedCheckoutSettings(
+	wordpressUrl: string | null | undefined = import.meta.env.PUBLIC_WORDPRESS_URL,
+): Promise<HostedCheckoutSettings> {
+	const defaults: HostedCheckoutSettings = {
+		authRequired: false,
+		companyFieldsEnabled: true,
+	};
+
+	const origin = (wordpressUrl ?? '').trim().replace(/\/+$/, '');
+	if (!origin) return defaults;
+
+	const now = Date.now();
+	if (settingsCache && now - settingsCache.at < SETTINGS_TTL_MS) {
+		return settingsCache.value;
+	}
+
+	try {
+		const res = await fetch(`${origin}/wp-json/astro-checkout/v1/settings`, {
+			credentials: 'omit',
+			headers: { Accept: 'application/json' },
+		});
+		if (!res.ok) return defaults;
+		const data = (await res.json()) as Partial<HostedCheckoutSettings>;
+		const value: HostedCheckoutSettings = {
+			authRequired: Boolean(data.authRequired),
+			companyFieldsEnabled:
+				typeof data.companyFieldsEnabled === 'boolean'
+					? data.companyFieldsEnabled
+					: true,
+		};
+		settingsCache = { at: now, value };
+		return value;
+	} catch {
+		return defaults;
+	}
+}
+
+/** Read browser cart + auth cookies and build the WP checkout URL. */
 export function getHostedCheckoutRedirectUrl(
 	wordpressUrl: string | null | undefined = import.meta.env.PUBLIC_WORDPRESS_URL,
 ): HostedCheckoutBuildResult {
 	const cookies = createBrowserCookieAdapter();
 	const sessionToken = cookies.get(COOKIE_NAMES.session) ?? null;
-	return buildHostedCheckoutUrl(wordpressUrl, sessionToken);
+	const authToken = cookies.get(COOKIE_NAMES.authToken) ?? null;
+	return buildHostedCheckoutUrl(wordpressUrl, sessionToken, authToken);
 }
 
 /** Clear the local headless cart session cookie (after WP checkout return). */

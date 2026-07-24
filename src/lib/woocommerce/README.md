@@ -34,16 +34,18 @@ In `wp-config.php`, set the Astro origin (must match `PUBLIC_APP_ORIGIN` in prod
 define( 'ASTRO_APP_ORIGIN', 'https://your-astro-site.example' );
 ```
 
-Headless checkout plugin:
+Headless checkout plugin (**v1.2.0+**):
 
 - Loads the headless cart when `/checkout/?session_id=…` is opened
+- Accepts `auth_token` (Astro JWT), sets a WordPress auth cookie, then redirects to a clean URL
 - Deletes that session after payment
 - Redirects successful orders to `{ASTRO_APP_ORIGIN}/moje-konto/?tab=zamowienia&from_checkout=1`
 
-Checkout UI plugin:
+Checkout UI plugin (**v3.1.0+**):
 
-- Full-bleed split layout (summary left, form/pay right)
-- Overrides `form-checkout.php` + `review-order.php`
+- Brand card layout (form left, cart right)
+- Settings: WooCommerce → Checkout UI (auth required, company fields, terms/privacy URLs, custom CSS)
+- Public REST: `GET /wp-json/astro-checkout/v1/settings`
 
 ### 2. Astro env
 
@@ -52,7 +54,7 @@ PUBLIC_WORDPRESS_URL=https://your-wordpress-site.example
 PUBLIC_APP_ORIGIN=http://localhost:4321
 ```
 
-Cart CTA **Do kasy** builds `{PUBLIC_WORDPRESS_URL}/checkout/?session_id=…` from the `woocommerce-session` cookie (`src/lib/shop/hostedCheckout.ts`).
+Cart CTA **Do kasy** fetches checkout settings, gates on login when `authRequired`, then builds `{PUBLIC_WORDPRESS_URL}/checkout/?session_id=…&auth_token=…` from cookies (`src/lib/shop/hostedCheckout.ts`).
 
 ## Setup
 

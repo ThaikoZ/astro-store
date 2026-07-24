@@ -9,7 +9,13 @@ export {
   type CookieOptions,
 } from './cookies';
 export { createAstroCookieAdapter } from './astroCookies';
-export { WooGraphQLError, toWooGraphQLError, extractGraphQLDataFromError, isAuthRelated } from './errors';
+export {
+  WooGraphQLError,
+  toWooGraphQLError,
+  extractGraphQLDataFromError,
+  extractGraphQLErrorMessage,
+  isAuthRelated,
+} from './errors';
 export {
   applySessionFromResponseHeaders,
   createSessionStore,

@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<?php wp_head(); ?>
 </head>
-<body <?php body_class( 'astro-checkout astro-pay' ); ?>>
+<body <?php body_class( array( 'astro-checkout', 'astro-pay' ) ); ?>>
 	<main class="astro-pay-root" id="astro-checkout-main">
 		<?php
 		while ( have_posts() ) {

@@ -3,7 +3,7 @@
  * Brand card checkout: form left, cart right.
  *
  * @package AstroCheckoutUI
- * @version 3.0.0
+ * @version 3.1.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -21,8 +21,16 @@ $show_shipping  = $needs_shipping && WC()->cart->show_shipping();
 
 do_action( 'woocommerce_before_checkout_form', $checkout );
 
-if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_required() && ! is_user_logged_in() ) {
-	echo esc_html( apply_filters( 'woocommerce_checkout_must_be_logged_in_message', __( 'You must be logged in to checkout.', 'woocommerce' ) ) );
+$auth_required = function_exists( 'astro_checkout_ui_auth_required' ) && astro_checkout_ui_auth_required();
+$woo_requires_login = ! $checkout->is_registration_enabled() && $checkout->is_registration_required();
+
+if ( ( $auth_required || $woo_requires_login ) && ! is_user_logged_in() ) {
+	$login_url = $brand_url . 'logowanie/?redirect=checkout';
+	echo '<div class="astro-pay-shell">';
+	echo '<div class="astro-pay-card astro-pay-card--form">';
+	echo '<p>Aby przejść do kasy, zaloguj się na swoje konto.</p>';
+	echo '<p><a class="button" href="' . esc_url( $login_url ) . '">Zaloguj się</a></p>';
+	echo '</div></div>';
 	return;
 }
 ?>

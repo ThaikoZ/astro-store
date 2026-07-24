@@ -1,5 +1,8 @@
 import { formatPrice } from '../lib/formatPrice';
-import { getHostedCheckoutRedirectUrl } from '../lib/shop/hostedCheckout';
+import {
+	fetchHostedCheckoutSettings,
+	getHostedCheckoutRedirectUrl,
+} from '../lib/shop/hostedCheckout';
 import { getBrowserWooClient } from '../lib/woocommerce';
 import type { CartFragment } from '../lib/woocommerce/generated/sdk';
 
@@ -105,15 +108,31 @@ export function resetCartUiAfterCheckout() {
 	setDrawerOpen(false);
 }
 
-function goToHostedCheckout(button: HTMLButtonElement | null) {
-	const result = getHostedCheckoutRedirectUrl(import.meta.env.PUBLIC_WORDPRESS_URL);
-	if (!result.ok) {
-		setCartError(result.error);
-		return;
-	}
-
+async function goToHostedCheckout(button: HTMLButtonElement | null) {
 	setLoading(button, true);
-	window.location.assign(result.url);
+	setCartError('');
+
+	try {
+		const woo = getBrowserWooClient();
+		const settings = await fetchHostedCheckoutSettings(import.meta.env.PUBLIC_WORDPRESS_URL);
+
+		if (settings.authRequired && !woo.auth.isAuthenticated()) {
+			window.location.assign('/logowanie/?redirect=checkout');
+			return;
+		}
+
+		const result = getHostedCheckoutRedirectUrl(import.meta.env.PUBLIC_WORDPRESS_URL);
+		if (!result.ok) {
+			setCartError(result.error);
+			setLoading(button, false);
+			return;
+		}
+
+		window.location.assign(result.url);
+	} catch (error) {
+		setCartError(polishError(error instanceof Error ? error.message : ''));
+		setLoading(button, false);
+	}
 }
 
 function lineImage(line: CartLine): { src: string; alt: string } | null {

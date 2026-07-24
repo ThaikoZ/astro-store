@@ -3,6 +3,10 @@ import AuthCard from '../components/site/AuthCard.astro';
 import AuthField from '../components/site/AuthField.astro';
 import Button from '../components/ui/Button.astro';
 import AuthPage from '../layouts/AuthPage.astro';
+import { authHref, getAuthRedirectParam } from '../lib/shop/authLinks';
+
+const redirect = getAuthRedirectParam(Astro.url.searchParams);
+const loginHref = authHref('/logowanie/', redirect);
 ---
 
 <AuthPage title="Ustaw nowe hasło - Klaudia Jaranowska Makeup">
@@ -39,7 +43,8 @@ import AuthPage from '../layouts/AuthPage.astro';
 
 		<p class="mt-7 m-0 text-center font-sans text-sm text-ink/55">
 			<a
-				href="/logowanie/"
+				href={loginHref}
+				data-auth-checkout-login
 				class="font-medium text-ink no-underline underline-offset-4 transition-opacity hover:opacity-70 hover:underline"
 			>
 				Wróć do logowania
