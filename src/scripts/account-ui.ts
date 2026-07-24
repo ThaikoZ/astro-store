@@ -174,11 +174,14 @@ function fillIdentity(opts: {
 	}
 }
 
+const ORDERS_PAGE_SIZE = 5;
+
 let ordersLoaded = false;
 let allOrders: OrderFragmentFragment[] = [];
 let ordersFilter: 'all' | 'today' | 'month' | 'year' | 'range' = 'all';
 let ordersRangeFrom = '';
 let ordersRangeTo = '';
+let ordersPage = 1;
 let viewerId: string | number | null = null;
 
 function startOfDay(date: Date) {
@@ -230,6 +233,61 @@ function filterOrders(orders: OrderFragmentFragment[]) {
 	});
 }
 
+function renderOrdersPagination(totalFiltered: number) {
+	const nav = document.querySelector('[data-account-orders-pagination]');
+	if (!(nav instanceof HTMLElement)) return;
+
+	const totalPages = Math.max(1, Math.ceil(totalFiltered / ORDERS_PAGE_SIZE));
+	if (ordersPage > totalPages) ordersPage = totalPages;
+
+	const show = totalFiltered > ORDERS_PAGE_SIZE;
+	nav.hidden = !show;
+	nav.classList.toggle('hidden', !show);
+	nav.classList.toggle('flex', show);
+	nav.replaceChildren();
+	if (!show) return;
+
+	const meta = document.createElement('p');
+	meta.className = 'm-0 font-sans text-xs tracking-wide text-ink/55';
+	const from = (ordersPage - 1) * ORDERS_PAGE_SIZE + 1;
+	const to = Math.min(ordersPage * ORDERS_PAGE_SIZE, totalFiltered);
+	meta.textContent = `${from}–${to} z ${totalFiltered}`;
+
+	const controls = document.createElement('div');
+	controls.className = 'flex items-center gap-2';
+
+	const prev = document.createElement('button');
+	prev.type = 'button';
+	prev.className =
+		'cursor-pointer border border-border-soft bg-foam px-3 py-2 font-sans text-xs tracking-[0.12em] text-ink uppercase transition-colors hover:border-ink disabled:cursor-not-allowed disabled:opacity-40';
+	prev.textContent = 'Poprzednia';
+	prev.disabled = ordersPage <= 1;
+	prev.addEventListener('click', () => {
+		if (ordersPage <= 1) return;
+		ordersPage -= 1;
+		renderOrders();
+	});
+
+	const pageLabel = document.createElement('span');
+	pageLabel.className = 'min-w-[4.5rem] text-center font-sans text-xs text-ink/70 tabular-nums';
+	pageLabel.textContent = `${ordersPage} / ${totalPages}`;
+
+	const next = document.createElement('button');
+	next.type = 'button';
+	next.className =
+		'cursor-pointer border border-border-soft bg-foam px-3 py-2 font-sans text-xs tracking-[0.12em] text-ink uppercase transition-colors hover:border-ink disabled:cursor-not-allowed disabled:opacity-40';
+	next.textContent = 'Następna';
+	next.disabled = ordersPage >= totalPages;
+	next.addEventListener('click', () => {
+		if (ordersPage >= totalPages) return;
+		ordersPage += 1;
+		renderOrders();
+	});
+
+	controls.append(prev, pageLabel, next);
+	nav.append(meta, controls);
+}
+
 function renderOrders() {
 	const loaded = document.querySelector('[data-account-orders-loaded]');
 	if (!(loaded instanceof HTMLElement)) return;
@@ -242,6 +300,7 @@ function renderOrders() {
 		p.className = 'm-0 font-sans text-sm text-ink/55';
 		p.textContent = 'Nie masz jeszcze żadnych zamówień.';
 		loaded.append(p);
+		renderOrdersPagination(0);
 		return;
 	}
 
@@ -250,10 +309,18 @@ function renderOrders() {
 		p.className = 'm-0 font-sans text-sm text-ink/55';
 		p.textContent = 'Brak zamówień w wybranym okresie.';
 		loaded.append(p);
+		renderOrdersPagination(0);
 		return;
 	}
 
-	for (const order of filtered) {
+	const totalPages = Math.max(1, Math.ceil(filtered.length / ORDERS_PAGE_SIZE));
+	if (ordersPage > totalPages) ordersPage = totalPages;
+	if (ordersPage < 1) ordersPage = 1;
+
+	const start = (ordersPage - 1) * ORDERS_PAGE_SIZE;
+	const pageOrders = filtered.slice(start, start + ORDERS_PAGE_SIZE);
+
+	for (const order of pageOrders) {
 		const id = order.orderNumber ?? order.databaseId;
 		if (id == null) continue;
 
@@ -274,10 +341,13 @@ function renderOrders() {
 		`;
 		loaded.append(link);
 	}
+
+	renderOrdersPagination(filtered.length);
 }
 
 function setOrdersFilter(next: typeof ordersFilter) {
 	ordersFilter = next;
+	ordersPage = 1;
 	const root = document.querySelector('[data-account-orders-filters]');
 	if (!(root instanceof HTMLElement)) return;
 
@@ -326,6 +396,7 @@ function initOrdersFilters(root: HTMLElement) {
 		}
 		setStatus(document.querySelector('[data-account-status="orders"]'), '');
 		ordersFilter = 'range';
+		ordersPage = 1;
 		setOrdersFilter('range');
 		renderOrders();
 	});
