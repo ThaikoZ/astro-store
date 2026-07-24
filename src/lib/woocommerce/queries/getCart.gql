@@ -1,0 +1,16 @@
+query getCart {
+  cart {
+    ...Cart
+  }
+  customer {
+    ...Customer
+  }
+  viewer {
+    ...Viewer
+  }
+  paymentGateways {
+    nodes {
+      ...PaymentGateway
+    }
+  }
+}
