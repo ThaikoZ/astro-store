@@ -18,6 +18,10 @@ interface Props {
 	target?: string;
 	rel?: string;
 	'aria-label'?: string;
+	disabled?: boolean;
+	'data-add-to-cart'?: string | boolean;
+	'data-product-id'?: string | number;
+	'data-cart-continue'?: string | boolean;
 }
 
 const {
@@ -29,6 +33,10 @@ const {
 	target,
 	rel,
 	'aria-label': ariaLabel,
+	disabled = false,
+	'data-add-to-cart': dataAddToCart,
+	'data-product-id': dataProductId,
+	'data-cart-continue': dataCartContinue,
 } = Astro.props;
 
 const isLink = typeof href === 'string';
@@ -77,6 +85,14 @@ const tones: Record<Variant, Record<Tone, string>> = {
 			class:list={[base, variants[variant], tones[variant][tone], className]}
 			aria-label={ariaLabel}
 			aria-busy="false"
+			disabled={disabled}
+			data-add-to-cart={
+				dataAddToCart === undefined || dataAddToCart === false ? undefined : ''
+			}
+			data-product-id={dataProductId != null ? String(dataProductId) : undefined}
+			data-cart-continue={
+				dataCartContinue === undefined || dataCartContinue === false ? undefined : ''
+			}
 		>
 			<span class="btn-spinner" data-btn-spinner aria-hidden="true"></span>
 			<span data-btn-label>

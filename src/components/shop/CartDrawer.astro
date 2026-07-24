@@ -1,0 +1,87 @@
+---
+import Button from '../ui/Button.astro';
+---
+
+<div
+	class="cart-backdrop pointer-events-none fixed inset-0 z-40 bg-ink/40 opacity-0 transition-opacity duration-300 ease-out invisible motion-reduce:transition-none"
+	data-cart-backdrop
+	aria-hidden="true"
+></div>
+
+<aside
+	id="site-cart-drawer"
+	class="cart-drawer pointer-events-none fixed inset-y-0 right-0 z-50 flex w-11/12 max-w-md translate-x-full flex-col bg-foam text-ink shadow-[-8px_0_32px_rgb(0_0_0/0.12)] transition-[translate,visibility] duration-300 ease-out invisible motion-reduce:transition-none"
+	data-cart-drawer
+	aria-hidden="true"
+	aria-labelledby="cart-drawer-title"
+	role="dialog"
+>
+	<div class="flex items-center justify-between gap-4 border-b border-border-soft px-5 py-5 md:px-7 md:py-6">
+		<h2
+			id="cart-drawer-title"
+			class="m-0 font-display text-sm tracking-[0.14em] text-ink uppercase md:text-base"
+		>
+			Koszyk
+			<span class="font-sans tracking-normal normal-case text-ink/55" data-cart-title-count></span>
+		</h2>
+		<button
+			type="button"
+			class="flex size-9 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-ink transition-opacity hover:opacity-70"
+			aria-label="Zamknij koszyk"
+			data-cart-close
+		>
+			<svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+				<path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"></path>
+			</svg>
+		</button>
+	</div>
+
+	<div class="relative flex min-h-0 flex-1 flex-col">
+		<div
+			class="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-12 text-center"
+			data-cart-empty
+		>
+			<p class="m-0 font-display text-base tracking-[0.08em] text-ink uppercase">
+				Twój koszyk jest obecnie pusty!
+			</p>
+			<p class="m-0 max-w-xs font-sans text-sm leading-relaxed text-ink/65">
+				Dodaj szkolenie online, aby zobaczyć je tutaj.
+			</p>
+		</div>
+
+		<ul
+			class="m-0 flex list-none flex-1 flex-col gap-5 overflow-y-auto px-5 py-6 md:px-7"
+			data-cart-items
+			hidden
+		></ul>
+
+		<div
+			class="cart-loading pointer-events-none absolute inset-0 flex items-center justify-center bg-foam/50 opacity-0 transition-opacity"
+			data-cart-loading
+			aria-hidden="true"
+		>
+			<span class="cart-loading-spinner" aria-hidden="true"></span>
+		</div>
+	</div>
+
+	<div class="border-t border-border-soft px-5 py-5 md:px-7 md:py-6" data-cart-footer hidden>
+		<div class="space-y-2 font-sans text-sm tabular-nums" data-cart-totals>
+			<div class="flex items-center justify-between gap-4 text-ink/70">
+				<span>Suma częściowa</span>
+				<span data-cart-subtotal>-</span>
+			</div>
+			<div class="flex items-center justify-between gap-4 font-medium text-ink">
+				<span>Razem</span>
+				<span data-cart-total>-</span>
+			</div>
+		</div>
+
+		<div class="mt-5">
+			<Button variant="solid" tone="ink" class="w-full" data-cart-continue>
+				Kontynuuj zakupy
+			</Button>
+		</div>
+
+		<p class="mt-3 hidden m-0 text-center font-sans text-xs text-red-800" data-cart-error role="status"></p>
+	</div>
+</aside>

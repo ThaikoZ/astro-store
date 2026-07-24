@@ -120,3 +120,45 @@ button[aria-busy='true'] [data-btn-spinner] {
 [data-order-detail]:not([data-loading]) [data-order-skeleton] {
   display: none !important;
 }
+
+.cart-backdrop.is-open,
+.cart-drawer.is-open {
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.cart-backdrop.is-open {
+  opacity: 1;
+}
+
+.cart-drawer.is-open {
+  translate: 0;
+}
+
+[data-cart-loading].is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cart-loading-spinner {
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1.5px solid #000000;
+  border-right-color: transparent;
+  border-radius: 9999px;
+  animation: btn-spin 0.7s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cart-loading-spinner {
+    animation: none;
+    opacity: 0.7;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cart-drawer {
+    transition: none;
+  }
+}

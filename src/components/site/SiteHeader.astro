@@ -1,4 +1,5 @@
 ---
+import CartDrawer from '../shop/CartDrawer.astro';
 import Container from '../ui/Container.astro';
 import { IMAGES, PRIMARY_NAV, type NavItem } from '../../lib/site';
 
@@ -41,7 +42,7 @@ function isNavItemActive(item: NavItem) {
 			<img
 				src={IMAGES.headerLogo}
 				alt="Klaudia Jaranowska Make Up Artist"
-				class="h-7 w-auto md:h-12 lg:h-9"
+				class="h-5 w-auto md:h-12 lg:h-7 xl:h-9"
 				width="220"
 				height="48"
 				fetchpriority="high"
@@ -120,24 +121,54 @@ function isNavItemActive(item: NavItem) {
 		</nav>
 
 		<div class="flex items-center gap-3 md:gap-4">
-			<a
-				href="/logowanie/"
-				class="flex size-9 items-center justify-center text-foam no-underline transition-opacity hover:opacity-70"
-				aria-label="Zaloguj się"
-				data-auth-account-link
-			>
-				<svg
-					class="size-5"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="1.5"
-					aria-hidden="true"
+			<div class="flex items-center gap-0">
+				<a
+					href="/logowanie/"
+					class="flex size-9 items-center justify-center text-foam no-underline transition-opacity hover:opacity-70"
+					aria-label="Zaloguj się"
+					data-auth-account-link
 				>
-					<circle cx="12" cy="8" r="3.5"></circle>
-					<path d="M5.5 19.5c1.6-3.2 4-4.8 6.5-4.8s4.9 1.6 6.5 4.8" stroke-linecap="round"></path>
-				</svg>
-			</a>
+					<svg
+						class="size-5"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.5"
+						aria-hidden="true"
+					>
+						<circle cx="12" cy="8" r="3.5"></circle>
+						<path d="M5.5 19.5c1.6-3.2 4-4.8 6.5-4.8s4.9 1.6 6.5 4.8" stroke-linecap="round"></path>
+					</svg>
+				</a>
+
+				<button
+					type="button"
+					class="relative flex size-9 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-foam transition-opacity hover:opacity-70"
+					aria-label="Otwórz koszyk"
+					aria-controls="site-cart-drawer"
+					data-cart-open
+				>
+					<svg
+						class="size-5"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.5"
+						aria-hidden="true"
+					>
+						<path
+							d="M6.5 8h11l-1 11h-9l-1-11Z"
+							stroke-linejoin="round"
+						></path>
+						<path d="M9 8V6.5a3 3 0 0 1 6 0V8" stroke-linecap="round"></path>
+					</svg>
+					<span
+						class="absolute top-0.5 right-0.5 inline-flex min-w-4 items-center justify-center rounded-full bg-foam px-1 font-sans text-[0.625rem] leading-4 font-semibold text-ink tabular-nums"
+						data-cart-count
+						hidden
+					>0</span>
+				</button>
+			</div>
 
 			<button
 				type="button"
@@ -273,6 +304,12 @@ function isNavItemActive(item: NavItem) {
 		</div>
 	</div>
 </header>
+
+<CartDrawer />
+
+<script>
+	import '../../scripts/cart-ui';
+</script>
 
 <style>
 	.nav-link {
