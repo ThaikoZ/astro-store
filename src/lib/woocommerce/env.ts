@@ -11,9 +11,16 @@ type AstroEnv = {
 /**
  * Build a Woo client from Astro / Vite env vars.
  * Pass `cookies` from the browser adapter or Astro.cookies wrapper when needed.
+ *
+ * Read `import.meta.env.WORDPRESS_*` with static property access so Vite/Astro
+ * can inject values (dynamic `env[key]` access is not replaced).
  */
 export function createWooClientFromEnv(
-  env: AstroEnv = import.meta.env as AstroEnv,
+  env: AstroEnv = {
+    WORDPRESS_GRAPHQL_URL: import.meta.env.WORDPRESS_GRAPHQL_URL,
+    PUBLIC_APP_ORIGIN: import.meta.env.PUBLIC_APP_ORIGIN,
+    PUBLIC_STRIPE_PUBLISHABLE_KEY: import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY,
+  },
   options: { cookies?: CookieAdapter; fetch?: typeof fetch } = {},
 ) {
   const endpoint = env.WORDPRESS_GRAPHQL_URL;
