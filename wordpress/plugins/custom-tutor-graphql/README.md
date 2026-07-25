@@ -6,7 +6,7 @@ Headless bridge between Astro and Tutor LMS Free.
 
 1. Exposes enrolled courses on WPGraphQL (`tutorEnrolledCourses`) for the JWT user.
 2. Issues a one-time SSO handoff so Astro can open Tutor course URLs as a logged-in WP user.
-3. Injects **Wróć do konta** on Tutor course/lesson screens → Astro `/moje-konto/?tab=kursy`.
+3. Rewrites Tutor’s native lesson exit controls (X / mobile back) to the Astro `returnTo` URL under `/moje-konto`.
 
 Purchase stays in WooCommerce on Astro.
 Learning stays in Tutor on WordPress.
@@ -16,7 +16,9 @@ Learning stays in Tutor on WordPress.
 - Tutor LMS (Free is enough)
 - WPGraphQL
 - WPGraphQL JWT Authentication
-- Same `GRAPHQL_JWT_AUTH_SECRET_KEY` / `ASTRO_APP_ORIGIN` as Custom Headless Checkout
+- **`ASTRO_APP_ORIGIN`** (required - same value as Custom Headless Checkout)
+
+Without `ASTRO_APP_ORIGIN`, the plugin shows an admin error notice and handoff REST returns `503` (`ctg_origin_missing`).
 
 ## Install
 
@@ -55,6 +57,10 @@ query TutorEnrolledCourses {
 }
 ```
 
+Astro opens courses via `tutorPermalink`.
+WordPress handoff resolves the next unfinished lesson.
+`continuePermalink` may still exist on newer schemas but is not required by Astro.
+
 Unauthenticated callers receive an empty list.
 
 ## Handoff REST
@@ -83,26 +89,39 @@ Response:
 Opening `url`:
 
 1. Logs the user into WordPress
-2. Stores `returnTo` in a cookie for the Tutor back bar
-3. If `redirectTo` is a **course** URL, upgrades it to the **next unfinished lesson** (`tutor_utils()->get_course_first_lesson`)
-4. Redirects into that lesson player
+2. Re-checks enrollment for the target course (fails → storefront login error redirect)
+3. Stores `returnTo` in a cookie for the Tutor exit rewrite
+4. If `redirectTo` is a **course** URL, upgrades it to the **next unfinished lesson** (`tutor_utils()->get_course_first_lesson`)
+5. Redirects into that lesson player
 
 Failed handoff → `{ASTRO_APP_ORIGIN}/logowanie/?redirect=kursy&auth_error=handoff`.
 
+Invalid JWT attempts are rate-limited per client IP (20 failures / 15 minutes → `429`).
+Successful auth clears the failure counter.
+
+## Return URL rules
+
+`returnTo` must:
+
+- Use `http` or `https`
+- Match the host of `ASTRO_APP_ORIGIN`
+- Have a path under `/moje-konto` (e.g. `/moje-konto/?tab=kursy`)
+
+Other Astro paths are rejected.
+Fallback: `{ASTRO_APP_ORIGIN}/moje-konto/?tab=kursy`.
+
 ## Back / exit from lesson player
 
-Tutor’s built-in lesson header exit controls (X and mobile back) are overridden to open the handoff `returnTo` URL instead of the course page / kokpit.
+Exit controls use the handoff `returnTo` cookie (fallback `{ASTRO_APP_ORIGIN}/moje-konto/?tab=kursy`).
 
-Astro sends the **current page** as `returnTo` (e.g. `/moje-konto/?tab=kursy`).
-Fallback if missing/invalid: `{ASTRO_APP_ORIGIN}/moje-konto/?tab=kursy`.
+**Tutor v4 learning area** (default): the header “Back to dashboard” control calls `tutor_dashboard_url()`.
+On learner screens that empty-path URL is rewritten to Astro `returnTo` (so `/kopkit/` is not used).
 
-Implementation:
+**Legacy spotlight mode**: thin PHP bridge + JS rewrite the X / mobile-back icons.
 
-- Template override: `templates/single/common/header.php` via `tutor_get_template_path`
-- Filter `tutor_dashboard_url` on learner screens
-- Small JS fallback for other Tutor exit/home controls
+Dashboard sub-routes (`tutor_dashboard_url( 'settings' )`, etc.) are not rewritten.
 
-Set origin in `wp-config.php` (required for back link + CORS):
+Set origin in `wp-config.php` (required for back link + CORS + handoff):
 
 ```php
 define( 'ASTRO_APP_ORIGIN', 'https://your-astro-site.example' );

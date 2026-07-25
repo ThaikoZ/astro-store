@@ -5,8 +5,6 @@ export type TutorEnrolledCourse = {
 	thumbnailUrl: string | null;
 	progressPercent: number;
 	isCompleted: boolean;
-	/** Course landing page on WordPress. */
+	/** Course landing page on WordPress (handoff target; WP resolves next lesson). */
 	tutorPermalink: string;
-	/** Next unfinished lesson (preferred handoff target). */
-	continuePermalink: string;
 };

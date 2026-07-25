@@ -16,11 +16,6 @@ function normalizeCourse(raw: Partial<TutorEnrolledCourse> | null | undefined): 
 		return null;
 	}
 
-	const continuePermalink =
-		typeof raw.continuePermalink === 'string' && raw.continuePermalink.trim()
-			? raw.continuePermalink.trim()
-			: tutorPermalink;
-
 	const progress = Number(raw.progressPercent);
 	return {
 		databaseId,
@@ -33,7 +28,6 @@ function normalizeCourse(raw: Partial<TutorEnrolledCourse> | null | undefined): 
 		progressPercent: Number.isFinite(progress) ? Math.max(0, Math.min(100, progress)) : 0,
 		isCompleted: Boolean(raw.isCompleted),
 		tutorPermalink,
-		continuePermalink,
 	};
 }
 

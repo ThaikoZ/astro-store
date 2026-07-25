@@ -457,7 +457,7 @@ function renderCourses() {
 		button.className =
 			'flex w-full cursor-pointer items-center gap-4 border-0 bg-transparent px-4 py-5 text-left transition-colors hover:bg-paper/70 md:px-5';
 		button.dataset.tutorCourseOpen = '';
-		button.dataset.tutorPermalink = course.continuePermalink || course.tutorPermalink;
+		button.dataset.tutorPermalink = course.tutorPermalink;
 
 		if (course.thumbnailUrl) {
 			const img = document.createElement('img');

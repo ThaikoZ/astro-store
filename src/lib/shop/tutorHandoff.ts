@@ -96,7 +96,7 @@ export async function requestTutorCourseHandoff(
 
 /**
  * Build Tutor handoff redirect using the browser auth cookie.
- * Prefer continuePermalink (next lesson); falls back to course landing URL.
+ * Pass the course tutorPermalink; WordPress resolves the next unfinished lesson.
  */
 export async function getTutorCourseHandoffUrl(
 	tutorPermalink: string,

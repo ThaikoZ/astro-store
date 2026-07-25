@@ -87,6 +87,22 @@ add_action(
 					'methods'             => 'POST',
 					'permission_callback' => '__return_true',
 					'callback'            => static function ( WP_REST_Request $request ) {
+						if ( custom_tutor_graphql_app_origin() === '' ) {
+							return new WP_Error(
+								'ctg_origin_missing',
+								'ASTRO_APP_ORIGIN is not configured.',
+								array( 'status' => 503 )
+							);
+						}
+
+						if ( custom_tutor_graphql_handoff_is_rate_limited() ) {
+							return new WP_Error(
+								'ctg_handoff_rate_limited',
+								'Too many failed handoff attempts. Try again later.',
+								array( 'status' => 429 )
+							);
+						}
+
 						$body = $request->get_json_params();
 						if ( ! is_array( $body ) ) {
 							$body = array();
@@ -99,12 +115,15 @@ add_action(
 
 						$user_id = custom_tutor_graphql_user_id_from_token( $auth_token );
 						if ( $user_id <= 0 ) {
+							custom_tutor_graphql_handoff_record_failure();
 							return new WP_Error(
 								'ctg_handoff_invalid',
 								'Invalid or expired auth token.',
 								array( 'status' => 401 )
 							);
 						}
+
+						custom_tutor_graphql_handoff_clear_failures();
 
 						if ( ! custom_tutor_graphql_is_safe_tutor_redirect( $redirect_to ) ) {
 							return new WP_Error(
@@ -118,36 +137,16 @@ add_action(
 							$return_to = custom_tutor_graphql_account_courses_url();
 						}
 
-						// Ensure the learner is enrolled before issuing a handoff.
-						$post_id = url_to_postid( $redirect_to );
-						if ( $post_id > 0 && function_exists( 'tutor_utils' ) ) {
-							$course_id = $post_id;
-							$post_type = get_post_type( $post_id );
-							$course_type = function_exists( 'tutor' ) && ! empty( tutor()->course_post_type )
-								? (string) tutor()->course_post_type
-								: 'courses';
-
-							if ( $post_type && $post_type !== $course_type && $post_type !== 'courses' ) {
-								$maybe = tutor_utils()->get_course_id_by( 'lesson', $post_id );
-								if ( ! $maybe ) {
-									$maybe = tutor_utils()->get_course_id_by( 'quiz', $post_id );
-								}
-								if ( $maybe ) {
-									$course_id = (int) $maybe;
-								}
-							}
-
-							if ( $course_id > 0 && ! tutor_utils()->is_enrolled( $course_id, $user_id ) ) {
-								return new WP_Error(
-									'ctg_handoff_forbidden',
-									'User is not enrolled in this course.',
-									array( 'status' => 403 )
-								);
-							}
-
-							// Prefer next unfinished lesson over course landing page.
-							$redirect_to = custom_tutor_graphql_resolve_learner_entry_url( $redirect_to, $user_id );
+						if ( ! custom_tutor_graphql_user_enrolled_for_url( $user_id, $redirect_to ) ) {
+							return new WP_Error(
+								'ctg_handoff_forbidden',
+								'User is not enrolled in this course.',
+								array( 'status' => 403 )
+							);
 						}
+
+						// Prefer next unfinished lesson over course landing page.
+						$redirect_to = custom_tutor_graphql_resolve_learner_entry_url( $redirect_to, $user_id );
 
 						if ( ! custom_tutor_graphql_is_safe_tutor_redirect( $redirect_to ) ) {
 							return new WP_Error(
@@ -233,6 +232,10 @@ add_action(
 		$return_to   = isset( $payload['return_to'] ) ? esc_url_raw( (string) $payload['return_to'] ) : '';
 
 		if ( $user_id <= 0 || ! custom_tutor_graphql_login_user( $user_id, $remember ) ) {
+			custom_tutor_graphql_auth_error_redirect();
+		}
+
+		if ( ! custom_tutor_graphql_user_enrolled_for_url( $user_id, $redirect_to ) ) {
 			custom_tutor_graphql_auth_error_redirect();
 		}
 

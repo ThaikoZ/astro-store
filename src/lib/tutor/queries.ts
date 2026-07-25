@@ -8,7 +8,6 @@ export const TUTOR_ENROLLED_COURSES_QUERY = /* GraphQL */ `
 			progressPercent
 			isCompleted
 			tutorPermalink
-			continuePermalink
 		}
 	}
 `;

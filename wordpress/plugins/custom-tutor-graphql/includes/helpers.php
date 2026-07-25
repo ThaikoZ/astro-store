@@ -49,8 +49,7 @@ function custom_tutor_graphql_account_courses_url(): string {
 }
 
 /**
- * Whether a return URL is safe (same host as ASTRO_APP_ORIGIN).
- * Any storefront path is allowed so back navigation stays dynamic.
+ * Whether a return URL is safe: same host as ASTRO_APP_ORIGIN and under /moje-konto.
  */
 function custom_tutor_graphql_is_safe_return_url( string $url ): bool {
 	$url = esc_url_raw( $url );
@@ -78,7 +77,114 @@ function custom_tutor_graphql_is_safe_return_url( string $url ): bool {
 		return false;
 	}
 
-	return strtolower( (string) $parts['host'] ) === strtolower( (string) $origin_parts['host'] );
+	if ( strtolower( (string) $parts['host'] ) !== strtolower( (string) $origin_parts['host'] ) ) {
+		return false;
+	}
+
+	$path = isset( $parts['path'] ) ? (string) $parts['path'] : '/';
+	if ( $path === '' ) {
+		$path = '/';
+	}
+	$path = '/' . ltrim( $path, '/' );
+	$path = rtrim( $path, '/' );
+	if ( $path === '' ) {
+		$path = '/';
+	}
+
+	return $path === '/moje-konto' || str_starts_with( $path . '/', '/moje-konto/' );
+}
+
+/**
+ * Resolve Tutor course id from a course/lesson/quiz/assignment URL.
+ */
+function custom_tutor_graphql_course_id_from_url( string $url ): int {
+	$url = esc_url_raw( $url );
+	if ( $url === '' ) {
+		return 0;
+	}
+
+	$post_id = url_to_postid( $url );
+	if ( $post_id <= 0 ) {
+		return 0;
+	}
+
+	$post_type   = (string) get_post_type( $post_id );
+	$course_type = function_exists( 'tutor' ) && ! empty( tutor()->course_post_type )
+		? (string) tutor()->course_post_type
+		: 'courses';
+
+	if ( $post_type === $course_type || $post_type === 'courses' ) {
+		return $post_id;
+	}
+
+	if ( ! function_exists( 'tutor_utils' ) ) {
+		return 0;
+	}
+
+	foreach ( array( 'lesson', 'quiz', 'assignment' ) as $content_type ) {
+		$maybe = tutor_utils()->get_course_id_by( $content_type, $post_id );
+		if ( $maybe ) {
+			return absint( $maybe );
+		}
+	}
+
+	return 0;
+}
+
+/**
+ * Whether the user is enrolled for the Tutor content at $url.
+ */
+function custom_tutor_graphql_user_enrolled_for_url( int $user_id, string $url ): bool {
+	if ( $user_id <= 0 || ! function_exists( 'tutor_utils' ) ) {
+		return false;
+	}
+
+	$course_id = custom_tutor_graphql_course_id_from_url( $url );
+	if ( $course_id <= 0 ) {
+		return false;
+	}
+
+	return (bool) tutor_utils()->is_enrolled( $course_id, $user_id );
+}
+
+/**
+ * Client IP for handoff rate limiting.
+ */
+function custom_tutor_graphql_client_ip(): string {
+	$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? (string) wp_unslash( $_SERVER['REMOTE_ADDR'] ) : '';
+	$ip = trim( $ip );
+	return $ip !== '' ? $ip : '0.0.0.0';
+}
+
+/**
+ * Transient key for failed handoff auth attempts.
+ */
+function custom_tutor_graphql_handoff_fail_key(): string {
+	return 'ctg_handoff_fail_' . hash( 'sha256', custom_tutor_graphql_client_ip() );
+}
+
+/**
+ * Whether handoff auth is currently rate-limited for this client.
+ */
+function custom_tutor_graphql_handoff_is_rate_limited(): bool {
+	$count = (int) get_transient( custom_tutor_graphql_handoff_fail_key() );
+	return $count >= 20;
+}
+
+/**
+ * Record a failed handoff JWT validation.
+ */
+function custom_tutor_graphql_handoff_record_failure(): void {
+	$key   = custom_tutor_graphql_handoff_fail_key();
+	$count = (int) get_transient( $key );
+	set_transient( $key, $count + 1, 15 * MINUTE_IN_SECONDS );
+}
+
+/**
+ * Clear failed handoff counter after successful auth.
+ */
+function custom_tutor_graphql_handoff_clear_failures(): void {
+	delete_transient( custom_tutor_graphql_handoff_fail_key() );
 }
 
 /**

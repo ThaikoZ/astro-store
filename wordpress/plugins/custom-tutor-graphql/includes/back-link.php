@@ -1,9 +1,9 @@
 <?php
 /**
- * Point Tutor's built-in lesson exit controls at the Astro return URL.
+ * Point Tutor exit controls at the Astro return URL.
  *
- * Tutor header X / mobile back normally go to the course page (or dashboard).
- * We override the header template and keep a small JS fallback.
+ * Tutor v4 learning area: "Back to dashboard" uses tutor_dashboard_url() → /kopkit/.
+ * Legacy spotlight: X / mobile back use course permalink (rewritten via header bridge + JS).
  *
  * @package CustomTutorGraphQL
  */
@@ -20,6 +20,10 @@ function custom_tutor_graphql_is_tutor_learner_screen(): bool {
 		return false;
 	}
 
+	if ( function_exists( 'tutor_utils' ) && method_exists( tutor_utils(), 'is_learning_area' ) && tutor_utils()->is_learning_area() ) {
+		return true;
+	}
+
 	$tutor = tutor();
 	$types = array_filter(
 		array(
@@ -34,7 +38,31 @@ function custom_tutor_graphql_is_tutor_learner_screen(): bool {
 }
 
 /**
- * Override Tutor lesson header so exit buttons use Astro returnTo.
+ * Tutor v4 learning-area back button calls tutor_dashboard_url() with an empty sub-path.
+ * Send that home link to Astro returnTo instead of WP /kopkit/.
+ *
+ * Sub-routes (e.g. my-courses, settings) are left alone.
+ */
+add_filter(
+	'tutor_dashboard_url',
+	static function ( $url, $sub_url = '' ) {
+		if ( is_string( $sub_url ) && $sub_url !== '' ) {
+			return $url;
+		}
+
+		if ( ! custom_tutor_graphql_is_tutor_learner_screen() ) {
+			return $url;
+		}
+
+		$back = custom_tutor_graphql_return_url();
+		return $back !== '' ? $back : $url;
+	},
+	10,
+	2
+);
+
+/**
+ * Legacy spotlight header bridge (Tutor learning_mode = legacy).
  */
 add_filter(
 	'tutor_get_template_path',
@@ -44,31 +72,28 @@ add_filter(
 			return $template_location;
 		}
 
-		$custom = CUSTOM_TUTOR_GRAPHQL_DIR . 'templates/single/common/header.php';
-		return file_exists( $custom ) ? $custom : $template_location;
+		$bridge = CUSTOM_TUTOR_GRAPHQL_DIR . 'templates/single/common/header-bridge.php';
+		if ( ! file_exists( $bridge ) ) {
+			return $template_location;
+		}
+
+		if ( custom_tutor_graphql_return_url() === '' ) {
+			static $logged = false;
+			if ( ! $logged ) {
+				error_log( 'LMS Tutor GraphQL: ASTRO_APP_ORIGIN is empty; exit controls cannot return to Astro.' );
+				$logged = true;
+			}
+			return $template_location;
+		}
+
+		return $bridge;
 	},
-	20,
+	10,
 	2
 );
 
-/**
- * If something still links to Tutor dashboard / course exit, send learners to Astro.
- */
-add_filter(
-	'tutor_dashboard_url',
-	static function ( $url ) {
-		if ( ! custom_tutor_graphql_is_tutor_learner_screen() ) {
-			return $url;
-		}
-
-		$back = custom_tutor_graphql_return_url();
-		return $back !== '' ? $back : $url;
-	},
-	20
-);
-
 add_action(
-	'wp_enqueue_scripts',
+	'wp_footer',
 	static function (): void {
 		if ( ! custom_tutor_graphql_is_tutor_learner_screen() ) {
 			return;
@@ -76,45 +101,63 @@ add_action(
 
 		$back_url = custom_tutor_graphql_return_url();
 		if ( $back_url === '' ) {
+			static $logged = false;
+			if ( ! $logged ) {
+				error_log( 'LMS Tutor GraphQL: ASTRO_APP_ORIGIN is empty; exit controls cannot return to Astro.' );
+				$logged = true;
+			}
 			return;
 		}
 
-		// Fallback: rewrite Tutor exit / home controls that still point at course or kokpit.
-		$js = sprintf(
-			<<<'JS'
-(function () {
-  var back = %s;
-  if (!back) return;
+		$back_json = wp_json_encode( $back_url );
+		if ( ! is_string( $back_json ) || $back_json === '' ) {
+			return;
+		}
 
-  function shouldRewrite(a) {
-    if (!a || !a.getAttribute) return false;
-    if (a.getAttribute("data-ctg-back") === "1") return true;
-    var cls = (a.className || "").toString();
-    if (cls.indexOf("tutor-topbar-home-btn") !== -1) return true;
-    if (cls.indexOf("tutor-course-spotlight-close") !== -1) return true;
-    var icon = a.querySelector(".tutor-icon-times, .tutor-icon-previous");
-    var inHeader = a.closest(".tutor-single-page-top-bar, .tutor-course-topic-single-header");
-    return Boolean(icon && inHeader);
-  }
-
-  document.addEventListener(
-    "click",
-    function (e) {
-      var a = e.target && e.target.closest ? e.target.closest("a") : null;
-      if (!shouldRewrite(a)) return;
-      e.preventDefault();
-      window.location.href = back;
-    },
-    true
-  );
-})();
-JS
-			,
-			wp_json_encode( $back_url )
-		);
-
-		wp_register_script( 'custom-tutor-graphql-back', false, array(), CUSTOM_TUTOR_GRAPHQL_VERSION, true );
-		wp_enqueue_script( 'custom-tutor-graphql-back' );
-		wp_add_inline_script( 'custom-tutor-graphql-back', $js );
-	}
+		echo "<script id=\"custom-tutor-graphql-back\">\n";
+		echo '(function(){';
+		echo 'var back=' . $back_json . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo 'if(!back)return;';
+		// Keep Tutor JS globals aligned with the Astro return URL.
+		echo 'try{';
+		echo 'if(window._tutorobject){window._tutorobject.tutor_frontend_dashboard_url=back;}';
+		echo 'if(window.TutorCore&&window.TutorCore.config&&window.TutorCore.config.tutorConfig){window.TutorCore.config.tutorConfig.tutor_frontend_dashboard_url=back;}';
+		echo '}catch(e){}';
+		echo 'function tag(){';
+		// Tutor v4 learning area: Back to dashboard.
+		echo 'var v4=document.querySelectorAll(".tutor-learning-header-back a");';
+		echo 'for(var v=0;v<v4.length;v++){';
+		echo 'v4[v].setAttribute("href",back);';
+		echo 'v4[v].setAttribute("data-ctg-back","1");';
+		echo 'v4[v].setAttribute("aria-label","Wróć do konta");';
+		echo '}';
+		// Legacy spotlight X / mobile back.
+		echo 'var bar=document.querySelector(".tutor-single-page-top-bar,.tutor-course-topic-single-header");';
+		echo 'if(bar){';
+		echo 'var links=bar.querySelectorAll("a");';
+		echo 'for(var i=0;i<links.length;i++){';
+		echo 'var a=links[i];';
+		echo 'if(!a||a.getAttribute("data-ctg-back")==="1")continue;';
+		echo 'if(a.querySelector(".tutor-icon-times")||a.querySelector(".tutor-icon-previous")){';
+		echo 'a.setAttribute("href",back);';
+		echo 'a.setAttribute("data-ctg-back","1");';
+		echo 'a.setAttribute("aria-label","Wróć do konta");';
+		echo '}}}';
+		echo '}';
+		echo 'tag();';
+		echo 'document.addEventListener("click",function(e){';
+		echo 'var a=e.target&&e.target.closest?e.target.closest("a[data-ctg-back=\'1\'],.tutor-learning-header-back a"):null;';
+		echo 'if(!a)return;';
+		echo 'e.preventDefault();';
+		echo 'e.stopPropagation();';
+		echo 'window.location.href=back;';
+		echo '},true);';
+		echo 'if(window.MutationObserver){';
+		echo 'var mo=new MutationObserver(function(){tag();});';
+		echo 'mo.observe(document.documentElement,{childList:true,subtree:true});';
+		echo '}';
+		echo '})();';
+		echo "\n</script>\n";
+	},
+	5
 );
