@@ -116,6 +116,8 @@ button[aria-busy='true'] [data-btn-spinner] {
 [data-account-root]:not([data-loading]) [data-account-skeleton],
 [data-account-orders][data-loading] [data-account-orders-loaded],
 [data-account-orders]:not([data-loading]) [data-account-orders-skeleton],
+[data-account-courses][data-loading] [data-account-courses-loaded],
+[data-account-courses]:not([data-loading]) [data-account-courses-skeleton],
 [data-order-detail][data-loading] [data-order-loaded],
 [data-order-detail]:not([data-loading]) [data-order-skeleton] {
   display: none !important;

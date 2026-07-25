@@ -35,6 +35,11 @@ export type WooClient = {
   session: SessionStore;
   sdk: Sdk;
   request: WooRequest;
+  /** Run a raw GraphQL document with the same auth/session middleware as the SDK. */
+  query: <TData>(
+    document: string,
+    variables?: Record<string, unknown>,
+  ) => Promise<TData>;
   catalog: CatalogApi;
   auth: AuthApi;
   cart: CartApi;
@@ -159,6 +164,15 @@ export function createWooClient(config: WooClientConfig): WooClient {
     }
   };
 
+  const query = async <TData>(
+    document: string,
+    variables?: Record<string, unknown>,
+  ): Promise<TData> => {
+    return request(async () => {
+      return graphQLClient.request<TData>(document, variables);
+    });
+  };
+
   const internals: WooClientInternals = {
     request,
     session,
@@ -175,6 +189,7 @@ export function createWooClient(config: WooClientConfig): WooClient {
     session,
     sdk,
     request,
+    query,
     catalog: createCatalogApi(internals),
     auth: createAuthApi(internals),
     cart: createCartApi(internals),

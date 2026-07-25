@@ -7,8 +7,14 @@ Install as a normal WordPress plugin under `wp-content/plugins/`, then **Activat
 | Path | Purpose |
 | --- | --- |
 | [`plugins/custom-headless-checkout/`](plugins/custom-headless-checkout/) | Custom Headless Checkout - branded UI + session/JWT handoff + return to Astro `/moje-konto/` |
+| [`plugins/custom-tutor-graphql/`](plugins/custom-tutor-graphql/) | LMS Tutor GraphQL - enrolled courses for Astro **Kursy** tab, SSO into Tutor LMS, back link to Astro |
 
-Ready-made zip: [`dist/custom-headless-checkout.zip`](dist/custom-headless-checkout.zip).
+Ready-made zips:
+
+- [`dist/custom-headless-checkout.zip`](dist/custom-headless-checkout.zip)
+- [`dist/lms-tutor-graphql.zip`](dist/lms-tutor-graphql.zip)
+
+Tutor learner details: [`plugins/custom-tutor-graphql/README.md`](plugins/custom-tutor-graphql/README.md).
 
 **Author:** Adrian Sudak, AlphaAi Ventures sp. z o.o. · [alphaaiventures.com](https://alphaaiventures.com)
 
@@ -35,12 +41,21 @@ Then activate in Plugins. You may rename the folder before upload if you prefer 
 
 ### Checkout page must be classic WooCommerce
 
-1. Deactivate Tutor LMS (or stop using Tutor checkout)
+1. Keep Tutor LMS for course delivery, but do **not** use Tutor's checkout UI for the Astro shop
 2. Pages → Checkout → Transform Checkout **block** → **Classic Shortcode** → Save  
    Or put `[woocommerce_checkout]` on the page
 3. Hard-refresh `/checkout/`
 
 You should see paper-background card checkout: form left, sticky cart right, **Zapłać**.
+
+### Tutor LMS learner (account Kursy tab)
+
+1. Activate **LMS Tutor GraphQL** (+ Tutor LMS, WPGraphQL, JWT auth)
+2. Tutor → Settings → Monetization → WooCommerce; enable automatic order completion
+3. Link each Woo product to its Tutor course
+4. Astro `/moje-konto/?tab=kursy` lists enrolled courses via GraphQL
+5. **Otwórz** exchanges JWT for `POST /wp-json/custom-tutor/v1/handoff` and opens Tutor logged-in
+6. Tutor **Wróć do konta** returns to Astro `/moje-konto/?tab=kursy`
 
 ### Config
 

@@ -3,6 +3,8 @@ import {
 	clearAuthRememberPreference,
 	clearLocalCartSessionCookie,
 } from '../lib/shop/hostedCheckout';
+import { getTutorCourseHandoffUrl } from '../lib/shop/tutorHandoff';
+import { getTutorEnrolledCourses, type TutorEnrolledCourse } from '../lib/tutor';
 import { getBrowserWooClient } from '../lib/woocommerce';
 import type { CustomerFragment, OrderFragmentFragment } from '../lib/woocommerce/generated/sdk';
 import { resetCartUiAfterCheckout } from './cart-ui';
@@ -134,6 +136,9 @@ function setTab(tab: AccountTab, push = true) {
 
 	if (next === 'zamowienia') {
 		void loadOrders();
+	}
+	if (next === 'kursy' || next === 'kokpit') {
+		void loadCourses();
 	}
 }
 
@@ -405,6 +410,171 @@ function initOrdersFilters(root: HTMLElement) {
 	});
 }
 
+let coursesLoaded = false;
+let allCourses: TutorEnrolledCourse[] = [];
+let coursesLoading = false;
+
+function fillKokpitStats(courses: TutorEnrolledCourse[]) {
+	const total = courses.length;
+	const completed = courses.filter((course) => course.isCompleted || course.progressPercent >= 100)
+		.length;
+	const active = Math.max(0, total - completed);
+
+	const totalEl = document.querySelector('[data-account-stat="total"]');
+	const activeEl = document.querySelector('[data-account-stat="active"]');
+	const completedEl = document.querySelector('[data-account-stat="completed"]');
+	if (totalEl) totalEl.textContent = String(total);
+	if (activeEl) activeEl.textContent = String(active);
+	if (completedEl) completedEl.textContent = String(completed);
+}
+
+function renderCourses() {
+	const loaded = document.querySelector('[data-account-courses-loaded]');
+	if (!(loaded instanceof HTMLElement)) return;
+
+	fillKokpitStats(allCourses);
+	loaded.replaceChildren();
+
+	if (allCourses.length === 0) {
+		const empty = document.createElement('div');
+		empty.className =
+			'border border-border-soft bg-foam px-8 py-16 text-center md:px-12 md:py-20';
+		empty.innerHTML =
+			'<p class="mx-auto m-0 max-w-md font-sans text-sm leading-relaxed text-ink/55 md:text-[0.95rem]">Nie masz jeszcze przypisanych kursów. Kup szkolenie w sklepie, a pojawi się tutaj po opłaceniu zamówienia.</p><p class="mt-6 m-0"><a class="font-display text-sm tracking-[0.06em] text-ink uppercase no-underline underline-offset-4 hover:underline" href="/szkolenia-online/">Przejdź do szkoleń online</a></p>';
+		loaded.append(empty);
+		return;
+	}
+
+	for (const course of allCourses) {
+		const card = document.createElement('article');
+		card.className = 'border border-border-soft bg-foam';
+
+		const progress = Math.round(course.progressPercent);
+		const statusLabel = course.isCompleted || progress >= 100 ? 'Ukończony' : 'W trakcie';
+
+		const button = document.createElement('button');
+		button.type = 'button';
+		button.className =
+			'flex w-full cursor-pointer items-center gap-4 border-0 bg-transparent px-4 py-5 text-left transition-colors hover:bg-paper/70 md:px-5';
+		button.dataset.tutorCourseOpen = '';
+		button.dataset.tutorPermalink = course.continuePermalink || course.tutorPermalink;
+
+		if (course.thumbnailUrl) {
+			const img = document.createElement('img');
+			img.src = course.thumbnailUrl;
+			img.alt = '';
+			img.width = 80;
+			img.height = 80;
+			img.loading = 'lazy';
+			img.className = 'size-16 shrink-0 object-cover md:size-20';
+			button.append(img);
+		} else {
+			const placeholder = document.createElement('span');
+			placeholder.className =
+				'flex size-16 shrink-0 items-center justify-center bg-paper text-ink/40 md:size-20';
+			placeholder.setAttribute('aria-hidden', 'true');
+			placeholder.innerHTML =
+				'<svg class="size-7 fill-current" viewBox="0 0 24 24"><path d="M12 4 2 9l10 5 8-4.1V17h2V9L12 4Zm-6 8.2V15c0 1.7 2.7 3 6 3s6-1.3 6-3v-2.8l-6 3-6-3Z"/></svg>';
+			button.append(placeholder);
+		}
+
+		const body = document.createElement('div');
+		body.className = 'min-w-0 flex-1';
+
+		const title = document.createElement('p');
+		title.className = 'm-0 font-display text-lg leading-snug text-ink md:text-xl';
+		title.textContent = course.title;
+
+		const track = document.createElement('div');
+		track.className = 'mt-3 h-1.5 w-full max-w-xs bg-paper';
+		const bar = document.createElement('div');
+		bar.className = 'h-full bg-ink';
+		bar.style.width = `${progress}%`;
+		track.append(bar);
+
+		const meta = document.createElement('p');
+		meta.className = 'mt-2 m-0 font-sans text-xs tracking-[0.08em] text-ink/55 uppercase';
+		meta.textContent = `${statusLabel} · ${progress}%`;
+
+		body.append(title, track, meta);
+
+		const cta = document.createElement('span');
+		cta.className = 'shrink-0 font-sans text-xs tracking-[0.12em] text-ink/70 uppercase';
+		cta.textContent = 'Otwórz';
+
+		button.append(body, cta);
+		button.addEventListener('click', () => {
+			void openTutorCourse(button);
+		});
+		card.append(button);
+		loaded.append(card);
+	}
+}
+
+async function openTutorCourse(button: HTMLButtonElement) {
+	const permalink = button.dataset.tutorPermalink?.trim() ?? '';
+	if (!permalink) return;
+
+	const status = document.querySelector('[data-account-status="courses"]');
+	setStatus(status, '');
+	setLoading(button, true);
+
+	try {
+		// Return to this exact account view (e.g. /moje-konto/?tab=kursy).
+		const returnTo = `${window.location.origin}${window.location.pathname}${window.location.search}`;
+		const result = await getTutorCourseHandoffUrl(permalink, undefined, returnTo);
+		if (!result.ok) {
+			setStatus(status, result.error);
+			return;
+		}
+		window.location.href = result.url;
+	} catch (error) {
+		setStatus(status, polishError(error instanceof Error ? error.message : ''));
+	} finally {
+		setLoading(button, false);
+	}
+}
+
+async function loadCourses() {
+	if (coursesLoaded) {
+		renderCourses();
+		return;
+	}
+	if (coursesLoading) return;
+
+	const list = document.querySelector('[data-account-courses]');
+	const loaded = document.querySelector('[data-account-courses-loaded]');
+	const status = document.querySelector('[data-account-status="courses"]');
+	if (!(list instanceof HTMLElement) || !(loaded instanceof HTMLElement)) {
+		// Kokpit-only refresh when Kursy panel markup is missing.
+		if (coursesLoaded) fillKokpitStats(allCourses);
+		return;
+	}
+
+	coursesLoading = true;
+	list.setAttribute('data-loading', '');
+	setStatus(status, '');
+
+	try {
+		const woo = getBrowserWooClient();
+		allCourses = await getTutorEnrolledCourses(woo);
+		coursesLoaded = true;
+		renderCourses();
+	} catch (error) {
+		fillKokpitStats([]);
+		setStatus(status, polishError(error instanceof Error ? error.message : ''));
+		loaded.replaceChildren();
+		const p = document.createElement('p');
+		p.className = 'm-0 font-sans text-sm text-ink/55';
+		p.textContent =
+			'Nie udało się pobrać kursów. Upewnij się, że wtyczka LMS Tutor GraphQL jest aktywna.';
+		loaded.append(p);
+	} finally {
+		coursesLoading = false;
+		list.removeAttribute('data-loading');
+	}
+}
+
 async function loadOrders() {
 	if (ordersLoaded) {
 		renderOrders();
@@ -652,6 +822,7 @@ export async function initAccountUi() {
 	initOrdersFilters(root);
 	setTab(currentTab(), false);
 	await loadAccount(root);
+	void loadCourses();
 }
 
 initAccountUi();

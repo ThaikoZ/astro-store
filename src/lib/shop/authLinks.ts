@@ -28,3 +28,17 @@ export function isCheckoutAuthRedirect(redirect: string | null | undefined): boo
 	const normalized = redirect.trim().toLowerCase().replace(/\/+$/, '');
 	return normalized === 'checkout' || normalized === '/checkout';
 }
+
+/** True when auth should return to the account Kursy tab (Tutor handoff failure recovery). */
+export function isKursyAuthRedirect(redirect: string | null | undefined): boolean {
+	if (!redirect) return false;
+	const normalized = redirect.trim().toLowerCase().replace(/\/+$/, '');
+	return normalized === 'kursy' || normalized === 'courses';
+}
+
+/** Post-login destination for known auth redirect tokens. */
+export function resolveAuthRedirectPath(redirect: string | null | undefined): string {
+	if (isCheckoutAuthRedirect(redirect)) return '/moje-konto/';
+	if (isKursyAuthRedirect(redirect)) return '/moje-konto/?tab=kursy';
+	return '/moje-konto/';
+}

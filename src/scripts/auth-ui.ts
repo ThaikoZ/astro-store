@@ -2,6 +2,8 @@ import {
 	authHref,
 	getAuthRedirectParam,
 	isCheckoutAuthRedirect,
+	isKursyAuthRedirect,
+	resolveAuthRedirectPath,
 } from '../lib/shop/authLinks';
 import {
 	getHostedCheckoutRedirectUrl,
@@ -19,7 +21,8 @@ function currentAuthRedirect() {
 }
 
 async function redirectAfterAuth() {
-	if (isCheckoutAuthRedirect(currentAuthRedirect())) {
+	const redirect = currentAuthRedirect();
+	if (isCheckoutAuthRedirect(redirect)) {
 		const result = await getHostedCheckoutRedirectUrl(import.meta.env.PUBLIC_WORDPRESS_URL);
 		if (result.ok) {
 			window.location.href = result.url;
@@ -28,7 +31,7 @@ async function redirectAfterAuth() {
 		window.location.href = '/moje-konto/';
 		return;
 	}
-	window.location.href = '/moje-konto/';
+	window.location.href = resolveAuthRedirectPath(redirect);
 }
 
 /** Show checkout gate / handoff error copy + keep redirect on cross-links. */
@@ -39,11 +42,10 @@ function initCheckoutAuthNotice() {
 
 	if (handoffError) {
 		const status = document.querySelector('[data-auth-form="login"] [data-auth-status]');
-		setStatus(
-			status,
-			'Sesja logowania wygasła. Zaloguj się ponownie, aby przejść do kasy.',
-			'error',
-		);
+		const message = isKursyAuthRedirect(redirect)
+			? 'Sesja logowania wygasła. Zaloguj się ponownie, aby otworzyć kurs.'
+			: 'Sesja logowania wygasła. Zaloguj się ponownie, aby przejść do kasy.';
+		setStatus(status, message, 'error');
 	}
 
 	if (!redirect && !handoffError) return;

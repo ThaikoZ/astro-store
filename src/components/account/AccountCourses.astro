@@ -1,0 +1,33 @@
+---
+const courseSkeletons = [1, 2, 3];
+---
+
+<section data-account-panel="kursy" class="hidden" aria-hidden="true">
+	<h2
+		class="mt-0 mb-8 font-display text-[clamp(1.6rem,3vw,2.15rem)] font-normal tracking-[0.02em] text-ink md:mb-10"
+	>
+		Kursy
+	</h2>
+
+	<p class="m-0 hidden font-sans text-sm leading-relaxed" data-account-status="courses" hidden></p>
+
+	<div class="space-y-3" data-account-courses data-loading>
+		<div class="space-y-3" data-account-courses-skeleton aria-hidden="true">
+			{
+				courseSkeletons.map(() => (
+					<div class="border border-border-soft bg-foam px-4 py-5 md:px-5">
+						<div class="flex items-center gap-4">
+							<span class="skeleton size-16 shrink-0 md:size-20"></span>
+							<div class="min-w-0 flex-1 space-y-3">
+								<span class="skeleton block h-4 w-48 max-w-full"></span>
+								<span class="skeleton block h-2 w-full max-w-xs"></span>
+								<span class="skeleton block h-3 w-24"></span>
+							</div>
+						</div>
+					</div>
+				))
+			}
+		</div>
+		<div class="space-y-3" data-account-courses-loaded></div>
+	</div>
+</section>
